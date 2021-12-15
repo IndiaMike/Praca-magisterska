@@ -1,13 +1,15 @@
 Podłączenie pod STM32F411RETx
 
-		4x PWM do silników (timery PWM mode)
-		1x PWM do LIDAR
-		8x pin od enkoderów (4x timer encoder mode)
-		1x ADC do pomiaru napięcia baterii
-		4x ADC do pomiaru prądu silników 
-		2x UART (jeden do lidar,  dwa do bluetooth/ wifi)
-		   SWD do programowania i zworki do boot
-		4x GPIO do motor EN
-		
-		
+		4x PWM do silników (timery PWM mode)					konieczne
+		1x PWM do LIDAR											wymiennie z 		GPIO do czujników odległości (1 pin)
+		8x pin od enkoderów (4x timer encoder mode)				konieczne
+		1x ADC do pomiaru napięcia baterii						wymiennie z 		GPIO do czujników odległości (1 pin)
+		---4x ADC do pomiaru prądu silników---    				wymiennie z			GPIO do czujników odległości (4 pin)
+		1x UART (jeden do lidar)								wymiennie z			GPIO do czujników odległości (2 pin)	
+		1x UART (do bluetooth/ wifi)							koniecznie
+		   SWD do programowania i zworki do boot				koniecznie
+		---4x GPIO do motor EN---								wymiennie z			GPIO do czujników odległości (4 pin)
+		1x GPIO do buzzera										konieczne
+		1x I2C do akcelerometra/kompasu							koniecznie
+		można zastosować6 czujników (12 wymiennych pinów)
 		
