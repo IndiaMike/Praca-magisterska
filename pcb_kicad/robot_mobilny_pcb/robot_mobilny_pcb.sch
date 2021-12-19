@@ -33,117 +33,26 @@ F0 "interface" 50
 F1 "interface.sch" 50
 $EndSheet
 $Comp
-L Device:Crystal Y101
-U 1 1 6179BE14
-P 1500 3200
-F 0 "Y101" V 1454 3331 50  0000 L CNN
-F 1 "8Mhz" V 1545 3331 50  0000 L CNN
-F 2 "Crystal:Crystal_HC49-4H_Vertical" H 1500 3200 50  0001 C CNN
-F 3 "~" H 1500 3200 50  0001 C CNN
-	1    1500 3200
-	0    1    1    0   
-$EndComp
-Text Notes 1950 2950 0    50   ~ 0
-in
-Text Notes 1950 3500 0    50   ~ 0
-out
-$Comp
-L Device:R R103
-U 1 1 6179BE1C
-P 2000 3150
-F 0 "R103" V 1900 3100 50  0000 C CNN
-F 1 "R" V 1850 3100 50  0000 C CNN
-F 2 "" V 1930 3150 50  0001 C CNN
-F 3 "~" H 2000 3150 50  0001 C CNN
-	1    2000 3150
-	0    1    1    0   
-$EndComp
-$Comp
-L Device:R R104
-U 1 1 6179BE22
-P 2000 3250
-F 0 "R104" V 2100 3200 50  0000 C CNN
-F 1 "R" V 2150 3200 50  0000 C CNN
-F 2 "" V 1930 3250 50  0001 C CNN
-F 3 "~" H 2000 3250 50  0001 C CNN
-	1    2000 3250
-	0    1    1    0   
-$EndComp
-$Comp
-L Device:C C103
-U 1 1 6179BE28
-P 1100 3050
-F 0 "C103" V 848 3050 50  0000 C CNN
-F 1 "20pF" V 939 3050 50  0000 C CNN
-F 2 "" H 1138 2900 50  0001 C CNN
-F 3 "~" H 1100 3050 50  0001 C CNN
-	1    1100 3050
-	0    1    1    0   
-$EndComp
-$Comp
-L Device:C C104
-U 1 1 6179BE2E
-P 1100 3350
-F 0 "C104" V 848 3350 50  0000 C CNN
-F 1 "20pF" V 939 3350 50  0000 C CNN
-F 2 "" H 1138 3200 50  0001 C CNN
-F 3 "~" H 1100 3350 50  0001 C CNN
-	1    1100 3350
-	0    1    1    0   
-$EndComp
-$Comp
-L power:GND #PWR0107
-U 1 1 6179BE34
-P 950 3200
-F 0 "#PWR0107" H 950 2950 50  0001 C CNN
-F 1 "GND" H 955 3027 50  0000 C CNN
-F 2 "" H 950 3200 50  0001 C CNN
-F 3 "" H 950 3200 50  0001 C CNN
-	1    950  3200
-	0    1    1    0   
-$EndComp
-Wire Wire Line
-	1850 3150 1850 3050
-Wire Wire Line
-	1850 3050 1500 3050
-Wire Wire Line
-	1850 3250 1850 3350
-Wire Wire Line
-	1850 3350 1500 3350
-Wire Wire Line
-	1250 3050 1500 3050
-Connection ~ 1500 3050
-Wire Wire Line
-	1250 3350 1500 3350
-Connection ~ 1500 3350
-Wire Wire Line
-	950  3200 950  3350
-Wire Wire Line
-	950  3050 950  3200
-Connection ~ 950  3200
-Text Notes 500  3250 0    50   ~ 0
-HSE
-$Comp
 L Device:C C102
 U 1 1 617A05B0
-P 3600 2600
-F 0 "C102" V 3750 2400 50  0000 C CNN
-F 1 "4.7uF" V 3750 2650 50  0000 C CNN
-F 2 "" H 3638 2450 50  0001 C CNN
-F 3 "~" H 3600 2600 50  0001 C CNN
-	1    3600 2600
-	1    0    0    -1  
+P 3500 2700
+F 0 "C102" V 3650 2500 50  0000 C CNN
+F 1 "4.7uF" V 3650 2750 50  0000 C CNN
+F 2 "Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P2.50mm" H 3538 2550 50  0001 C CNN
+F 3 "~" H 3500 2700 50  0001 C CNN
+	1    3500 2700
+	0    1    1    0   
 $EndComp
 $Comp
 L power:GND #PWR0106
 U 1 1 617A0F41
-P 3600 2750
-F 0 "#PWR0106" H 3600 2500 50  0001 C CNN
-F 1 "GND" H 3605 2577 50  0000 C CNN
-F 2 "" H 3600 2750 50  0001 C CNN
-F 3 "" H 3600 2750 50  0001 C CNN
-	1    3600 2750
-	1    0    0    -1  
+P 3350 2700
+F 0 "#PWR0106" H 3350 2450 50  0001 C CNN
+F 1 "GND" V 3355 2527 50  0000 C CNN
+F 2 "" H 3350 2700 50  0001 C CNN
+F 3 "" H 3350 2700 50  0001 C CNN
+	1    3350 2700
+	0    1    1    0   
 $EndComp
 $Comp
 L Switch:SW_Push SW101
@@ -465,97 +374,6 @@ Wire Wire Line
 	3800 4650 3900 4650
 Wire Wire Line
 	3800 4750 3900 4750
-Text Notes 500  5150 0    50   ~ 0
-LSE
-Connection ~ 950  5100
-Wire Wire Line
-	950  4950 950  5100
-Wire Wire Line
-	950  5100 950  5250
-Connection ~ 1500 5250
-Wire Wire Line
-	1250 5250 1500 5250
-Connection ~ 1500 4950
-Wire Wire Line
-	1250 4950 1500 4950
-Wire Wire Line
-	1850 5250 1500 5250
-Wire Wire Line
-	1850 5150 1850 5250
-Wire Wire Line
-	1850 4950 1500 4950
-Wire Wire Line
-	1850 5050 1850 4950
-$Comp
-L power:GND #PWR0110
-U 1 1 61798CFA
-P 950 5100
-F 0 "#PWR0110" H 950 4850 50  0001 C CNN
-F 1 "GND" H 955 4927 50  0000 C CNN
-F 2 "" H 950 5100 50  0001 C CNN
-F 3 "" H 950 5100 50  0001 C CNN
-	1    950  5100
-	0    1    1    0   
-$EndComp
-$Comp
-L Device:C C106
-U 1 1 61798979
-P 1100 5250
-F 0 "C106" V 1200 5400 50  0000 C CNN
-F 1 "4.3pF" V 1300 5400 50  0000 C CNN
-F 2 "" H 1138 5100 50  0001 C CNN
-F 3 "~" H 1100 5250 50  0001 C CNN
-	1    1100 5250
-	0    1    1    0   
-$EndComp
-$Comp
-L Device:C C105
-U 1 1 61797D46
-P 1100 4950
-F 0 "C105" V 848 4950 50  0000 C CNN
-F 1 "4.3pF" V 939 4950 50  0000 C CNN
-F 2 "" H 1138 4800 50  0001 C CNN
-F 3 "~" H 1100 4950 50  0001 C CNN
-	1    1100 4950
-	0    1    1    0   
-$EndComp
-$Comp
-L Device:R R107
-U 1 1 617973EA
-P 2000 5150
-F 0 "R107" V 2100 5100 50  0000 C CNN
-F 1 "R" V 2150 5100 50  0000 C CNN
-F 2 "" V 1930 5150 50  0001 C CNN
-F 3 "~" H 2000 5150 50  0001 C CNN
-	1    2000 5150
-	0    1    1    0   
-$EndComp
-$Comp
-L Device:R R106
-U 1 1 61796AD6
-P 2000 5050
-F 0 "R106" V 1900 5000 50  0000 C CNN
-F 1 "R" V 1850 5000 50  0000 C CNN
-F 2 "" V 1930 5050 50  0001 C CNN
-F 3 "~" H 2000 5050 50  0001 C CNN
-	1    2000 5050
-	0    1    1    0   
-$EndComp
-Text Notes 2150 5250 0    50   ~ 0
-out
-Text Notes 2150 5000 0    50   ~ 0
-in
-$Comp
-L Device:Crystal Y102
-U 1 1 61794C4E
-P 1500 5100
-F 0 "Y102" V 1454 5231 50  0000 L CNN
-F 1 "Crystal" V 1545 5231 50  0000 L CNN
-F 2 "Crystal:Crystal_HC49-4H_Vertical" H 1500 5100 50  0001 C CNN
-F 3 "~" H 1500 5100 50  0001 C CNN
-	1    1500 5100
-	0    1    1    0   
-$EndComp
 Wire Wire Line
 	3800 4850 3900 4850
 Wire Wire Line
@@ -641,7 +459,7 @@ Text GLabel 6450 3700 2    50   Output ~ 0
 Dist_Sens_03_Trig
 Text GLabel 6750 5250 2    50   Input ~ 0
 Dist_Sens_03_Echo
-Text GLabel 2850 5350 3    50   Input ~ 0
+Text GLabel 2550 5150 0    50   Input ~ 0
 Dist_Sens_04_Echo
 Text GLabel 3750 3750 0    50   Output ~ 0
 Dist_Sens_05_Trig
@@ -674,28 +492,6 @@ Wire Wire Line
 	5400 2750 5300 2750
 Wire Wire Line
 	6300 3700 6450 3700
-$Comp
-L Jumper:Jumper_3_Bridged12 JP106
-U 1 1 61CEBE1D
-P 2550 4900
-F 0 "JP106" V 2550 4966 50  0001 L CNN
-F 1 "Jumper_3_Bridged12" V 2595 4967 50  0001 L CNN
-F 2 "Connector_PinHeader_2.54mm:PinHeader_1x03_P2.54mm_Vertical" H 2550 4900 50  0001 C CNN
-F 3 "~" H 2550 4900 50  0001 C CNN
-	1    2550 4900
-	1    0    0    -1  
-$EndComp
-$Comp
-L Jumper:Jumper_3_Bridged12 JP108
-U 1 1 61CF0FAC
-P 2550 5300
-F 0 "JP108" V 2550 5366 50  0001 L CNN
-F 1 "Jumper_3_Bridged12" V 2595 5367 50  0001 L CNN
-F 2 "Connector_PinHeader_2.54mm:PinHeader_1x03_P2.54mm_Vertical" H 2550 5300 50  0001 C CNN
-F 3 "~" H 2550 5300 50  0001 C CNN
-	1    2550 5300
-	-1   0    0    1   
-$EndComp
 Wire Wire Line
 	3750 4150 3900 4150
 Wire Wire Line
@@ -732,64 +528,18 @@ Wire Wire Line
 	6400 4550 6400 5000
 Wire Wire Line
 	5300 4550 6400 4550
-Text GLabel 2750 3400 2    50   Input ~ 0
+Text GLabel 2500 3250 0    50   Input ~ 0
 INT2_mag+acc
-Text GLabel 2750 3000 2    50   Input ~ 0
+Text GLabel 2500 3150 0    50   Input ~ 0
 INT1_mag+acc
 Wire Wire Line
 	3750 3450 3900 3450
-$Comp
-L Jumper:Jumper_3_Bridged12 JP101
-U 1 1 61E02E00
-P 2500 3000
-F 0 "JP101" V 2500 3066 50  0001 L CNN
-F 1 "Jumper_3_Bridged12" V 2545 3067 50  0001 L CNN
-F 2 "Connector_PinHeader_2.54mm:PinHeader_1x03_P2.54mm_Vertical" H 2500 3000 50  0001 C CNN
-F 3 "~" H 2500 3000 50  0001 C CNN
-	1    2500 3000
-	1    0    0    -1  
-$EndComp
-$Comp
-L Jumper:Jumper_3_Bridged12 JP103
-U 1 1 61E2BC8C
-P 2500 3400
-F 0 "JP103" V 2500 3466 50  0001 L CNN
-F 1 "Jumper_3_Bridged12" V 2545 3467 50  0001 L CNN
-F 2 "Connector_PinHeader_2.54mm:PinHeader_1x03_P2.54mm_Vertical" H 2500 3400 50  0001 C CNN
-F 3 "~" H 2500 3400 50  0001 C CNN
-	1    2500 3400
-	-1   0    0    1   
-$EndComp
-Wire Wire Line
-	2150 3150 2250 3150
-Wire Wire Line
-	2250 3150 2250 3000
-Wire Wire Line
-	2150 3250 2250 3250
-Wire Wire Line
-	2250 3250 2250 3400
-Wire Wire Line
-	2150 5050 2300 5050
-Wire Wire Line
-	2300 5050 2300 4900
-Wire Wire Line
-	2150 5150 2300 5150
-Wire Wire Line
-	2300 5150 2300 5300
 Wire Wire Line
 	2550 5050 3900 5050
 Wire Wire Line
 	2550 5150 3900 5150
-Text GLabel 2850 4850 1    50   Output ~ 0
+Text GLabel 2550 5050 0    50   Output ~ 0
 Dist_Sens_04_Trig
-Wire Wire Line
-	2800 4900 2850 4900
-Wire Wire Line
-	2850 4900 2850 4850
-Wire Wire Line
-	2800 5300 2850 5300
-Wire Wire Line
-	2850 5300 2850 5350
 Text GLabel 3900 1350 1    50   Input ~ 0
 NRST
 Text GLabel 3550 2250 1    50   Input ~ 0
@@ -813,9 +563,11 @@ F0 "power_section" 50
 F1 "power.sch" 50
 $EndSheet
 Wire Wire Line
-	3600 2450 3900 2450
-Wire Wire Line
 	2500 3150 3900 3150
 Wire Wire Line
 	2500 3250 3900 3250
+Wire Wire Line
+	3650 2700 3900 2700
+Wire Wire Line
+	3900 2700 3900 2450
 $EndSCHEMATC
