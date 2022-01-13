@@ -435,7 +435,7 @@ Wire Wire Line
 Wire Wire Line
 	4500 5350 4600 5350
 Wire Wire Line
-	5300 3950 6150 3950
+	5300 3950 6100 3950
 $Comp
 L Jumper:Jumper_3_Bridged12 JP107
 U 1 1 61BAE22E
@@ -570,4 +570,23 @@ Wire Wire Line
 	3650 2700 3900 2700
 Wire Wire Line
 	3900 2700 3900 2450
+Text GLabel 3900 2450 0    50   Input ~ 0
+VCAP_1
+Text GLabel 6400 4600 2    50   Output ~ 10
+PB9
+Text GLabel 6250 3600 1    50   Output ~ 10
+PB2
+Wire Wire Line
+	6250 3600 6250 3900
+Wire Wire Line
+	6250 3900 6100 3900
+Wire Wire Line
+	6100 3900 6100 3950
+Connection ~ 6100 3950
+Wire Wire Line
+	6100 3950 6150 3950
+Text GLabel 6650 3150 1    50   Output ~ 10
+PA11
+Text GLabel 6650 3250 3    50   Output ~ 10
+PA12
 $EndSCHEMATC

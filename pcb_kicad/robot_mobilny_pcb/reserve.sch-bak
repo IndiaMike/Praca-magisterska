@@ -26,7 +26,7 @@ Wire Notes Line
 Text GLabel 5950 5050 1    50   Input ~ 10
 I2C2_SCL_mag+acc
 Text GLabel 5850 5050 1    50   Output ~ 0
-Dist_Sens_03_Trig
+PB2
 Text GLabel 5750 5050 1    50   Input ~ 0
 Dist_Sens_02_Echo
 Text GLabel 5650 5050 1    50   Output ~ 0
@@ -45,11 +45,6 @@ Text GLabel 5150 5050 1    50   Input ~ 10
 ENCODER_2_A
 Text GLabel 4750 5050 1    50   Output ~ 10
 M4PWM
-NoConn ~ 6050 5050
-Wire Wire Line
-	6250 5050 6150 5050
-Wire Wire Line
-	4850 5050 4950 5050
 Text GLabel 6150 1950 3    50   BiDi ~ 0
 SWCLK
 Text GLabel 6050 1950 3    50   Output ~ 10
@@ -75,35 +70,22 @@ ENCODER_4_A
 Text GLabel 5050 1950 3    50   Input ~ 0
 BOOT0
 Text GLabel 4950 1950 3    50   Output ~ 10
-PWM_LIDAR
+PB9
 Text GLabel 4850 1950 3    50   Input ~ 10
 I2C2_SDA_mag+acc
-Wire Wire Line
-	4700 1950 4750 1950
-Connection ~ 4700 1950
 $Comp
 L power:+3.3V #PWR?
 U 1 1 61F9E7D3
-P 4700 1950
+P 4650 2050
 AR Path="/61F9E7D3" Ref="#PWR?"  Part="1" 
 AR Path="/61F91A58/61F9E7D3" Ref="#PWR0401"  Part="1" 
-F 0 "#PWR0401" H 4700 1800 50  0001 C CNN
-F 1 "+3.3V" V 4700 2200 50  0000 C CNN
-F 2 "" H 4700 1950 50  0001 C CNN
-F 3 "" H 4700 1950 50  0001 C CNN
-	1    4700 1950
+F 0 "#PWR0401" H 4650 1900 50  0001 C CNN
+F 1 "+3.3V" V 4650 2300 50  0000 C CNN
+F 2 "" H 4650 2050 50  0001 C CNN
+F 3 "" H 4650 2050 50  0001 C CNN
+	1    4650 2050
 	-1   0    0    1   
 $EndComp
-Wire Wire Line
-	4650 1950 4700 1950
-Text GLabel 6850 4350 0    50   Output Italic 0
-M2INA
-Text GLabel 6850 4150 0    50   BiDi ~ 0
-SWCLK
-Text GLabel 6850 4250 0    50   Input ~ 0
-SWDIO
-Text GLabel 6850 4050 0    50   Output ~ 10
-UART1_TX
 Text GLabel 6850 3950 0    50   Input ~ 10
 ENCODER_3_A
 Text GLabel 6850 3850 0    50   Input ~ 10
@@ -118,56 +100,42 @@ Text GLabel 6850 3450 0    50   Input ~ 10
 ENCODER_1_B
 Text GLabel 6850 3350 0    50   Input ~ 10
 UART1_RX
-Text GLabel 6850 3250 0    50   Output ~ 10
-UART6_TX
-Text GLabel 6850 3150 0    50   Input ~ 10
-UART6_RX
+Text GLabel 6850 3150 0    50   Output ~ 10
+PA12
+Text GLabel 6850 3250 0    50   Input ~ 10
+PA11
 Text GLabel 6850 3050 0    50   Input ~ 0
 SWDIO
-Wire Wire Line
-	6850 2900 6850 2950
-Connection ~ 6850 2900
 $Comp
 L power:+3.3V #PWR?
 U 1 1 61F9E7BC
-P 6850 2900
+P 6750 2850
 AR Path="/61F9E7BC" Ref="#PWR?"  Part="1" 
 AR Path="/61F91A58/61F9E7BC" Ref="#PWR0402"  Part="1" 
-F 0 "#PWR0402" H 6850 2750 50  0001 C CNN
-F 1 "+3.3V" V 6850 3150 50  0000 C CNN
-F 2 "" H 6850 2900 50  0001 C CNN
-F 3 "" H 6850 2900 50  0001 C CNN
-	1    6850 2900
+F 0 "#PWR0402" H 6750 2700 50  0001 C CNN
+F 1 "+3.3V" V 6750 3100 50  0000 C CNN
+F 2 "" H 6750 2850 50  0001 C CNN
+F 3 "" H 6750 2850 50  0001 C CNN
+	1    6750 2850
 	0    -1   -1   0   
 $EndComp
-Wire Wire Line
-	6850 2850 6850 2900
 Text GLabel 4000 4100 2    50   Output ~ 10
 M1PWM
 Text GLabel 4000 4300 2    50   Output ~ 10
 M3PWM
 Text GLabel 4000 4200 2    50   Output ~ 10
 M2PWM
-Connection ~ 4100 3950
-Wire Wire Line
-	4100 4000 4100 3950
-Wire Wire Line
-	4000 4000 4100 4000
-Wire Wire Line
-	4100 3900 4100 3950
-Wire Wire Line
-	4000 3900 4100 3900
 $Comp
 L power:+3.3V #PWR?
 U 1 1 61F9E7AD
-P 4100 3950
+P 4150 4000
 AR Path="/61F9E7AD" Ref="#PWR?"  Part="1" 
 AR Path="/61F91A58/61F9E7AD" Ref="#PWR0403"  Part="1" 
-F 0 "#PWR0403" H 4100 3800 50  0001 C CNN
-F 1 "+3.3V" V 4100 4200 50  0000 C CNN
-F 2 "" H 4100 3950 50  0001 C CNN
-F 3 "" H 4100 3950 50  0001 C CNN
-	1    4100 3950
+F 0 "#PWR0403" H 4150 3850 50  0001 C CNN
+F 1 "+3.3V" V 4150 4250 50  0000 C CNN
+F 2 "" H 4150 4000 50  0001 C CNN
+F 3 "" H 4150 4000 50  0001 C CNN
+	1    4150 4000
 	0    1    1    0   
 $EndComp
 Text GLabel 4000 3500 2    50   Input ~ 0
@@ -218,19 +186,6 @@ F 3 "~" H 7050 3550 50  0001 C CNN
 $EndComp
 $Comp
 L Connector:Conn_01x16_Female J?
-U 1 1 61F9E791
-P 5550 5250
-AR Path="/61F9E791" Ref="J?"  Part="1" 
-AR Path="/61F91A58/61F9E791" Ref="J404"  Part="1" 
-F 0 "J404" V 5623 5180 50  0000 C CNN
-F 1 "BOTTOM_CONN" V 5714 5180 50  0000 C CNN
-F 2 "Connector_PinSocket_2.54mm:PinSocket_1x16_P2.54mm_Vertical" H 5550 5250 50  0001 C CNN
-F 3 "~" H 5550 5250 50  0001 C CNN
-	1    5550 5250
-	0    1    1    0   
-$EndComp
-$Comp
-L Connector:Conn_01x16_Female J?
 U 1 1 61F9E78B
 P 5350 1750
 AR Path="/61F9E78B" Ref="J?"  Part="1" 
@@ -244,4 +199,147 @@ F 3 "~" H 5350 1750 50  0001 C CNN
 $EndComp
 Wire Notes Line
 	3800 1350 3100 2000
+$Comp
+L Connector:Conn_01x16_Female J?
+U 1 1 61F9E791
+P 5550 5250
+AR Path="/61F9E791" Ref="J?"  Part="1" 
+AR Path="/61F91A58/61F9E791" Ref="J404"  Part="1" 
+F 0 "J404" V 5623 5180 50  0000 C CNN
+F 1 "BOTTOM_CONN" V 5714 5180 50  0000 C CNN
+F 2 "Connector_PinSocket_2.54mm:PinSocket_1x16_P2.54mm_Vertical" H 5550 5250 50  0001 C CNN
+F 3 "~" H 5550 5250 50  0001 C CNN
+	1    5550 5250
+	0    1    1    0   
+$EndComp
+$Comp
+L power:GND #PWR0107
+U 1 1 61D9EEC1
+P 4850 4850
+F 0 "#PWR0107" H 4850 4600 50  0001 C CNN
+F 1 "GND" H 4855 4677 50  0000 C CNN
+F 2 "" H 4850 4850 50  0001 C CNN
+F 3 "" H 4850 4850 50  0001 C CNN
+	1    4850 4850
+	-1   0    0    1   
+$EndComp
+$Comp
+L power:+3V3 #PWR0120
+U 1 1 61D9F7FA
+P 4950 4650
+F 0 "#PWR0120" H 4950 4500 50  0001 C CNN
+F 1 "+3V3" H 4965 4823 50  0000 C CNN
+F 2 "" H 4950 4650 50  0001 C CNN
+F 3 "" H 4950 4650 50  0001 C CNN
+	1    4950 4650
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	4950 4650 4950 5050
+Wire Wire Line
+	4850 4850 4850 5050
+$Comp
+L power:GND #PWR0121
+U 1 1 61DA19E2
+P 6150 4850
+F 0 "#PWR0121" H 6150 4600 50  0001 C CNN
+F 1 "GND" H 6155 4677 50  0000 C CNN
+F 2 "" H 6150 4850 50  0001 C CNN
+F 3 "" H 6150 4850 50  0001 C CNN
+	1    6150 4850
+	-1   0    0    1   
+$EndComp
+$Comp
+L power:+3V3 #PWR0122
+U 1 1 61DA19E8
+P 6250 4650
+F 0 "#PWR0122" H 6250 4500 50  0001 C CNN
+F 1 "+3V3" H 6265 4823 50  0000 C CNN
+F 2 "" H 6250 4650 50  0001 C CNN
+F 3 "" H 6250 4650 50  0001 C CNN
+	1    6250 4650
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	6250 4650 6250 5050
+Wire Wire Line
+	6150 4850 6150 5050
+Text GLabel 6050 5050 1    50   Input ~ 0
+VCAP_1
+$Comp
+L power:GND #PWR0123
+U 1 1 61DA6A7C
+P 6750 2950
+F 0 "#PWR0123" H 6750 2700 50  0001 C CNN
+F 1 "GND" V 6755 2822 50  0000 R CNN
+F 2 "" H 6750 2950 50  0001 C CNN
+F 3 "" H 6750 2950 50  0001 C CNN
+	1    6750 2950
+	0    1    1    0   
+$EndComp
+Wire Wire Line
+	6750 2850 6850 2850
+Wire Wire Line
+	6750 2950 6850 2950
+$Comp
+L power:GND #PWR0124
+U 1 1 61DA83D7
+P 4750 2050
+F 0 "#PWR0124" H 4750 1800 50  0001 C CNN
+F 1 "GND" V 4750 1800 50  0000 C CNN
+F 2 "" H 4750 2050 50  0001 C CNN
+F 3 "" H 4750 2050 50  0001 C CNN
+	1    4750 2050
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	4650 1950 4650 2050
+Wire Wire Line
+	4750 1950 4750 2050
+$Comp
+L power:+3.3V #PWR?
+U 1 1 61DA9B9D
+P 4100 2800
+AR Path="/61DA9B9D" Ref="#PWR?"  Part="1" 
+AR Path="/61F91A58/61DA9B9D" Ref="#PWR0125"  Part="1" 
+F 0 "#PWR0125" H 4100 2650 50  0001 C CNN
+F 1 "+3.3V" V 4100 3050 50  0000 C CNN
+F 2 "" H 4100 2800 50  0001 C CNN
+F 3 "" H 4100 2800 50  0001 C CNN
+	1    4100 2800
+	0    1    1    0   
+$EndComp
+Wire Wire Line
+	4000 2800 4100 2800
+$Comp
+L power:GND #PWR0126
+U 1 1 61DAAAB3
+P 4150 3900
+F 0 "#PWR0126" H 4150 3650 50  0001 C CNN
+F 1 "GND" V 4150 3650 50  0000 C CNN
+F 2 "" H 4150 3900 50  0001 C CNN
+F 3 "" H 4150 3900 50  0001 C CNN
+	1    4150 3900
+	0    -1   -1   0   
+$EndComp
+Wire Wire Line
+	4000 3900 4150 3900
+Wire Wire Line
+	4000 4000 4150 4000
+Text GLabel 6750 4050 0    50   Output Italic 0
+M3INB
+Text GLabel 6750 4150 0    50   Output Italic 0
+M3INA
+Text GLabel 6750 4250 0    50   Output Italic 0
+M2INB
+Text GLabel 6750 4350 0    50   Output Italic 0
+M2INA
+Wire Wire Line
+	6850 4350 6750 4350
+Wire Wire Line
+	6850 4250 6750 4250
+Wire Wire Line
+	6850 4150 6750 4150
+Wire Wire Line
+	6850 4050 6750 4050
 $EndSCHEMATC

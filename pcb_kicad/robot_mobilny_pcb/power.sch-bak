@@ -41,7 +41,7 @@ U 1 1 6173A5E1
 P 2700 4000
 F 0 "SW1" H 2700 4285 50  0000 C CNN
 F 1 "SWITCH" H 2700 4194 50  0000 C CNN
-F 2 "Button_Switch_THT:SW_CuK_JS202011CQN_DPDT_Straight" H 2700 4000 50  0001 C CNN
+F 2 "my_footprint:Button_MRS-101" H 2700 4000 50  0001 C CNN
 F 3 "~" H 2700 4000 50  0001 C CNN
 	1    2700 4000
 	1    0    0    -1  
@@ -438,8 +438,6 @@ Wire Wire Line
 Wire Wire Line
 	2450 4600 2550 4600
 Wire Wire Line
-	2450 4100 2450 4600
-Wire Wire Line
 	2950 4600 3100 4600
 Wire Wire Line
 	4600 4900 4600 4100
@@ -459,19 +457,6 @@ Wire Wire Line
 	2750 4900 3450 4900
 Wire Wire Line
 	3750 4900 4600 4900
-$Comp
-L Device:Jumper_NO_Small JP1
-U 1 1 61A9CAD3
-P 3900 4100
-F 0 "JP1" H 3900 4285 50  0000 C CNN
-F 1 "ammeter" H 3900 4194 50  0000 C CNN
-F 2 "Connector_PinHeader_2.54mm:PinHeader_1x02_P2.54mm_Vertical" H 3900 4100 50  0001 C CNN
-F 3 "~" H 3900 4100 50  0001 C CNN
-	1    3900 4100
-	1    0    0    -1  
-$EndComp
-Wire Wire Line
-	4000 4100 4100 4100
 Text GLabel 2100 1700 2    50   Output ~ 0
 ADC_BAT
 $Comp
@@ -504,7 +489,7 @@ L Connector:Screw_Terminal_01x04 J3
 U 1 1 61C7CD44
 P 4200 3600
 F 0 "J3" V 4200 3850 50  0000 R CNN
-F 1 "Motor Driver Power" V 4300 3950 50  0000 R CNN
+F 1 "Motor Driver Power" H 5000 3600 50  0000 R CNN
 F 2 "TerminalBlock_Phoenix:TerminalBlock_Phoenix_MKDS-1,5-4_1x04_P5.00mm_Horizontal" H 4200 3600 50  0001 C CNN
 F 3 "~" H 4200 3600 50  0001 C CNN
 	1    4200 3600
@@ -514,22 +499,6 @@ Wire Wire Line
 	4100 3800 4100 4100
 Wire Wire Line
 	4400 3800 4400 4100
-Wire Wire Line
-	4200 3800 4250 3800
-$Comp
-L power:GND #PWR0119
-U 1 1 61C8004C
-P 4250 3800
-F 0 "#PWR0119" H 4250 3550 50  0001 C CNN
-F 1 "GND" H 4255 3627 50  0000 C CNN
-F 2 "" H 4250 3800 50  0001 C CNN
-F 3 "" H 4250 3800 50  0001 C CNN
-	1    4250 3800
-	1    0    0    -1  
-$EndComp
-Connection ~ 4250 3800
-Wire Wire Line
-	4250 3800 4300 3800
 Wire Wire Line
 	5750 4100 5750 4150
 Wire Wire Line
@@ -556,5 +525,56 @@ Connection ~ 4400 4100
 Wire Wire Line
 	4400 4100 4600 4100
 Wire Wire Line
-	2900 4100 3800 4100
+	2900 4100 3250 4100
+$Comp
+L Connector:Screw_Terminal_01x04 J?
+U 1 1 61E329F9
+P 3350 3600
+F 0 "J?" V 3350 3850 50  0000 R CNN
+F 1 "Motor Driver Power_not_reverse" H 4650 3600 50  0000 R CNN
+F 2 "TerminalBlock_Phoenix:TerminalBlock_Phoenix_MKDS-1,5-4_1x04_P5.00mm_Horizontal" H 3350 3600 50  0001 C CNN
+F 3 "~" H 3350 3600 50  0001 C CNN
+	1    3350 3600
+	0    -1   -1   0   
+$EndComp
+Wire Wire Line
+	3250 3800 3250 4100
+Connection ~ 3250 4100
+Wire Wire Line
+	3250 4100 3550 4100
+Wire Wire Line
+	3550 3800 3550 4100
+Connection ~ 3550 4100
+Wire Wire Line
+	3550 4100 4100 4100
+Wire Wire Line
+	2450 4100 2450 4200
+Wire Wire Line
+	4200 3800 4250 3800
+$Comp
+L power:GND #PWR?
+U 1 1 61E3E4C6
+P 4250 3800
+F 0 "#PWR?" H 4250 3550 50  0001 C CNN
+F 1 "GND" H 4255 3627 50  0000 C CNN
+F 2 "" H 4250 3800 50  0001 C CNN
+F 3 "" H 4250 3800 50  0001 C CNN
+	1    4250 3800
+	1    0    0    -1  
+$EndComp
+Connection ~ 4250 3800
+Wire Wire Line
+	4250 3800 4300 3800
+Wire Wire Line
+	3350 3800 3400 3800
+Wire Wire Line
+	3400 3800 3400 4200
+Wire Wire Line
+	3400 4200 2450 4200
+Connection ~ 3400 3800
+Wire Wire Line
+	3400 3800 3450 3800
+Connection ~ 2450 4200
+Wire Wire Line
+	2450 4200 2450 4600
 $EndSCHEMATC
