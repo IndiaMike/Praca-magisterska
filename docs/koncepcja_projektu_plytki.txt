@@ -13,3 +13,10 @@ Podłączenie pod STM32F411RETx
 		1x I2C do akcelerometra/kompasu							koniecznie
 		można zastosować6 czujników (12 wymiennych pinów)
 		
+		
+szerokości ścieżek 
+-maksymalny pobór prądu silnika 5500mA x4
+	
+-maksymalny pobór prądu silników 22A
+
+
