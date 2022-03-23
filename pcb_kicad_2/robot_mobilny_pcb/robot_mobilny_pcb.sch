@@ -27,7 +27,7 @@ $EndComp
 Wire Wire Line
 	4600 5450 4600 5350
 $Sheet
-S 9450 2400 950  500 
+S 8950 2400 950  500 
 U 61770FA2
 F0 "interface" 50
 F1 "interface.sch" 50
@@ -209,7 +209,7 @@ F 3 "" H 6850 4300 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Sheet
-S 9450 3250 950  500 
+S 8950 3250 950  500 
 U 617D3880
 F0 "shields" 50
 F1 "shields.sch" 50
@@ -551,7 +551,7 @@ ADC_BAT
 Wire Wire Line
 	5300 2450 5400 2450
 $Sheet
-S 9450 1450 950  500 
+S 8950 1450 950  500 
 U 61720EC8
 F0 "power_section" 50
 F1 "power.sch" 50
