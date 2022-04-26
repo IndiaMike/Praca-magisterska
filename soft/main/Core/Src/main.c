@@ -19,11 +19,13 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+#include "tim.h"
 #include "gpio.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "user_interface.h"
+#include "motor_encoder.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -58,6 +60,11 @@ void SystemClock_Config(void);
 	TLed LED_2_GREEN;
 	TLed LED_3_YELLOW;
 	TLed LED_4_RED;
+
+	TMotor MOTOR_Front_Left_1;
+	TMotor MOTOR_Front_Right_2;
+	TMotor MOTOR_Rear_Left_3;
+	TMotor MOTOR_Rear_Right_4;
 /* USER CODE END 0 */
 
 /**
@@ -88,19 +95,60 @@ int main(void)
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
+  MX_TIM2_Init();
+  MX_TIM1_Init();
+  MX_TIM3_Init();
+  MX_TIM4_Init();
+  MX_TIM5_Init();
   /* USER CODE BEGIN 2 */
+  HAL_GPIO_WritePin(BUZZER_GPIO_Port, BUZZER_Pin, GPIO_PIN_SET);
   LEDs_Init(&LED_1_GREEN,LED_1_GPIO_Port,LED_1_Pin);
   LEDs_Init(&LED_2_GREEN,LED_2_GPIO_Port,LED_2_Pin);
   LEDs_Init(&LED_3_YELLOW,LED_3_GPIO_Port,LED_3_Pin);
   LEDs_Init(&LED_4_RED,LED_4_GPIO_Port,LED_4_Pin);
 
+  MOTOR_Init(&MOTOR_Front_Left_1, M3INA_GPIO_Port, M3INA_Pin, M3INB_GPIO_Port, M3INB_Pin,
+		  &htim5,TIM_CHANNEL_3);
+
+  MOTOR_Init(&MOTOR_Front_Right_2, M2INB_GPIO_Port, M2INB_Pin, M2INA_GPIO_Port,M2INA_Pin,
+		  &htim5,TIM_CHANNEL_2);
+
+  MOTOR_Init(&MOTOR_Rear_Left_3, M1INB_GPIO_Port, M1INB_Pin, M1INA_GPIO_Port,M1INA_Pin,
+		  &htim5, TIM_CHANNEL_1);
+
+  MOTOR_Init(&MOTOR_Rear_Right_4, M4INA_GPIO_Port,M4INA_Pin,M4INB_GPIO_Port,M4INB_Pin,
+		  &htim5, TIM_CHANNEL_4);
+
   LEDs_test(LED_1_GREEN,LED_2_GREEN,LED_3_YELLOW,LED_4_RED);
+
+  HAL_TIM_Encoder_Start(&htim1,TIM_CHANNEL_ALL);
+  HAL_TIM_Encoder_Start(&htim2,TIM_CHANNEL_ALL);
+  HAL_TIM_Encoder_Start(&htim3,TIM_CHANNEL_ALL);
+  HAL_TIM_Encoder_Start(&htim4,TIM_CHANNEL_ALL);
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
+
+
+	  if(GPIO_PIN_RESET == HAL_GPIO_ReadPin(BUTTON_1_GPIO_Port, BUTTON_1_Pin))
+	  {
+
+			  MOTOR_Set_Speed(&MOTOR_Front_Left_1, Forward, 50);
+			  MOTOR_Set_Speed(&MOTOR_Front_Right_2, Forward, 50);
+			  MOTOR_Set_Speed(&MOTOR_Rear_Left_3, Forward, 50);
+			  MOTOR_Set_Speed(&MOTOR_Rear_Right_4, Forward, 50);
+	  }
+	  else
+	  {
+		  MOTOR_Soft_STOP(&MOTOR_Front_Left_1);
+		  MOTOR_Soft_STOP(&MOTOR_Front_Right_2);
+		  MOTOR_Soft_STOP(&MOTOR_Rear_Left_3);
+		  MOTOR_Soft_STOP(&MOTOR_Rear_Right_4);
+	  }
+
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */

@@ -40,19 +40,40 @@ void MX_GPIO_Init(void)
 
   /* GPIO Ports Clock Enable */
   __HAL_RCC_GPIOC_CLK_ENABLE();
+  __HAL_RCC_GPIOA_CLK_ENABLE();
+  __HAL_RCC_GPIOB_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOC, BUZZER_Pin|LED_1_Pin|LED_2_Pin|LED_3_Pin
-                          |LED_4_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOC, M1INB_Pin|M1INA_Pin|BUZZER_Pin|LED_1_Pin
+                          |LED_2_Pin|LED_3_Pin|LED_4_Pin, GPIO_PIN_RESET);
+
+  /*Configure GPIO pin Output Level */
+  HAL_GPIO_WritePin(GPIOB, M2INA_Pin|M2INB_Pin|M3INA_Pin|M3INB_Pin
+                          |M4INA_Pin|M4INB_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pins : PCPin PCPin PCPin PCPin
-                           PCPin */
-  GPIO_InitStruct.Pin = BUZZER_Pin|LED_1_Pin|LED_2_Pin|LED_3_Pin
-                          |LED_4_Pin;
+                           PCPin PCPin PCPin */
+  GPIO_InitStruct.Pin = M1INB_Pin|M1INA_Pin|BUZZER_Pin|LED_1_Pin
+                          |LED_2_Pin|LED_3_Pin|LED_4_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
+
+  /*Configure GPIO pins : PBPin PBPin PBPin PBPin
+                           PBPin PBPin */
+  GPIO_InitStruct.Pin = M2INA_Pin|M2INB_Pin|M3INA_Pin|M3INB_Pin
+                          |M4INA_Pin|M4INB_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+
+  /*Configure GPIO pin : PtPin */
+  GPIO_InitStruct.Pin = BUTTON_1_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  HAL_GPIO_Init(BUTTON_1_GPIO_Port, &GPIO_InitStruct);
 
 }
 
