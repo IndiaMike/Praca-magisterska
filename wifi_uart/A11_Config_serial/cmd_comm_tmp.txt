@@ -1,0 +1,2 @@
+AT+NETP=TCP,Client,8899,10.10.100.254
+E
