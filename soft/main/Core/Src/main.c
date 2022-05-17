@@ -50,6 +50,7 @@
 
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
+static void MX_NVIC_Init(void);
 /* USER CODE BEGIN PFP */
 
 /* USER CODE END PFP */
@@ -65,6 +66,8 @@ void SystemClock_Config(void);
 	TMotor MOTOR_Front_Right_2;
 	TMotor MOTOR_Rear_Left_3;
 	TMotor MOTOR_Rear_Right_4;
+
+	TEncoder ENCODER_Motor_1;
 /* USER CODE END 0 */
 
 /**
@@ -100,7 +103,13 @@ int main(void)
   MX_TIM3_Init();
   MX_TIM4_Init();
   MX_TIM5_Init();
+  MX_TIM11_Init();
+
+  /* Initialize interrupts */
+  MX_NVIC_Init();
   /* USER CODE BEGIN 2 */
+
+
   HAL_GPIO_WritePin(BUZZER_GPIO_Port, BUZZER_Pin, GPIO_PIN_SET);
   LEDs_Init(&LED_1_GREEN,LED_1_GPIO_Port,LED_1_Pin);
   LEDs_Init(&LED_2_GREEN,LED_2_GPIO_Port,LED_2_Pin);
@@ -109,6 +118,8 @@ int main(void)
 
   MOTOR_Init(&MOTOR_Front_Left_1, M3INA_GPIO_Port, M3INA_Pin, M3INB_GPIO_Port, M3INB_Pin,
 		  &htim5,TIM_CHANNEL_3);
+
+
 
   MOTOR_Init(&MOTOR_Front_Right_2, M2INB_GPIO_Port, M2INB_Pin, M2INA_GPIO_Port,M2INA_Pin,
 		  &htim5,TIM_CHANNEL_2);
@@ -121,10 +132,18 @@ int main(void)
 
   LEDs_test(LED_1_GREEN,LED_2_GREEN,LED_3_YELLOW,LED_4_RED);
 
+  ENCODER_Init(&MOTOR_Front_Left_1, &ENCODER_Motor_1, &htim1);
+
   HAL_TIM_Encoder_Start(&htim1,TIM_CHANNEL_ALL);
   HAL_TIM_Encoder_Start(&htim2,TIM_CHANNEL_ALL);
   HAL_TIM_Encoder_Start(&htim3,TIM_CHANNEL_ALL);
   HAL_TIM_Encoder_Start(&htim4,TIM_CHANNEL_ALL);
+
+
+
+  __HAL_TIM_ENABLE_IT(&htim11,TIM_IT_UPDATE);
+  //timer 10Hz start
+   HAL_TIM_OC_Start_IT(&htim11,TIM_CHANNEL_1);
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -136,10 +155,10 @@ int main(void)
 	  if(GPIO_PIN_RESET == HAL_GPIO_ReadPin(BUTTON_1_GPIO_Port, BUTTON_1_Pin))
 	  {
 
-			  MOTOR_Set_Speed(&MOTOR_Front_Left_1, Forward, 50);
-			  MOTOR_Set_Speed(&MOTOR_Front_Right_2, Forward, 50);
-			  MOTOR_Set_Speed(&MOTOR_Rear_Left_3, Forward, 50);
-			  MOTOR_Set_Speed(&MOTOR_Rear_Right_4, Forward, 50);
+			  MOTOR_Set_Speed(&MOTOR_Front_Left_1, Forward, 5);
+			  MOTOR_Set_Speed(&MOTOR_Front_Right_2, Forward, 5);
+			  MOTOR_Set_Speed(&MOTOR_Rear_Left_3, Forward, 5);
+			  MOTOR_Set_Speed(&MOTOR_Rear_Right_4, Forward, 5);
 	  }
 	  else
 	  {
@@ -198,6 +217,17 @@ void SystemClock_Config(void)
   {
     Error_Handler();
   }
+}
+
+/**
+  * @brief NVIC Configuration.
+  * @retval None
+  */
+static void MX_NVIC_Init(void)
+{
+  /* TIM1_TRG_COM_TIM11_IRQn interrupt configuration */
+  HAL_NVIC_SetPriority(TIM1_TRG_COM_TIM11_IRQn, 0, 0);
+  HAL_NVIC_EnableIRQ(TIM1_TRG_COM_TIM11_IRQn);
 }
 
 /* USER CODE BEGIN 4 */

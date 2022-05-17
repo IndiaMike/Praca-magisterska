@@ -1,0 +1,16 @@
+# This file is managed by Qt Creator, do not edit!
+
+set("CMAKE_GENERATOR" "Ninja" CACHE "STRING" "" FORCE)
+set("CMAKE_BUILD_TYPE" "Debug" CACHE "STRING" "" FORCE)
+set("CMAKE_PROJECT_INCLUDE_BEFORE" "C:/Qt/Tools/QtCreator/share/qtcreator/package-manager/auto-setup.cmake" CACHE "FILEPATH" "" FORCE)
+set("QT_QMAKE_EXECUTABLE" "C:/Qt/5.12.12/android_arm64_v8a/bin/qmake.exe" CACHE "FILEPATH" "" FORCE)
+set("CMAKE_PREFIX_PATH" "C:/Qt/5.12.12/android_arm64_v8a" CACHE "PATH" "" FORCE)
+set("CMAKE_C_COMPILER" "C:/Users/grzes/AppData/Local/Android/Sdk/ndk/22.1.7171670/toolchains/llvm/prebuilt/windows-x86_64/bin/clang.exe" CACHE "FILEPATH" "" FORCE)
+set("CMAKE_CXX_COMPILER" "C:/Users/grzes/AppData/Local/Android/Sdk/ndk/22.1.7171670/toolchains/llvm/prebuilt/windows-x86_64/bin/clang++.exe" CACHE "FILEPATH" "" FORCE)
+set("ANDROID_NATIVE_API_LEVEL" "16" CACHE "STRING" "" FORCE)
+set("ANDROID_NDK" "C:/Users/grzes/AppData/Local/Android/Sdk/ndk/22.1.7171670" CACHE "PATH" "" FORCE)
+set("CMAKE_TOOLCHAIN_FILE" "C:/Users/grzes/AppData/Local/Android/Sdk/ndk/22.1.7171670/build/cmake/android.toolchain.cmake" CACHE "FILEPATH" "" FORCE)
+set("ANDROID_ABI" "arm64-v8a" CACHE "STRING" "" FORCE)
+set("ANDROID_STL" "c++_shared" CACHE "STRING" "" FORCE)
+set("CMAKE_FIND_ROOT_PATH" "C:/Qt/5.12.12/android_arm64_v8a" CACHE "PATH" "" FORCE)
+set("ANDROID_SDK" "C:/Users/grzes/AppData/Local/Android/Sdk" CACHE "PATH" "" FORCE)

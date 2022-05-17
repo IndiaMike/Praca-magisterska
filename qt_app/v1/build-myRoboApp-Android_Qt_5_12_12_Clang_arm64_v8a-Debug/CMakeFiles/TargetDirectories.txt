@@ -1,0 +1,4 @@
+D:/studia/2_st_magisterka_/parca_mgr/qt_app/v1/build-myRoboApp-Android_Qt_5_12_12_Clang_arm64_v8a-Debug/CMakeFiles/myRoboApp.dir
+D:/studia/2_st_magisterka_/parca_mgr/qt_app/v1/build-myRoboApp-Android_Qt_5_12_12_Clang_arm64_v8a-Debug/CMakeFiles/edit_cache.dir
+D:/studia/2_st_magisterka_/parca_mgr/qt_app/v1/build-myRoboApp-Android_Qt_5_12_12_Clang_arm64_v8a-Debug/CMakeFiles/rebuild_cache.dir
+D:/studia/2_st_magisterka_/parca_mgr/qt_app/v1/build-myRoboApp-Android_Qt_5_12_12_Clang_arm64_v8a-Debug/CMakeFiles/myRoboApp_autogen.dir
