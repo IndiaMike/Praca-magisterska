@@ -19,6 +19,7 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+#include "adc.h"
 #include "tim.h"
 #include "gpio.h"
 
@@ -104,13 +105,14 @@ int main(void)
   MX_TIM4_Init();
   MX_TIM5_Init();
   MX_TIM11_Init();
+  MX_ADC1_Init();
 
   /* Initialize interrupts */
   MX_NVIC_Init();
   /* USER CODE BEGIN 2 */
 
 
-  HAL_GPIO_WritePin(BUZZER_GPIO_Port, BUZZER_Pin, GPIO_PIN_SET);
+  BUZZER_Off();
   LEDs_Init(&LED_1_GREEN,LED_1_GPIO_Port,LED_1_Pin);
   LEDs_Init(&LED_2_GREEN,LED_2_GPIO_Port,LED_2_Pin);
   LEDs_Init(&LED_3_YELLOW,LED_3_GPIO_Port,LED_3_Pin);
@@ -150,15 +152,24 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
+	  LED_Heart(&LED_3_YELLOW,50);
+	  //BUTTON_LEDS_Test();
+	  if(Center == BUTTON_Read())
+	  {
+		  BUZZER_Impulse_Blocked(10,100);
+	  }
+	  if(Right == BUTTON_Read())
+	 	  {
+	 		  BUZZER_On();
+	 	  }
 
-
-	  if(GPIO_PIN_RESET == HAL_GPIO_ReadPin(BUTTON_1_GPIO_Port, BUTTON_1_Pin))
+	  if(Left == BUTTON_Read())
 	  {
 
-			  MOTOR_Set_Speed(&MOTOR_Front_Left_1, Forward, 5);
-			  MOTOR_Set_Speed(&MOTOR_Front_Right_2, Forward, 5);
-			  MOTOR_Set_Speed(&MOTOR_Rear_Left_3, Forward, 5);
-			  MOTOR_Set_Speed(&MOTOR_Rear_Right_4, Forward, 5);
+			  MOTOR_Set_Speed(&MOTOR_Front_Left_1, Forward, 10);
+			  MOTOR_Set_Speed(&MOTOR_Front_Right_2, Forward, 10);
+			  MOTOR_Set_Speed(&MOTOR_Rear_Left_3, Forward, 10);
+			  MOTOR_Set_Speed(&MOTOR_Rear_Right_4, Forward, 10);
 	  }
 	  else
 	  {

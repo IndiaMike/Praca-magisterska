@@ -58,6 +58,8 @@ void Error_Handler(void);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
+#define BUTTON_2_Pin GPIO_PIN_13
+#define BUTTON_2_GPIO_Port GPIOC
 #define M1INB_Pin GPIO_PIN_2
 #define M1INB_GPIO_Port GPIOC
 #define M1INA_Pin GPIO_PIN_3
@@ -70,10 +72,14 @@ void Error_Handler(void);
 #define M3PWM_GPIO_Port GPIOA
 #define M4PWM_Pin GPIO_PIN_3
 #define M4PWM_GPIO_Port GPIOA
+#define ADC_BAT_Pin GPIO_PIN_4
+#define ADC_BAT_GPIO_Port GPIOA
 #define ENCODER_2_A_Pin GPIO_PIN_5
 #define ENCODER_2_A_GPIO_Port GPIOA
 #define BUZZER_Pin GPIO_PIN_4
 #define BUZZER_GPIO_Port GPIOC
+#define BUTTON_3_Pin GPIO_PIN_5
+#define BUTTON_3_GPIO_Port GPIOC
 #define M2INA_Pin GPIO_PIN_12
 #define M2INA_GPIO_Port GPIOB
 #define M2INB_Pin GPIO_PIN_13
