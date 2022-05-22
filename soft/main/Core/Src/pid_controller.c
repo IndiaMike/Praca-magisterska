@@ -21,7 +21,6 @@ void HAL_TIM_OC_DelayElapsedCallback(TIM_HandleTypeDef *htim)
 		{
 			ENCODER_Speed_Calculate(&MOTOR_Front_Left_1);
 
-
 		}
 
 
