@@ -84,7 +84,7 @@ int main(void)
   /* MCU Configuration--------------------------------------------------------*/
 
   /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
-  HAL_Init();
+   HAL_Init();
 
   /* USER CODE BEGIN Init */
 
@@ -112,7 +112,7 @@ int main(void)
   /* USER CODE BEGIN 2 */
 
 
-  BUZZER_Off();
+  BUZZER_On();
   LEDs_Init(&LED_1_GREEN,LED_1_GPIO_Port,LED_1_Pin);
   LEDs_Init(&LED_2_GREEN,LED_2_GPIO_Port,LED_2_Pin);
   LEDs_Init(&LED_3_YELLOW,LED_3_GPIO_Port,LED_3_Pin);
@@ -121,15 +121,13 @@ int main(void)
   MOTOR_Init(&MOTOR_Front_Left_1, M3INA_GPIO_Port, M3INA_Pin, M3INB_GPIO_Port, M3INB_Pin,
 		  &htim5,TIM_CHANNEL_3);
 
-
-
   MOTOR_Init(&MOTOR_Front_Right_2, M2INB_GPIO_Port, M2INB_Pin, M2INA_GPIO_Port,M2INA_Pin,
 		  &htim5,TIM_CHANNEL_2);
 
-  MOTOR_Init(&MOTOR_Rear_Left_3, M1INB_GPIO_Port, M1INB_Pin, M1INA_GPIO_Port,M1INA_Pin,
+  MOTOR_Init(&MOTOR_Rear_Right_4, M1INB_GPIO_Port, M1INB_Pin, M1INA_GPIO_Port,M1INA_Pin,
 		  &htim5, TIM_CHANNEL_1);
 
-  MOTOR_Init(&MOTOR_Rear_Right_4, M4INA_GPIO_Port,M4INA_Pin,M4INB_GPIO_Port,M4INB_Pin,
+  MOTOR_Init(&MOTOR_Rear_Left_3, M4INA_GPIO_Port,M4INA_Pin,M4INB_GPIO_Port,M4INB_Pin,
 		  &htim5, TIM_CHANNEL_4);
 
   LEDs_test(LED_1_GREEN,LED_2_GREEN,LED_3_YELLOW,LED_4_RED);
@@ -146,6 +144,8 @@ int main(void)
   __HAL_TIM_ENABLE_IT(&htim11,TIM_IT_UPDATE);
   //timer 10Hz start
    HAL_TIM_OC_Start_IT(&htim11,TIM_CHANNEL_1);
+
+   BUZZER_Off();
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -153,23 +153,31 @@ int main(void)
   while (1)
   {
 	  LED_Heart(&LED_3_YELLOW,50);
-	  //BUTTON_LEDS_Test();
-	  if(Center == BUTTON_Read())
-	  {
-		  BUZZER_Impulse_Blocked(10,100);
-	  }
+	  define_test();
+
+
+
 	  if(Right == BUTTON_Read())
-	 	  {
-	 		  BUZZER_On();
-	 	  }
-
-	  if(Left == BUTTON_Read())
 	  {
 
-			  MOTOR_Set_Speed(&MOTOR_Front_Left_1, Forward, 10);
-			  MOTOR_Set_Speed(&MOTOR_Front_Right_2, Forward, 10);
-			  MOTOR_Set_Speed(&MOTOR_Rear_Left_3, Forward, 10);
-			  MOTOR_Set_Speed(&MOTOR_Rear_Right_4, Forward, 10);
+			  MOTOR_Set_Speed(&MOTOR_Front_Left_1, Forward, 30);
+			  MOTOR_Set_Speed(&MOTOR_Front_Right_2, Backward, 30);
+			  MOTOR_Set_Speed(&MOTOR_Rear_Left_3, Forward, 30);
+			  MOTOR_Set_Speed(&MOTOR_Rear_Right_4, Backward, 30);
+	  }
+	  else if(Left == BUTTON_Read())
+	  {
+		  MOTOR_Set_Speed(&MOTOR_Front_Left_1, Backward, 30);
+		  MOTOR_Set_Speed(&MOTOR_Front_Right_2, Forward, 30);
+		  MOTOR_Set_Speed(&MOTOR_Rear_Left_3, Backward, 30);
+		  MOTOR_Set_Speed(&MOTOR_Rear_Right_4, Forward, 30);
+	  }
+	  else if(Center == BUTTON_Read())
+	  {
+		  MOTOR_Set_Speed(&MOTOR_Front_Left_1, Forward, 15);
+		  MOTOR_Set_Speed(&MOTOR_Front_Right_2, Forward, 15);
+		  MOTOR_Set_Speed(&MOTOR_Rear_Left_3, Forward, 15);
+		  MOTOR_Set_Speed(&MOTOR_Rear_Right_4, Forward, 15);
 	  }
 	  else
 	  {

@@ -92,9 +92,16 @@ void ENCODER_Speed_Calculate(TMotor *Motor)
 	Motor->encoder->Last_Value 			= Motor->encoder->Current_Value;
 	Motor->encoder->Current_Value 		= (int16_t)Motor->encoder->htim_encoder->Instance->CNT;
 	Motor->encoder->Difference_Pulse	= Motor->encoder->Current_Value - Motor->encoder->Last_Value;
+	Motor->encoder->Difference_Angle	= Motor->encoder->Difference_Pulse * DEG_PER_PULSE;
+	Motor->encoder->Difference_Radian	= Motor->encoder->Difference_Angle * PI / 180.0;
 
-	Motor->encoder->Speed_Pulse_per_Sec = (float)Motor->encoder->Difference_Pulse * (float)FREQUENCY_OF_TIM_CALCULATE_INTERRUPT_HZ;
-	Motor->encoder->Speed_MM_per_Sec	= Motor->encoder->Speed_Pulse_per_Sec * (float)WHEEL_CIRCUMFERENCE_MM / (float)ENCODER_PULSE_PER_REVOLUTION;
+	Motor->encoder->Speed_Rad_per_Sec	= (float)Motor->encoder->Difference_Radian /(float)DELTA_TIME_S;
+	Motor->encoder->Speed_Deg_per_Sec	= (float)Motor->encoder->Difference_Angle /(float)DELTA_TIME_S;
+
+	//Motor->encoder->Speed_Pulse_per_Sec = (float)Motor->encoder->Difference_Pulse * (float)FREQUENCY_OF_TIM_CALCULATE_INTERRUPT_HZ;
+	//Motor->encoder->Speed_MM_per_Sec	= Motor->encoder->Speed_Pulse_per_Sec * (float)WHEEL_CIRCUMFERENCE_MM / (float)ENCODER_PULSE_PER_REVOLUTION;
+	//Motor->encoder->Speed_Deg_per_Sec	= (float)Motor->encoder->Difference_Pulse * (float)PULSE_PER_DEG / TIME_OF_CALCULATION_CYCLE_MS;
+
 
 	Motor->encoder->Difference_mm		= (float)Motor->encoder->Difference_Pulse * WHEEL_CIRCUMFERENCE_MM / ENCODER_PULSE_PER_REVOLUTION;
 	Motor->encoder->Total_Distance_mm	+=Motor->encoder->Difference_mm;
@@ -106,3 +113,11 @@ void ENCODER_Total_Dist_Reset(TMotor *Motor)
 	Motor->encoder->Total_Distance_mm = 0.0;
 }
 
+void define_test()
+{
+	uint8_t frequency_100 = FREQUENCY_OF_TIM_CALCULATE_INTERRUPT_HZ;
+	float time_10		  = TIME_OF_CALCULATION_CYCLE_MS;
+	float delta_01s 	  = DELTA_TIME_S;
+	float pulse_per_deg_5_3= PULSE_PER_DEG;
+	float wheel_r		  = WHEEL_R;
+}

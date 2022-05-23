@@ -10,12 +10,19 @@
 
 //to change the calculation frequency change below:
 #define FREQUENCY_OF_TIM_CALCULATE_INTERRUPT_HZ 100 //in HZ;
-#define TIME_OF_CALCULATION_CYCLE_MS 1000/ FREQUENCY_OF_TIM_CALCULATE_INTERRUPT_HZ  //10 ms
-#define DELTA_TIME_S	1 / FREQUENCY_OF_TIM_CALCULATE_INTERRUPT_HZ					//0,01s
+#define TIME_OF_CALCULATION_CYCLE_MS (1000/ FREQUENCY_OF_TIM_CALCULATE_INTERRUPT_HZ) //10 ms
+#define DELTA_TIME_S	(1.0 / FREQUENCY_OF_TIM_CALCULATE_INTERRUPT_HZ)					//0,01s
 
 
-#define ENCODER_PULSE_PER_REVOLUTION	1000
+#define ENCODER_PULSE_PER_REVOLUTION	1920
 #define WHEEL_CIRCUMFERENCE_MM	360
+#define PULSE_PER_DEG (ENCODER_PULSE_PER_REVOLUTION / 360.0)
+#define DEG_PER_PULSE (360.0 / ENCODER_PULSE_PER_REVOLUTION)
+
+#define PULSE_PER_RAD (ENCODER_PULSE_PER_REVOLUTION / (2.0 * PI))
+
+#define PI 3.1415
+#define WHEEL_R (WHEEL_CIRCUMFERENCE_MM / (2.0 * PI))
 
 
 typedef enum
@@ -31,17 +38,21 @@ typedef enum
 typedef struct
 {
 	//ticks
-	int32_t	Last_Value;
-	int32_t	Current_Value;
+	int32_t		Last_Value;
+	int32_t	 	Current_Value;
 	int32_t		Difference_Pulse;
 
 	//distance
 	float		Difference_mm;
 	float		Total_Distance_mm;
+	float		Difference_Angle;
+	float		Difference_Radian;
 
 	//speed
 	float		Speed_MM_per_Sec;
 	float		Speed_Pulse_per_Sec;
+	float		Speed_Deg_per_Sec;
+	float		Speed_Rad_per_Sec;
 	// timer encoder mode
 	TIM_HandleTypeDef *htim_encoder;
 
@@ -85,4 +96,6 @@ void MOTOR_Set_Speed(TMotor *Motor, Motor_Direcrion Direction, uint8_t Speed_in_
 void ENCODER_Total_Dist_Reset(TMotor *Motor);
 void ENCODER_Speed_Calculate(TMotor *Motor);
 void ENCODER_Init(TMotor *Motor, TEncoder *encoder, TIM_HandleTypeDef *htim_encoder);
+
+void define_test();
 #endif /* INC_MOTOR_ENCODER_H_ */
