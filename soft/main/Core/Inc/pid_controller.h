@@ -10,10 +10,14 @@
 
 #include "main.h"
 
-#define MOTOR_A_Kp					4.5
-#define MOTOR_A_Ki					0.8
-#define MOTOR_A_Kd					0.5
-#define MOTOR_A_ANTI_WINDUP		   1000
+
+
+
+#define MOTOR_1_Kp					2.5
+#define MOTOR_1_Ki					0.0
+#define MOTOR_1_Kd					0.0
+#define MOTOR_1_ANTI_WINDUP		   1000
+
 
 typedef struct
 {
@@ -28,6 +32,9 @@ typedef struct
 	float Set_Speed_MM_per_Sec;
 
 	int anti_windup_limit;
-}TPID_Controller;
+}TPid;
 
+void PID_Init(TPid *Pid, float kp_init, float ki_init, float kd_init, int anti_windup_limit_init);
+void PID_Reset(TPid *PID);
+int  PID_Calculate(TPid *PID, int setpoint, int process_variable);
 #endif /* INC_PID_CONTROLLER_H_ */

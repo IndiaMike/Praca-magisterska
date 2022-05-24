@@ -27,6 +27,8 @@
 /* USER CODE BEGIN Includes */
 #include "user_interface.h"
 #include "motor_encoder.h"
+#include "pid_controller.h"
+
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -69,6 +71,11 @@ static void MX_NVIC_Init(void);
 	TMotor MOTOR_Rear_Right_4;
 
 	TEncoder ENCODER_Motor_1;
+
+	TPid PID_Motor_1;
+
+	//TPid	PID_Motor_1;
+
 /* USER CODE END 0 */
 
 /**
@@ -133,6 +140,11 @@ int main(void)
   LEDs_test(LED_1_GREEN,LED_2_GREEN,LED_3_YELLOW,LED_4_RED);
 
   ENCODER_Init(&MOTOR_Front_Left_1, &ENCODER_Motor_1, &htim1);
+  MOTOR_PID_Connect(&MOTOR_Front_Left_1, &PID_Motor_1);
+
+  PID_Init(&PID_Motor_1, MOTOR_1_Kp, MOTOR_1_Ki, MOTOR_1_Kd, MOTOR_1_ANTI_WINDUP);
+
+  //PID_Init(&MOTOR_Front_Left_1, &PID_Motor_1, 2, 0, 0, 10);
 
   HAL_TIM_Encoder_Start(&htim1,TIM_CHANNEL_ALL);
   HAL_TIM_Encoder_Start(&htim2,TIM_CHANNEL_ALL);
@@ -153,38 +165,32 @@ int main(void)
   while (1)
   {
 	  LED_Heart(&LED_3_YELLOW,50);
-	  define_test();
+
 
 
 
 	  if(Right == BUTTON_Read())
 	  {
 
-			  MOTOR_Set_Speed(&MOTOR_Front_Left_1, Forward, 30);
-			  MOTOR_Set_Speed(&MOTOR_Front_Right_2, Backward, 30);
-			  MOTOR_Set_Speed(&MOTOR_Rear_Left_3, Forward, 30);
-			  MOTOR_Set_Speed(&MOTOR_Rear_Right_4, Backward, 30);
+			  MOTOR_Set_Speed_in_Direction(&MOTOR_Front_Left_1, Forward, 30);
+			  MOTOR_Set_Speed_in_Direction(&MOTOR_Front_Right_2, Backward, 30);
+			  MOTOR_Set_Speed_in_Direction(&MOTOR_Rear_Left_3, Forward, 30);
+			  MOTOR_Set_Speed_in_Direction(&MOTOR_Rear_Right_4, Backward, 30);
 	  }
 	  else if(Left == BUTTON_Read())
-	  {
-		  MOTOR_Set_Speed(&MOTOR_Front_Left_1, Backward, 30);
-		  MOTOR_Set_Speed(&MOTOR_Front_Right_2, Forward, 30);
-		  MOTOR_Set_Speed(&MOTOR_Rear_Left_3, Backward, 30);
-		  MOTOR_Set_Speed(&MOTOR_Rear_Right_4, Forward, 30);
-	  }
-	  else if(Center == BUTTON_Read())
-	  {
-		  MOTOR_Set_Speed(&MOTOR_Front_Left_1, Forward, 15);
-		  MOTOR_Set_Speed(&MOTOR_Front_Right_2, Forward, 15);
-		  MOTOR_Set_Speed(&MOTOR_Rear_Left_3, Forward, 15);
-		  MOTOR_Set_Speed(&MOTOR_Rear_Right_4, Forward, 15);
-	  }
-	  else
 	  {
 		  MOTOR_Soft_STOP(&MOTOR_Front_Left_1);
 		  MOTOR_Soft_STOP(&MOTOR_Front_Right_2);
 		  MOTOR_Soft_STOP(&MOTOR_Rear_Left_3);
 		  MOTOR_Soft_STOP(&MOTOR_Rear_Right_4);
+	  }
+	  else if (Center == BUTTON_Read())
+	  {
+		  MOTOR_Set_Speed_PID(&MOTOR_Front_Left_1, 6.0);
+	  }
+	  else
+	  {
+
 	  }
 
     /* USER CODE END WHILE */

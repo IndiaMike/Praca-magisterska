@@ -4,8 +4,11 @@
  *  Created on: 26 kwi 2022
  *      Author: grzes
  */
-#include "main.h"
+
 #include "motor_encoder.h"
+#include <math.h>
+
+extern TMotor MOTOR_Front_Left_1;
 
 static void MOTOR_PWM_Set_Width(TMotor *Motor,uint8_t Percent);
 static void MOTOR_PWM_Start(TMotor *Motor);
@@ -22,6 +25,10 @@ Motor->IN_B_GpioPin	 = IN_B_GpioPin;
 
 Motor->htim = htim;
 Motor->TIM_CHANNEL = channel;
+
+Motor->Set_Speed_Rad_per_Sec =0;
+Motor->actual_PWM_Percent =0;
+
 
 
 MOTOR_PWM_Start(Motor);
@@ -42,11 +49,18 @@ void ENCODER_Init(TMotor *Motor, TEncoder *encoder, TIM_HandleTypeDef *htim_enco
 
 	Motor->encoder->Speed_Pulse_per_Sec	=0;
 	Motor->encoder->Speed_MM_per_Sec	=0;
+	Motor->encoder->Speed_Rad_per_Sec	=0;
 }
 
+void MOTOR_PID_Connect(TMotor *Motor, TPid *pid)
+{
+	Motor->pid = pid;
+}
 
 static void MOTOR_PWM_Set_Width(TMotor *Motor,uint8_t Percent)
 {
+	if(Percent > MAX_PWM_VALUE)
+	   Percent = MAX_PWM_VALUE;
 	__HAL_TIM_SET_COMPARE(Motor->htim, Motor->TIM_CHANNEL,Percent);
 }
 
@@ -54,8 +68,6 @@ static void MOTOR_PWM_Start(TMotor *Motor)
 {	MOTOR_PWM_Set_Width(Motor,0);
 	HAL_TIM_PWM_Start(Motor->htim, Motor->TIM_CHANNEL);
 }
-
-
 
 
 
@@ -71,20 +83,50 @@ void MOTOR_Emergency_STOP(TMotor *Motor)
 	HAL_GPIO_WritePin(Motor->IN_B_GpioPort, Motor->IN_B_GpioPin, RESET);
 }
 
-void MOTOR_Set_Speed(TMotor *Motor, Motor_Direcrion Direction, uint8_t Speed_in_Percentage)
+void MOTOR_Set_Speed_in_Direction(TMotor *Motor, Motor_Direcrion Direction, uint8_t Speed_in_Percentage)
 {
+	Motor->actual_PWM_Percent = Speed_in_Percentage;
 	if(Direction == Forward)
 	{
 		HAL_GPIO_WritePin(Motor->IN_A_GpioPort, Motor->IN_A_GpioPin, RESET);
 		HAL_GPIO_WritePin(Motor->IN_B_GpioPort, Motor->IN_B_GpioPin, SET);
-		MOTOR_PWM_Set_Width(Motor,Speed_in_Percentage);
+		MOTOR_PWM_Set_Width(Motor,Motor->actual_PWM_Percent);
 	}
 	else if(Direction == Backward)
 	{
 		HAL_GPIO_WritePin(Motor->IN_A_GpioPort, Motor->IN_A_GpioPin, SET);
 		HAL_GPIO_WritePin(Motor->IN_B_GpioPort, Motor->IN_B_GpioPin, RESET);
-		MOTOR_PWM_Set_Width(Motor,Speed_in_Percentage);
+		MOTOR_PWM_Set_Width(Motor,Motor->actual_PWM_Percent);
 	}
+}
+
+void MOTOR_Set_Speed(TMotor *Motor, int8_t Speed_in_Percentage)
+{
+	if(Speed_in_Percentage > MAX_PWM_VALUE) Speed_in_Percentage = MAX_PWM_VALUE;
+	if(Speed_in_Percentage < MIN_PWM_VALUE) Speed_in_Percentage = MIN_PWM_VALUE;
+
+
+	if( Speed_in_Percentage >= 0)
+	{
+		HAL_GPIO_WritePin(Motor->IN_A_GpioPort, Motor->IN_A_GpioPin, RESET);
+		HAL_GPIO_WritePin(Motor->IN_B_GpioPort, Motor->IN_B_GpioPin, SET);
+		MOTOR_PWM_Set_Width(Motor,Motor->actual_PWM_Percent);
+	}
+	if( Speed_in_Percentage < 0)
+		{
+		HAL_GPIO_WritePin(Motor->IN_A_GpioPort, Motor->IN_A_GpioPin, SET);
+		HAL_GPIO_WritePin(Motor->IN_B_GpioPort, Motor->IN_B_GpioPin, RESET);
+		MOTOR_PWM_Set_Width(Motor,abs(Motor->actual_PWM_Percent));
+		}
+}
+
+void MOTOR_Set_Speed_PID(TMotor *Motor, float set_speed)
+{
+	if(set_speed != Motor->Set_Speed_Rad_per_Sec)
+		PID_Reset(Motor->pid);
+
+	Motor->Set_Speed_Rad_per_Sec = set_speed;
+
 }
 
 void ENCODER_Speed_Calculate(TMotor *Motor)
@@ -92,32 +134,46 @@ void ENCODER_Speed_Calculate(TMotor *Motor)
 	Motor->encoder->Last_Value 			= Motor->encoder->Current_Value;
 	Motor->encoder->Current_Value 		= (int16_t)Motor->encoder->htim_encoder->Instance->CNT;
 	Motor->encoder->Difference_Pulse	= Motor->encoder->Current_Value - Motor->encoder->Last_Value;
+	if(Motor->encoder->Difference_Pulse > 32768) Motor->encoder->Difference_Pulse -=65536;
+	if(Motor->encoder->Difference_Pulse <-32768) Motor->encoder->Difference_Pulse  =65536 - abs(Motor->encoder->Difference_Pulse);
 	Motor->encoder->Difference_Angle	= Motor->encoder->Difference_Pulse * DEG_PER_PULSE;
 	Motor->encoder->Difference_Radian	= Motor->encoder->Difference_Angle * PI / 180.0;
 
 	Motor->encoder->Speed_Rad_per_Sec	= (float)Motor->encoder->Difference_Radian /(float)DELTA_TIME_S;
 	Motor->encoder->Speed_Deg_per_Sec	= (float)Motor->encoder->Difference_Angle /(float)DELTA_TIME_S;
 
+
+	int output = PID_Calculate(Motor->pid, Motor->Set_Speed_Rad_per_Sec, Motor->encoder->Speed_Rad_per_Sec);
+
+	Motor->actual_PWM_Percent += output;
+
+
+	MOTOR_Set_Speed(Motor, Motor->actual_PWM_Percent);
 	//Motor->encoder->Speed_Pulse_per_Sec = (float)Motor->encoder->Difference_Pulse * (float)FREQUENCY_OF_TIM_CALCULATE_INTERRUPT_HZ;
 	//Motor->encoder->Speed_MM_per_Sec	= Motor->encoder->Speed_Pulse_per_Sec * (float)WHEEL_CIRCUMFERENCE_MM / (float)ENCODER_PULSE_PER_REVOLUTION;
 	//Motor->encoder->Speed_Deg_per_Sec	= (float)Motor->encoder->Difference_Pulse * (float)PULSE_PER_DEG / TIME_OF_CALCULATION_CYCLE_MS;
 
-
 	Motor->encoder->Difference_mm		= (float)Motor->encoder->Difference_Pulse * WHEEL_CIRCUMFERENCE_MM / ENCODER_PULSE_PER_REVOLUTION;
 	Motor->encoder->Total_Distance_mm	+=Motor->encoder->Difference_mm;
-
 }
+
 
 void ENCODER_Total_Dist_Reset(TMotor *Motor)
 {
 	Motor->encoder->Total_Distance_mm = 0.0;
 }
 
-void define_test()
+/**
+  * @brief  This function is for TIM11 Callback 100Hz cyclic interrupt for e.g. wheel speed calculation
+  *
+  */
+void HAL_TIM_OC_DelayElapsedCallback(TIM_HandleTypeDef *htim)
 {
-	uint8_t frequency_100 = FREQUENCY_OF_TIM_CALCULATE_INTERRUPT_HZ;
-	float time_10		  = TIME_OF_CALCULATION_CYCLE_MS;
-	float delta_01s 	  = DELTA_TIME_S;
-	float pulse_per_deg_5_3= PULSE_PER_DEG;
-	float wheel_r		  = WHEEL_R;
+	if(htim->Instance == TIM11 )
+	{
+		if(htim->Channel == HAL_TIM_ACTIVE_CHANNEL_1)
+		{
+			ENCODER_Speed_Calculate(&MOTOR_Front_Left_1);
+		}
+	}
 }

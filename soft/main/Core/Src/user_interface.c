@@ -12,8 +12,8 @@ extern  TLed LED_2_GREEN;
 extern  TLed LED_3_YELLOW;
 extern  TLed LED_4_RED;
 
-uint32_t lastTick_Heart=0;
-uint32_t lastTick_Buzzer=0;
+static uint32_t lastTick_Heart=0;	// zmienne pomocnicze do timera softwarowego /Static aby nie były widoczne na zewnątrz
+static uint32_t lastTick_Buzzer=0;  // zmienne pomocnicze do timera softwarowego /Static aby nie były widoczne na zewnątrz
 
 void LEDs_test(TLed Led_1, TLed Led_2, TLed Led_3, TLed Led_4)
 {
