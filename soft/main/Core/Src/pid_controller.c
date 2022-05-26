@@ -51,5 +51,4 @@ int PID_Calculate(TPid *PID, int setpoint, int process_variable)
 
 	PID->previous_error = error;
 	return(int)(p_term + i_term + d_term);
-
 }

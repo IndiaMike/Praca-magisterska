@@ -146,7 +146,8 @@ void ENCODER_Speed_Calculate(TMotor *Motor)
 	int output = PID_Calculate(Motor->pid, Motor->Set_Speed_Rad_per_Sec, Motor->encoder->Speed_Rad_per_Sec);
 
 	Motor->actual_PWM_Percent += output;
-
+	if(Motor->actual_PWM_Percent > MAX_PWM_VALUE) Motor->actual_PWM_Percent = MAX_PWM_VALUE;
+	if(Motor->actual_PWM_Percent < MIN_PWM_VALUE) Motor->actual_PWM_Percent = MIN_PWM_VALUE;
 
 	MOTOR_Set_Speed(Motor, Motor->actual_PWM_Percent);
 	//Motor->encoder->Speed_Pulse_per_Sec = (float)Motor->encoder->Difference_Pulse * (float)FREQUENCY_OF_TIM_CALCULATE_INTERRUPT_HZ;
