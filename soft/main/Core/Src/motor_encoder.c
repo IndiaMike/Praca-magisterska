@@ -6,7 +6,7 @@
  */
 
 #include "motor_encoder.h"
-#include <math.h>
+#include <stdlib.h>
 
 extern TMotor MOTOR_Front_Left_1;
 
@@ -126,7 +126,6 @@ void MOTOR_Set_Speed_PID(TMotor *Motor, float set_speed)
 		PID_Reset(Motor->pid);
 
 	Motor->Set_Speed_Rad_per_Sec = set_speed;
-
 }
 
 void ENCODER_Speed_Calculate(TMotor *Motor)
@@ -146,6 +145,7 @@ void ENCODER_Speed_Calculate(TMotor *Motor)
 	int output = PID_Calculate(Motor->pid, Motor->Set_Speed_Rad_per_Sec, Motor->encoder->Speed_Rad_per_Sec);
 
 	Motor->actual_PWM_Percent += output;
+
 	if(Motor->actual_PWM_Percent > MAX_PWM_VALUE) Motor->actual_PWM_Percent = MAX_PWM_VALUE;
 	if(Motor->actual_PWM_Percent < MIN_PWM_VALUE) Motor->actual_PWM_Percent = MIN_PWM_VALUE;
 

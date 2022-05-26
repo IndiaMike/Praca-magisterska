@@ -16,7 +16,7 @@
 #define MOTOR_1_Kp					2.5
 #define MOTOR_1_Ki					0.0
 #define MOTOR_1_Kd					0.0
-#define MOTOR_1_ANTI_WINDUP		   1000
+#define MOTOR_1_ANTI_WINDUP		   10
 
 
 typedef struct

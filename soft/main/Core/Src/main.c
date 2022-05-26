@@ -74,6 +74,13 @@ static void MX_NVIC_Init(void);
 
 	TPid PID_Motor_1;
 
+	//temporary PID test_ do tablicy
+	uint8_t start_flag =0;
+	uint8_t i=0;
+	int speed_table[] = {10, 20, 30, 10, 0, -20, 0};
+	uint32_t time_tick=0;
+	uint32_t max_time=5000;
+
 	//TPid	PID_Motor_1;
 
 /* USER CODE END 0 */
@@ -164,18 +171,26 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-	  LED_Heart(&LED_3_YELLOW,50);
 
+		if(start_flag == 1)
+		{
+			if((HAL_GetTick() - time_tick) > max_time)
+				  {
+					  time_tick = HAL_GetTick();
+
+					  MOTOR_Set_Speed_PID(&MOTOR_Front_Left_1, speed_table[i++]);
+
+
+					  if(i >= 7)i = 0;
+				  }
+		}
 
 
 
 	  if(Right == BUTTON_Read())
 	  {
-
-			  MOTOR_Set_Speed_in_Direction(&MOTOR_Front_Left_1, Forward, 30);
-			  MOTOR_Set_Speed_in_Direction(&MOTOR_Front_Right_2, Backward, 30);
-			  MOTOR_Set_Speed_in_Direction(&MOTOR_Rear_Left_3, Forward, 30);
-			  MOTOR_Set_Speed_in_Direction(&MOTOR_Rear_Right_4, Backward, 30);
+		  start_flag = 0;
+		  MOTOR_Set_Speed_PID(&MOTOR_Front_Left_1, 0);
 	  }
 	  else if(Left == BUTTON_Read())
 	  {
@@ -186,7 +201,7 @@ int main(void)
 	  }
 	  else if (Center == BUTTON_Read())
 	  {
-		  MOTOR_Set_Speed_PID(&MOTOR_Front_Left_1, 6.0);
+		  start_flag =1;
 	  }
 	  else
 	  {
@@ -196,6 +211,7 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
+	  LED_Heart(&LED_3_YELLOW,50);
   }
   /* USER CODE END 3 */
 }
