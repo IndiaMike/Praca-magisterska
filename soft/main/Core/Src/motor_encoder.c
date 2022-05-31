@@ -42,9 +42,9 @@ void ENCODER_Init(TMotor *Motor, TEncoder *encoder, TIM_HandleTypeDef *htim_enco
 	Motor->encoder->Total_Distance_mm	=0;
 	Motor->encoder->Difference_mm		=0;
 
-	Motor->encoder->Speed_Pulse_per_Sec	=0;
-	Motor->encoder->Speed_MM_per_Sec	=0;
-	Motor->encoder->Speed_Rad_per_Sec	=0;
+	Motor->encoder->Actual_Speed_Pulse_per_Sec	=0;
+	Motor->encoder->Actual_Speed_MM_per_Sec	=0;
+	Motor->encoder->Actual_Speed_Rad_per_Sec	=0;
 }
 
 void MOTOR_PID_Connect(TMotor *Motor, TPid *pid)
@@ -79,23 +79,26 @@ void MOTOR_Emergency_STOP(TMotor *Motor)
 }
 
 
-void MOTOR_Set_Speed(TMotor *Motor, int16_t Speed)
+void MOTOR_Set_Speed(TMotor *Motor, float Speed)
 {
-	if(Speed > MAX_PWM_VALUE) Speed = MAX_PWM_VALUE;
-	if(Speed < MIN_PWM_VALUE) Speed = MIN_PWM_VALUE;
 
-	if( Speed >= 0)
+	if (Speed > -0.02f && Speed < 0.02f)
+			{
+			MOTOR_Soft_STOP(&MOTOR_Front_Left_1);
+			}
+	else if( Speed >= 0.0f)
 	{
 		HAL_GPIO_WritePin(Motor->IN_A_GpioPort, Motor->IN_A_GpioPin, RESET);
 		HAL_GPIO_WritePin(Motor->IN_B_GpioPort, Motor->IN_B_GpioPin, SET);
-		MOTOR_PWM_Set_Width(Motor,Speed);
+		MOTOR_PWM_Set_Width(Motor,(uint16_t)(fabsf(Speed) * 999.0f));
 	}
-	if( Speed < 0)
+	else if( Speed < 0.0f)
 	{
 		HAL_GPIO_WritePin(Motor->IN_A_GpioPort, Motor->IN_A_GpioPin, SET);
 		HAL_GPIO_WritePin(Motor->IN_B_GpioPort, Motor->IN_B_GpioPin, RESET);
-		MOTOR_PWM_Set_Width(Motor,abs(Speed));
+		MOTOR_PWM_Set_Width(Motor,(uint16_t)(fabsf(Speed) * 999.0f));
 	}
+
 }
 
 
@@ -109,8 +112,8 @@ void ENCODER_Speed_Calculate(TMotor *Motor)
 	Motor->encoder->Difference_Angle	= Motor->encoder->Difference_Pulse * DEG_PER_PULSE;
 	Motor->encoder->Difference_Radian	= Motor->encoder->Difference_Angle * PI / 180.0;
 
-	Motor->encoder->Speed_Rad_per_Sec	= (float)Motor->encoder->Difference_Radian /(float)DELTA_TIME_S;
-	Motor->encoder->Speed_Deg_per_Sec	= (float)Motor->encoder->Difference_Angle /(float)DELTA_TIME_S;
+	Motor->encoder->Actual_Speed_Rad_per_Sec	= (float)Motor->encoder->Difference_Radian /(float)DELTA_TIME_S;
+	Motor->encoder->Actual_Speed_Deg_per_Sec	= (float)Motor->encoder->Difference_Angle /(float)DELTA_TIME_S;
 
 	//Motor->encoder->Speed_Pulse_per_Sec = (float)Motor->encoder->Difference_Pulse * (float)FREQUENCY_OF_TIM_CALCULATE_INTERRUPT_HZ;
 	//Motor->encoder->Speed_MM_per_Sec	= Motor->encoder->Speed_Pulse_per_Sec * (float)WHEEL_CIRCUMFERENCE_MM / (float)ENCODER_PULSE_PER_REVOLUTION;
@@ -138,6 +141,8 @@ void HAL_TIM_OC_DelayElapsedCallback(TIM_HandleTypeDef *htim)
 		if(htim->Channel == HAL_TIM_ACTIVE_CHANNEL_1)
 		{
 			ENCODER_Speed_Calculate(&MOTOR_Front_Left_1);
+			PID_Controller(&MOTOR_Front_Left_1);
+
 		}
 	}
 }

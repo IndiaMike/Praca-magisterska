@@ -27,7 +27,7 @@
 /* USER CODE BEGIN Includes */
 #include "user_interface.h"
 #include "motor_encoder.h"
-#include "pid_controller.h"
+//#include "pid_controller.h"
 
 /* USER CODE END Includes */
 
@@ -140,6 +140,8 @@ int main(void)
 
   ENCODER_Init(&MOTOR_Front_Left_1, &ENCODER_Motor_1, &htim1);
   MOTOR_PID_Connect(&MOTOR_Front_Left_1, &PID_Motor_1);
+  PID_Init(&PID_Motor_1,0.2, 0, 0,  100);
+
 
 
 
@@ -170,11 +172,11 @@ int main(void)
 	  }
 	  else if(Left == BUTTON_Read())
 	  {
-		  MOTOR_Set_Speed(&MOTOR_Front_Left_1,1000);
+		  MOTOR_Front_Left_1.pid->Set_Speed_Rad_per_Sec = 6.0;
 	  }
 	  else if (Center == BUTTON_Read())
 	  {
-		  MOTOR_Set_Speed(&MOTOR_Front_Left_1,-1000);
+		  MOTOR_Front_Left_1.pid->Set_Speed_Rad_per_Sec = 0.0;
 	  }
 	  else
 	  {

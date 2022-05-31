@@ -9,7 +9,7 @@
 #define INC_PID_CONTROLLER_H_
 
 #include "main.h"
-
+#include "math.h"
 
 
 
@@ -21,9 +21,11 @@
 
 typedef struct
 {
-	int previous_error;
-	int total_error;
+	float previous_error;
+	float total_error;
+	float error;
 
+	float out;
 	//controllers gains
 	float Kp;
 	float Ki;
@@ -31,8 +33,10 @@ typedef struct
 
 	float Set_Speed_Rad_per_Sec;
 
-	int anti_windup_limit;
+	float anti_windup_limit;
 }TPid;
+
+void PID_Init(TPid *pid, float kp, float ki, float kd, float anti_windup_limit);
 
 
 #endif /* INC_PID_CONTROLLER_H_ */

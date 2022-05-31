@@ -56,10 +56,10 @@ typedef struct
 	float		Difference_Radian;
 
 	//measured speed
-	float		Speed_MM_per_Sec;
-	float		Speed_Pulse_per_Sec;
-	float		Speed_Deg_per_Sec;
-	float		Speed_Rad_per_Sec;		//mierzona predkosc w rad/s
+	float		Actual_Speed_MM_per_Sec;
+	float		Actual_Speed_Pulse_per_Sec;
+	float		Actual_Speed_Deg_per_Sec;
+	float		Actual_Speed_Rad_per_Sec;		//mierzona predkosc w rad/s
 
 	// timer encoder mode
 	TIM_HandleTypeDef *htim_encoder;
@@ -93,7 +93,7 @@ void MOTOR_Init(TMotor *Motor,GPIO_TypeDef *IN_A_GpioPort, uint16_t IN_A_GpioPin
 		uint16_t channel);
 
 
-void MOTOR_Set_Speed(TMotor *Motor, int16_t Speed);
+void MOTOR_Set_Speed(TMotor *Motor, float Speed);
 void MOTOR_Soft_STOP(TMotor *Motor);
 void MOTOR_Emergency_STOP(TMotor *Motor);
 
