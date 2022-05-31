@@ -29,8 +29,8 @@
 #define PI 3.1415
 #define WHEEL_R (WHEEL_CIRCUMFERENCE_MM / (2.0 * PI))
 
-#define MAX_PWM_VALUE  100
-#define MIN_PWM_VALUE -100
+#define MAX_PWM_VALUE  1000
+#define MIN_PWM_VALUE -1000
 
 typedef enum
 {
@@ -61,10 +61,8 @@ typedef struct
 	float		Speed_Deg_per_Sec;
 	float		Speed_Rad_per_Sec;		//mierzona predkosc w rad/s
 
-
 	// timer encoder mode
 	TIM_HandleTypeDef *htim_encoder;
-
 
 }TEncoder;
 typedef struct
@@ -85,11 +83,7 @@ typedef struct
 	Motor_Direcrion	 Direction;
 
 	TEncoder 		*encoder;
-
-	//Set speed
 	TPid 			*pid;
-	float			Set_Speed_Rad_per_Sec;	//zadana predkosc w rad/s
-	int8_t			actual_PWM_Percent;		//wartosc aktualna pwm
 
 }TMotor;
 
@@ -99,18 +93,16 @@ void MOTOR_Init(TMotor *Motor,GPIO_TypeDef *IN_A_GpioPort, uint16_t IN_A_GpioPin
 		uint16_t channel);
 
 
-
+void MOTOR_Set_Speed(TMotor *Motor, int16_t Speed);
 void MOTOR_Soft_STOP(TMotor *Motor);
 void MOTOR_Emergency_STOP(TMotor *Motor);
-void MOTOR_Set_Speed_in_Direction(TMotor *Motor, Motor_Direcrion Direction, uint8_t Speed_in_Percentage);
-void MOTOR_Set_Speed(TMotor *Motor, int8_t Speed_in_Percentage);
 
-void MOTOR_Set_Speed_PID(TMotor *Motor, float set_speed);
+
 
 // ENCODERS
+void ENCODER_Init(TMotor *Motor, TEncoder *encoder, TIM_HandleTypeDef *htim_encoder);
 void ENCODER_Total_Dist_Reset(TMotor *Motor);
 void ENCODER_Speed_Calculate(TMotor *Motor);
-void ENCODER_Init(TMotor *Motor, TEncoder *encoder, TIM_HandleTypeDef *htim_encoder);
 
 void MOTOR_PID_Connect(TMotor *Motor, TPid *pid);
 

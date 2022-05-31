@@ -34,7 +34,5 @@ typedef struct
 	int anti_windup_limit;
 }TPid;
 
-void PID_Init(TPid *Pid, float kp_init, float ki_init, float kd_init, int anti_windup_limit_init);
-void PID_Reset(TPid *PID);
-int  PID_Calculate(TPid *PID, int setpoint, int process_variable);
+
 #endif /* INC_PID_CONTROLLER_H_ */

@@ -74,15 +74,6 @@ static void MX_NVIC_Init(void);
 
 	TPid PID_Motor_1;
 
-	//temporary PID test_ do tablicy
-	uint8_t start_flag =0;
-	uint8_t i=0;
-	int speed_table[] = {10, 20, 30, 10, 0, -20, 0};
-	uint32_t time_tick=0;
-	uint32_t max_time=5000;
-
-	//TPid	PID_Motor_1;
-
 /* USER CODE END 0 */
 
 /**
@@ -98,7 +89,7 @@ int main(void)
   /* MCU Configuration--------------------------------------------------------*/
 
   /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
-   HAL_Init();
+  HAL_Init();
 
   /* USER CODE BEGIN Init */
 
@@ -135,6 +126,7 @@ int main(void)
   MOTOR_Init(&MOTOR_Front_Left_1, M3INA_GPIO_Port, M3INA_Pin, M3INB_GPIO_Port, M3INB_Pin,
 		  &htim5,TIM_CHANNEL_3);
 
+
   MOTOR_Init(&MOTOR_Front_Right_2, M2INB_GPIO_Port, M2INB_Pin, M2INA_GPIO_Port,M2INA_Pin,
 		  &htim5,TIM_CHANNEL_2);
 
@@ -149,7 +141,7 @@ int main(void)
   ENCODER_Init(&MOTOR_Front_Left_1, &ENCODER_Motor_1, &htim1);
   MOTOR_PID_Connect(&MOTOR_Front_Left_1, &PID_Motor_1);
 
-  PID_Init(&PID_Motor_1, MOTOR_1_Kp, MOTOR_1_Ki, MOTOR_1_Kd, MOTOR_1_ANTI_WINDUP);
+
 
   //PID_Init(&MOTOR_Front_Left_1, &PID_Motor_1, 2, 0, 0, 10);
 
@@ -172,36 +164,17 @@ int main(void)
   while (1)
   {
 
-		if(start_flag == 1)
-		{
-			if((HAL_GetTick() - time_tick) > max_time)
-				  {
-					  time_tick = HAL_GetTick();
-
-					  MOTOR_Set_Speed_PID(&MOTOR_Front_Left_1, speed_table[i++]);
-
-
-					  if(i >= 7)i = 0;
-				  }
-		}
-
-
-
 	  if(Right == BUTTON_Read())
 	  {
-		  start_flag = 0;
-		  MOTOR_Set_Speed_PID(&MOTOR_Front_Left_1, 0);
+		  MOTOR_Soft_STOP(&MOTOR_Front_Left_1);
 	  }
 	  else if(Left == BUTTON_Read())
 	  {
-		  MOTOR_Soft_STOP(&MOTOR_Front_Left_1);
-		  MOTOR_Soft_STOP(&MOTOR_Front_Right_2);
-		  MOTOR_Soft_STOP(&MOTOR_Rear_Left_3);
-		  MOTOR_Soft_STOP(&MOTOR_Rear_Right_4);
+		  MOTOR_Set_Speed(&MOTOR_Front_Left_1,1000);
 	  }
 	  else if (Center == BUTTON_Read())
 	  {
-		  start_flag =1;
+		  MOTOR_Set_Speed(&MOTOR_Front_Left_1,-1000);
 	  }
 	  else
 	  {
