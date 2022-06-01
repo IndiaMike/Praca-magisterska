@@ -68,6 +68,7 @@ static void MOTOR_PWM_Start(TMotor *Motor)
 
 void MOTOR_Soft_STOP(TMotor *Motor)
 {
+	MOTOR_Front_Left_1.pid->Set_Speed_Rad_per_Sec = 0.0;
 	MOTOR_PWM_Set_Width(Motor,0);
 }
 
@@ -79,24 +80,24 @@ void MOTOR_Emergency_STOP(TMotor *Motor)
 }
 
 
-void MOTOR_Set_Speed(TMotor *Motor, float Speed)
+void MOTOR_Set_Speed(TMotor *Motor)
 {
 
-	if (Speed > -0.02f && Speed < 0.02f)
+	if (Motor->pid->out > -0.025f && Motor->pid->out < 0.025f)
 			{
 			MOTOR_Soft_STOP(&MOTOR_Front_Left_1);
 			}
-	else if( Speed >= 0.0f)
+	else if( Motor->pid->out >= 0.0f)
 	{
 		HAL_GPIO_WritePin(Motor->IN_A_GpioPort, Motor->IN_A_GpioPin, RESET);
 		HAL_GPIO_WritePin(Motor->IN_B_GpioPort, Motor->IN_B_GpioPin, SET);
-		MOTOR_PWM_Set_Width(Motor,(uint16_t)(fabsf(Speed) * 999.0f));
+		MOTOR_PWM_Set_Width(Motor,(uint16_t)(fabsf(Motor->pid->out) * 999.0f));
 	}
-	else if( Speed < 0.0f)
+	else if( Motor->pid->out < 0.0f)
 	{
 		HAL_GPIO_WritePin(Motor->IN_A_GpioPort, Motor->IN_A_GpioPin, SET);
 		HAL_GPIO_WritePin(Motor->IN_B_GpioPort, Motor->IN_B_GpioPin, RESET);
-		MOTOR_PWM_Set_Width(Motor,(uint16_t)(fabsf(Speed) * 999.0f));
+		MOTOR_PWM_Set_Width(Motor,(uint16_t)(fabsf(Motor->pid->out) * 999.0f));
 	}
 
 }

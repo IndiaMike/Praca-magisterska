@@ -78,12 +78,12 @@ typedef struct
 	TIM_HandleTypeDef *htim;
 	uint16_t		  TIM_CHANNEL;
 
-
-	Motor			 MotorID;
-	Motor_Direcrion	 Direction;
-
 	TEncoder 		*encoder;
 	TPid 			*pid;
+
+	//not used jet
+	Motor			 MotorID;
+	Motor_Direcrion	 Direction;
 
 }TMotor;
 
@@ -93,7 +93,7 @@ void MOTOR_Init(TMotor *Motor,GPIO_TypeDef *IN_A_GpioPort, uint16_t IN_A_GpioPin
 		uint16_t channel);
 
 
-void MOTOR_Set_Speed(TMotor *Motor, float Speed);
+void MOTOR_Set_Speed(TMotor *Motor);
 void MOTOR_Soft_STOP(TMotor *Motor);
 void MOTOR_Emergency_STOP(TMotor *Motor);
 

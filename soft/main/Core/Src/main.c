@@ -71,9 +71,14 @@ static void MX_NVIC_Init(void);
 	TMotor MOTOR_Rear_Right_4;
 
 	TEncoder ENCODER_Motor_1;
+	TEncoder ENCODER_Motor_2;
+	TEncoder ENCODER_Motor_3;
+	TEncoder ENCODER_Motor_4;
 
 	TPid PID_Motor_1;
-
+	TPid PID_Motor_2;
+	TPid PID_Motor_3;
+	TPid PID_Motor_4;
 /* USER CODE END 0 */
 
 /**
@@ -123,9 +128,10 @@ int main(void)
   LEDs_Init(&LED_3_YELLOW,LED_3_GPIO_Port,LED_3_Pin);
   LEDs_Init(&LED_4_RED,LED_4_GPIO_Port,LED_4_Pin);
 
+  LEDs_test(LED_1_GREEN,LED_2_GREEN,LED_3_YELLOW,LED_4_RED);
+
   MOTOR_Init(&MOTOR_Front_Left_1, M3INA_GPIO_Port, M3INA_Pin, M3INB_GPIO_Port, M3INB_Pin,
 		  &htim5,TIM_CHANNEL_3);
-
 
   MOTOR_Init(&MOTOR_Front_Right_2, M2INB_GPIO_Port, M2INB_Pin, M2INA_GPIO_Port,M2INA_Pin,
 		  &htim5,TIM_CHANNEL_2);
@@ -136,11 +142,11 @@ int main(void)
   MOTOR_Init(&MOTOR_Rear_Left_3, M4INA_GPIO_Port,M4INA_Pin,M4INB_GPIO_Port,M4INB_Pin,
 		  &htim5, TIM_CHANNEL_4);
 
-  LEDs_test(LED_1_GREEN,LED_2_GREEN,LED_3_YELLOW,LED_4_RED);
 
   ENCODER_Init(&MOTOR_Front_Left_1, &ENCODER_Motor_1, &htim1);
+
   MOTOR_PID_Connect(&MOTOR_Front_Left_1, &PID_Motor_1);
-  PID_Init(&PID_Motor_1,0.2, 0, 0,  100);
+  PID_Init(&PID_Motor_1,MOTOR_Kp, MOTOR_Ki, MOTOR_Kd,  MOTOR_ANTI_WINDUP);
 
 
 
