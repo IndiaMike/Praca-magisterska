@@ -144,12 +144,20 @@ int main(void)
 
 
   ENCODER_Init(&MOTOR_Front_Left_1, &ENCODER_Motor_1, &htim1);
+  ENCODER_Init(&MOTOR_Front_Right_2, &ENCODER_Motor_2, &htim2);
+  ENCODER_Init(&MOTOR_Rear_Left_3, &ENCODER_Motor_3, &htim3);
+  ENCODER_Init(&MOTOR_Rear_Right_4, &ENCODER_Motor_4, &htim4);
+
 
   MOTOR_PID_Connect(&MOTOR_Front_Left_1, &PID_Motor_1);
+  MOTOR_PID_Connect(&MOTOR_Front_Right_2, &PID_Motor_2);
+  MOTOR_PID_Connect(&MOTOR_Rear_Left_3, &PID_Motor_3);
+  MOTOR_PID_Connect(&MOTOR_Rear_Right_4, &PID_Motor_4);
+
   PID_Init(&PID_Motor_1,MOTOR_Kp, MOTOR_Ki, MOTOR_Kd,  MOTOR_ANTI_WINDUP);
-
-
-
+  PID_Init(&PID_Motor_2,MOTOR_Kp, MOTOR_Ki, MOTOR_Kd,  MOTOR_ANTI_WINDUP);
+  PID_Init(&PID_Motor_3,MOTOR_Kp, MOTOR_Ki, MOTOR_Kd,  MOTOR_ANTI_WINDUP);
+  PID_Init(&PID_Motor_4,MOTOR_Kp, MOTOR_Ki, MOTOR_Kd,  MOTOR_ANTI_WINDUP);
 
   //PID_Init(&MOTOR_Front_Left_1, &PID_Motor_1, 2, 0, 0, 10);
 
@@ -175,14 +183,23 @@ int main(void)
 	  if(Right == BUTTON_Read())
 	  {
 		  MOTOR_Soft_STOP(&MOTOR_Front_Left_1);
+		  MOTOR_Soft_STOP(&MOTOR_Front_Right_2);
+		  MOTOR_Soft_STOP(&MOTOR_Rear_Left_3);
+		  MOTOR_Soft_STOP(&MOTOR_Rear_Right_4);
 	  }
 	  else if(Left == BUTTON_Read())
 	  {
 		  MOTOR_Front_Left_1.pid->Set_Speed_Rad_per_Sec = 6.0;
+		  MOTOR_Front_Right_2.pid->Set_Speed_Rad_per_Sec = 6.0;
+		  MOTOR_Rear_Left_3.pid->Set_Speed_Rad_per_Sec = 6.0;
+		  MOTOR_Rear_Right_4.pid->Set_Speed_Rad_per_Sec = 6.0;
 	  }
 	  else if (Center == BUTTON_Read())
 	  {
-		  MOTOR_Front_Left_1.pid->Set_Speed_Rad_per_Sec = 0.0;
+		  MOTOR_Soft_STOP(&MOTOR_Front_Left_1);
+		  MOTOR_Soft_STOP(&MOTOR_Front_Right_2);
+		  MOTOR_Soft_STOP(&MOTOR_Rear_Left_3);
+		  MOTOR_Soft_STOP(&MOTOR_Rear_Right_4);
 	  }
 	  else
 	  {

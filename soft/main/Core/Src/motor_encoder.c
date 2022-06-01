@@ -9,6 +9,9 @@
 #include <stdlib.h>
 
 extern TMotor MOTOR_Front_Left_1;
+extern TMotor MOTOR_Front_Right_2;
+extern TMotor MOTOR_Rear_Left_3;
+extern TMotor MOTOR_Rear_Right_4;
 
 static void MOTOR_PWM_Set_Width(TMotor *Motor,uint16_t Percent);
 static void MOTOR_PWM_Start(TMotor *Motor);
@@ -143,6 +146,15 @@ void HAL_TIM_OC_DelayElapsedCallback(TIM_HandleTypeDef *htim)
 		{
 			ENCODER_Speed_Calculate(&MOTOR_Front_Left_1);
 			PID_Controller(&MOTOR_Front_Left_1);
+
+			ENCODER_Speed_Calculate(&MOTOR_Front_Right_2);
+			PID_Controller(&MOTOR_Front_Right_2);
+
+			ENCODER_Speed_Calculate(&MOTOR_Rear_Left_3);
+			PID_Controller(&MOTOR_Rear_Left_3);
+
+			ENCODER_Speed_Calculate(&MOTOR_Rear_Right_4);
+			PID_Controller(&MOTOR_Rear_Right_4);
 
 		}
 	}
