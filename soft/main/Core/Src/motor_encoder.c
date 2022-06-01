@@ -7,11 +7,14 @@
 
 #include "motor_encoder.h"
 #include <stdlib.h>
+#include "control.h"
 
 extern TMotor MOTOR_Front_Left_1;
 extern TMotor MOTOR_Front_Right_2;
 extern TMotor MOTOR_Rear_Left_3;
 extern TMotor MOTOR_Rear_Right_4;
+
+extern TRobot R;
 
 static void MOTOR_PWM_Set_Width(TMotor *Motor,uint16_t Percent);
 static void MOTOR_PWM_Start(TMotor *Motor);
@@ -71,7 +74,6 @@ static void MOTOR_PWM_Start(TMotor *Motor)
 
 void MOTOR_Soft_STOP(TMotor *Motor)
 {
-	MOTOR_Front_Left_1.pid->Set_Speed_Rad_per_Sec = 0.0;
 	MOTOR_PWM_Set_Width(Motor,0);
 }
 
@@ -86,10 +88,10 @@ void MOTOR_Emergency_STOP(TMotor *Motor)
 void MOTOR_Set_Speed(TMotor *Motor)
 {
 
-	if (Motor->pid->out > -0.025f && Motor->pid->out < 0.025f)
-			{
-			MOTOR_Soft_STOP(&MOTOR_Front_Left_1);
-			}
+	if (Motor->pid->out > -0.05f && Motor->pid->out < 0.05f)
+		{
+		MOTOR_Soft_STOP(Motor);
+		}
 	else if( Motor->pid->out >= 0.0f)
 	{
 		HAL_GPIO_WritePin(Motor->IN_A_GpioPort, Motor->IN_A_GpioPin, RESET);
@@ -134,28 +136,4 @@ void ENCODER_Total_Dist_Reset(TMotor *Motor)
 }
 
 
-/**
-  * @brief  This function is for TIM11 Callback 100Hz cyclic interrupt for e.g. wheel speed calculation
-  *
-  */
-void HAL_TIM_OC_DelayElapsedCallback(TIM_HandleTypeDef *htim)
-{
-	if(htim->Instance == TIM11 )
-	{
-		if(htim->Channel == HAL_TIM_ACTIVE_CHANNEL_1)
-		{
-			ENCODER_Speed_Calculate(&MOTOR_Front_Left_1);
-			PID_Controller(&MOTOR_Front_Left_1);
 
-			ENCODER_Speed_Calculate(&MOTOR_Front_Right_2);
-			PID_Controller(&MOTOR_Front_Right_2);
-
-			ENCODER_Speed_Calculate(&MOTOR_Rear_Left_3);
-			PID_Controller(&MOTOR_Rear_Left_3);
-
-			ENCODER_Speed_Calculate(&MOTOR_Rear_Right_4);
-			PID_Controller(&MOTOR_Rear_Right_4);
-
-		}
-	}
-}

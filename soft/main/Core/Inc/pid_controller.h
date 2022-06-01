@@ -13,7 +13,8 @@
 
 
 
-#define MOTOR_Kp					0.038
+
+#define MOTOR_Kp					0.035
 #define MOTOR_Ki					0.0016
 #define MOTOR_Kd					0.0002
 #define MOTOR_ANTI_WINDUP		     200

@@ -27,6 +27,7 @@
 /* USER CODE BEGIN Includes */
 #include "user_interface.h"
 #include "motor_encoder.h"
+#include "control.h"
 //#include "pid_controller.h"
 
 /* USER CODE END Includes */
@@ -60,6 +61,8 @@ static void MX_NVIC_Init(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
+	TRobot R;
+
 	TLed LED_1_GREEN;
 	TLed LED_2_GREEN;
 	TLed LED_3_YELLOW;
@@ -159,6 +162,7 @@ int main(void)
   PID_Init(&PID_Motor_3,MOTOR_Kp, MOTOR_Ki, MOTOR_Kd,  MOTOR_ANTI_WINDUP);
   PID_Init(&PID_Motor_4,MOTOR_Kp, MOTOR_Ki, MOTOR_Kd,  MOTOR_ANTI_WINDUP);
 
+  ROBOT_Init(&R);
   //PID_Init(&MOTOR_Front_Left_1, &PID_Motor_1, 2, 0, 0, 10);
 
   HAL_TIM_Encoder_Start(&htim1,TIM_CHANNEL_ALL);
@@ -182,24 +186,19 @@ int main(void)
 
 	  if(Right == BUTTON_Read())
 	  {
-		  MOTOR_Soft_STOP(&MOTOR_Front_Left_1);
-		  MOTOR_Soft_STOP(&MOTOR_Front_Right_2);
-		  MOTOR_Soft_STOP(&MOTOR_Rear_Left_3);
-		  MOTOR_Soft_STOP(&MOTOR_Rear_Right_4);
+		  ROBOT_Stop(&R);
 	  }
 	  else if(Left == BUTTON_Read())
 	  {
-		  MOTOR_Front_Left_1.pid->Set_Speed_Rad_per_Sec = 6.0;
+		  R.isPidOn = true;
+		  MOTOR_Front_Left_1.pid ->Set_Speed_Rad_per_Sec = 6.0;
 		  MOTOR_Front_Right_2.pid->Set_Speed_Rad_per_Sec = 6.0;
-		  MOTOR_Rear_Left_3.pid->Set_Speed_Rad_per_Sec = 6.0;
-		  MOTOR_Rear_Right_4.pid->Set_Speed_Rad_per_Sec = 6.0;
+		  MOTOR_Rear_Left_3.pid  ->Set_Speed_Rad_per_Sec = 6.0;
+		  MOTOR_Rear_Right_4.pid ->Set_Speed_Rad_per_Sec = 6.0;
 	  }
 	  else if (Center == BUTTON_Read())
 	  {
-		  MOTOR_Soft_STOP(&MOTOR_Front_Left_1);
-		  MOTOR_Soft_STOP(&MOTOR_Front_Right_2);
-		  MOTOR_Soft_STOP(&MOTOR_Rear_Left_3);
-		  MOTOR_Soft_STOP(&MOTOR_Rear_Right_4);
+		  ROBOT_Go(&R, 6.0);
 	  }
 	  else
 	  {
@@ -270,7 +269,32 @@ static void MX_NVIC_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
+/**
+  * @brief  This function is for TIM11 Callback 100Hz cyclic interrupt for e.g. wheel speed calculation
+  *
+  */
+void HAL_TIM_OC_DelayElapsedCallback(TIM_HandleTypeDef *htim)
+{
+	if(htim->Instance == TIM11 )
+	{
+		if(htim->Channel == HAL_TIM_ACTIVE_CHANNEL_1)
+		{
+			ENCODER_Speed_Calculate(&MOTOR_Front_Left_1);
+			ENCODER_Speed_Calculate(&MOTOR_Front_Right_2);
+			ENCODER_Speed_Calculate(&MOTOR_Rear_Left_3);
+			ENCODER_Speed_Calculate(&MOTOR_Rear_Right_4);
 
+			if(true == R.isPidOn)
+			{
+				PID_Controller(&MOTOR_Front_Left_1);
+				PID_Controller(&MOTOR_Front_Right_2);
+				PID_Controller(&MOTOR_Rear_Left_3);
+				PID_Controller(&MOTOR_Rear_Right_4);
+			}
+
+		}
+	}
+}
 /* USER CODE END 4 */
 
 /**
