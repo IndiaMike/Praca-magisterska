@@ -164,6 +164,7 @@ int main(void)
   PID_Init(&PID_Motor_3,MOTOR_Kp, MOTOR_Ki, MOTOR_Kd,  MOTOR_ANTI_WINDUP);
   PID_Init(&PID_Motor_4,MOTOR_Kp, MOTOR_Ki, MOTOR_Kd,  MOTOR_ANTI_WINDUP);
 
+  PID_Init(&Position_PID,0.006, 0, 0, 0);
   ROBOT_Init(&R);
   //PID_Init(&MOTOR_Front_Left_1, &PID_Motor_1, 2, 0, 0, 10);
 
@@ -175,10 +176,12 @@ int main(void)
 
 
   __HAL_TIM_ENABLE_IT(&htim11,TIM_IT_UPDATE);
-  //timer 10Hz start
-   HAL_TIM_OC_Start_IT(&htim11,TIM_CHANNEL_1);
+
+
 
    BUZZER_Off();
+   //timer 10Hz start
+   HAL_TIM_OC_Start_IT(&htim11,TIM_CHANNEL_1);
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -193,14 +196,17 @@ int main(void)
 	  else if(Left == BUTTON_Read())
 	  {
 		  R.isPidOn = true;
-		  MOTOR_Front_Left_1.pid ->Set_Speed_Rad_per_Sec = 6.0;
-		  MOTOR_Front_Right_2.pid->Set_Speed_Rad_per_Sec = 6.0;
-		  MOTOR_Rear_Left_3.pid  ->Set_Speed_Rad_per_Sec = 6.0;
-		  MOTOR_Rear_Right_4.pid ->Set_Speed_Rad_per_Sec = 6.0;
+		  MOTOR_Front_Left_1.pid ->Set_Value = 6.0;
+		  MOTOR_Front_Right_2.pid->Set_Value = 6.0;
+		  MOTOR_Rear_Left_3.pid  ->Set_Value = 6.0;
+		  MOTOR_Rear_Right_4.pid ->Set_Value = 6.0;
 	  }
 	  else if (Center == BUTTON_Read())
 	  {
-		  ROBOT_Go(&R, 6.0);
+		  //ROBOT_Go(&R, 6.0);
+
+		  R.Pid_Position->Set_Value = 150.0;
+		  ROBOT_Go_Forward(&R);
 	  }
 	  else
 	  {
@@ -286,19 +292,24 @@ void HAL_TIM_OC_DelayElapsedCallback(TIM_HandleTypeDef *htim)
 			ENCODER_Speed_Calculate(&MOTOR_Rear_Left_3);
 			ENCODER_Speed_Calculate(&MOTOR_Rear_Right_4);
 
+			ROBOT_Calculate(&R);
+			PID_Controller(R.Pid_Position);
+
 			if(true == R.isPidOn)
 			{
-				PID_Controller(&MOTOR_Front_Left_1);
-				PID_Controller(&MOTOR_Front_Right_2);
-				PID_Controller(&MOTOR_Rear_Left_3);
-				PID_Controller(&MOTOR_Rear_Right_4);
+				PID_Controller(&PID_Motor_1);
+				PID_Controller(&PID_Motor_2);
+				PID_Controller(&PID_Motor_3);
+				PID_Controller(&PID_Motor_4);
 
 				MOTOR_Set_Speed(&MOTOR_Front_Left_1);
 				MOTOR_Set_Speed(&MOTOR_Front_Right_2);
 				MOTOR_Set_Speed(&MOTOR_Rear_Left_3);
 				MOTOR_Set_Speed(&MOTOR_Rear_Right_4);
 			}
-			ROBOT_Calculate(&R);
+
+
+
 
 		}
 	}

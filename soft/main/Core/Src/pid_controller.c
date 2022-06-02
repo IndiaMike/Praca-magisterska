@@ -18,36 +18,36 @@ void PID_Init(TPid *pid, float kp, float ki, float kd, float anti_windup_limit)
 
 	pid->previous_error = 0.0f;
 	pid->total_error = 0.0f;
-	pid->Set_Speed_Rad_per_Sec = 0.0f;
+	pid->Set_Value = 0.0f;
 	pid->out = 0.0f;
 
 }
 
-void PID_Controller(TMotor *Motor)
+void PID_Controller(TPid *pid)
 {
 	float p_term, i_term, d_term;
-	Motor->pid->previous_error = Motor->pid->error;
-	Motor->pid->error = Motor->pid->Set_Speed_Rad_per_Sec - Motor->encoder->Actual_Speed_Rad_per_Sec;
-	Motor->pid->total_error += Motor->pid->error;
+	pid->previous_error = pid->error;
+	pid->error = pid->Set_Value - pid->Actual_Value;
+	pid->total_error += pid->error;
 
-	if(Motor->pid->total_error > Motor->pid->anti_windup_limit)
+	if(pid->total_error > pid->anti_windup_limit)
 	{
-		Motor->pid->total_error = Motor->pid->anti_windup_limit;
+		pid->total_error = pid->anti_windup_limit;
 	}
-	if(Motor->pid->total_error < -Motor->pid->anti_windup_limit)
+	if(pid->total_error < -pid->anti_windup_limit)
 	{
-		Motor->pid->total_error = -Motor->pid->anti_windup_limit;
+		pid->total_error = -pid->anti_windup_limit;
 	}
-	 p_term = Motor->pid->Kp * Motor->pid->error;
-	 i_term = Motor->pid->Ki * Motor->pid->total_error * TIME_OF_CALCULATION_CYCLE_MS;
-	 d_term = Motor->pid->Kd * (Motor->pid->error - Motor->pid->previous_error) / TIME_OF_CALCULATION_CYCLE_MS;
+	 p_term = pid->Kp * pid->error;
+	 i_term = pid->Ki * pid->total_error * TIME_OF_CALCULATION_CYCLE_MS;
+	 d_term = pid->Kd * (pid->error - pid->previous_error) / TIME_OF_CALCULATION_CYCLE_MS;
 
-	Motor->pid->out = p_term + i_term + d_term;
+	pid->out = p_term + i_term + d_term;
 
-	if(Motor->pid->out >  1.0f)
-		Motor->pid->out =  1.0f;
-	if(Motor->pid->out < -1.0f)
-		Motor->pid->out = -1.0f;
+	if(pid->out >  1.0f)
+		pid->out =  1.0f;
+	if(pid->out < -1.0f)
+		pid->out = -1.0f;
 }
 
 

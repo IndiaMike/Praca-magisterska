@@ -19,6 +19,7 @@
 #define ROBOT_POSITION_ANTI_WINDUP		    200
 
 #define ROBOT_WIDTH_MM 313.0
+#define RAD_2_DEG 57.29577951308f
 
 typedef struct
 {
@@ -30,7 +31,7 @@ typedef struct
 
 	float set_position;
 
-	TPid	 Pid_Position;
+	TPid	 *Pid_Position;
 	TMotor 	 Motors[4];
 }TRobot;
 

@@ -32,7 +32,8 @@ typedef struct
 	float Ki;
 	float Kd;
 
-	float Set_Speed_Rad_per_Sec;
+	float Set_Value;
+	float Actual_Value;
 
 	float anti_windup_limit;
 }TPid;

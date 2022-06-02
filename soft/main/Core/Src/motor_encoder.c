@@ -121,6 +121,8 @@ void ENCODER_Speed_Calculate(TMotor *Motor)
 	Motor->encoder->Actual_Speed_Rad_per_Sec	= (float)Motor->encoder->Difference_Radian /(float)DELTA_TIME_S;
 	Motor->encoder->Actual_Speed_Deg_per_Sec	= (float)Motor->encoder->Difference_Angle /(float)DELTA_TIME_S;
 
+	Motor->pid->Actual_Value			= Motor->encoder->Actual_Speed_Rad_per_Sec;
+
 	//Motor->encoder->Speed_Pulse_per_Sec = (float)Motor->encoder->Difference_Pulse * (float)FREQUENCY_OF_TIM_CALCULATE_INTERRUPT_HZ;
 	//Motor->encoder->Speed_MM_per_Sec	= Motor->encoder->Speed_Pulse_per_Sec * (float)WHEEL_CIRCUMFERENCE_MM / (float)ENCODER_PULSE_PER_REVOLUTION;
 	//Motor->encoder->Speed_Deg_per_Sec	= (float)Motor->encoder->Difference_Pulse * (float)PULSE_PER_DEG / TIME_OF_CALCULATION_CYCLE_MS;
