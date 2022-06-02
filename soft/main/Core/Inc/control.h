@@ -11,16 +11,31 @@
 #include "main.h"
 #include <stdbool.h>
 #include "motor_encoder.h"
+#include "pid_controller.h"
+
+#define ROBOT_POSITION_Kp					0.035
+#define ROBOT_POSITION_Ki					0.0
+#define ROBOT_POSITION_Kd					0.0
+#define ROBOT_POSITION_ANTI_WINDUP		    200
+
+#define ROBOT_WIDTH_MM 313.0
 
 typedef struct
 {
 	bool 	 isPidOn;
-	uint32_t distance;
-	uint16_t angle;
+	float left_site_distance_MM;
+	float right_site_distance_MM;
+	float actual_position;
+	float actual_angle;
+
+	float set_position;
+
+	TPid	 Pid_Position;
 	TMotor 	 Motors[4];
 }TRobot;
 
 void ROBOT_Init(TRobot *R);
 void ROBOT_Stop(TRobot *R);
 void ROBOT_Go(TRobot *R, float Speed);
+void ROBOT_Calculate(TRobot *R);
 #endif /* INC_CONTROL_H_ */

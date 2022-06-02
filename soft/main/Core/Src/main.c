@@ -82,6 +82,8 @@ static void MX_NVIC_Init(void);
 	TPid PID_Motor_2;
 	TPid PID_Motor_3;
 	TPid PID_Motor_4;
+
+	TPid Position_PID;
 /* USER CODE END 0 */
 
 /**
@@ -290,7 +292,13 @@ void HAL_TIM_OC_DelayElapsedCallback(TIM_HandleTypeDef *htim)
 				PID_Controller(&MOTOR_Front_Right_2);
 				PID_Controller(&MOTOR_Rear_Left_3);
 				PID_Controller(&MOTOR_Rear_Right_4);
+
+				MOTOR_Set_Speed(&MOTOR_Front_Left_1);
+				MOTOR_Set_Speed(&MOTOR_Front_Right_2);
+				MOTOR_Set_Speed(&MOTOR_Rear_Left_3);
+				MOTOR_Set_Speed(&MOTOR_Rear_Right_4);
 			}
+			ROBOT_Calculate(&R);
 
 		}
 	}

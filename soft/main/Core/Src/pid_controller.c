@@ -48,7 +48,6 @@ void PID_Controller(TMotor *Motor)
 		Motor->pid->out =  1.0f;
 	if(Motor->pid->out < -1.0f)
 		Motor->pid->out = -1.0f;
-	MOTOR_Set_Speed(Motor);
 }
 
 
