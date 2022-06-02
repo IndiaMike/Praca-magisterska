@@ -164,7 +164,7 @@ int main(void)
   PID_Init(&PID_Motor_3,MOTOR_Kp, MOTOR_Ki, MOTOR_Kd,  MOTOR_ANTI_WINDUP);
   PID_Init(&PID_Motor_4,MOTOR_Kp, MOTOR_Ki, MOTOR_Kd,  MOTOR_ANTI_WINDUP);
 
-  PID_Init(&Position_PID,0.006, 0, 0, 0);
+  PID_Init(&Position_PID,0.010, 0, 0, 0);
   ROBOT_Init(&R);
   //PID_Init(&MOTOR_Front_Left_1, &PID_Motor_1, 2, 0, 0, 10);
 
@@ -293,6 +293,7 @@ void HAL_TIM_OC_DelayElapsedCallback(TIM_HandleTypeDef *htim)
 			ENCODER_Speed_Calculate(&MOTOR_Rear_Right_4);
 
 			ROBOT_Calculate(&R);
+			//forward, to setpoint PID
 			PID_Controller(R.Pid_Position);
 
 			if(true == R.isPidOn)

@@ -26,10 +26,14 @@ typedef struct
 	bool 	 isPidOn;
 	float left_site_distance_MM;
 	float right_site_distance_MM;
-	float actual_position;
-	float actual_angle;
 
+	float actual_position;
 	float set_position;
+
+	float actual_angle;
+	float set_angle;
+
+	float max_speed_Rad_per_Sec;
 
 	TPid	 *Pid_Position;
 	TMotor 	 Motors[4];

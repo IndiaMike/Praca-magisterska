@@ -34,26 +34,21 @@ void ROBOT_Init(TRobot *R)
 	R->left_site_distance_MM = 0.0;
 	R->right_site_distance_MM= 0.0;
 	R->actual_angle			 = 0.0;
+	R->max_speed_Rad_per_Sec = 4.0;
 
 	R->Pid_Position = &Position_PID;
 }
 
-void ROBOT_Go(TRobot *R, float  Speed)
-{
-	R->isPidOn = true;
-	for(uint8_t i=0;i<4;i++)
-	{
-		R->Motors[i].pid->Set_Value = Speed;
-	}
-}
+
 
 void ROBOT_Go_Forward(TRobot *R)
 {
-
-		if( R->Pid_Position->out >= 0.0f)
+	R->isPidOn = true;
+	for(uint8_t i=0;i<4;i++)
 		{
-			ROBOT_Go(R, 6.0*(R->Pid_Position->out));
+			R->Motors[i].pid->Set_Value = R->Pid_Position->out * R->max_speed_Rad_per_Sec;
 		}
+
 
 }
 
@@ -66,5 +61,16 @@ void ROBOT_Calculate(TRobot *R)
 	R->Pid_Position->Actual_Value = R->actual_position;
 	R->left_site_distance_MM  += (R->Motors[0].encoder->Difference_mm + R->Motors[2].encoder->Difference_mm) / 2.0f;
 	R->right_site_distance_MM += (R->Motors[1].encoder->Difference_mm + R->Motors[3].encoder->Difference_mm) / 2.0f;
-	R->actual_angle 		   = atan((R->left_site_distance_MM - R->right_site_distance_MM) / (float)ROBOT_WIDTH_MM) * RAD_2_DEG;
+	R->actual_angle 		   = fmod(atan((R->left_site_distance_MM - R->right_site_distance_MM) / (float)ROBOT_WIDTH_MM) * RAD_2_DEG, 360.0f);
+}
+
+void ROBOT_Go_Direction(TRobot *R, float Speed)
+{
+	if(R->set_angle > R->actual_angle)
+	{
+		R->Motors[0].pid->Set_Value = Speed;
+		R->Motors[1].pid->Set_Value = -Speed;
+		R->Motors[2].pid->Set_Value = Speed;
+		R->Motors[3].pid->Set_Value = -Speed;
+	}
 }

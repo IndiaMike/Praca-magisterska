@@ -1,0 +1,6 @@
+1. zasada dołączania plików .c .h -> struktuty zagnieżdzone w różnych plikach
+2. strojenie PID koła
+3. strojenie PI/PID jazda
+
+-> diagram regulatorów + profiler prędkości?
+ 
