@@ -20,6 +20,7 @@
 
 #define ROBOT_WIDTH_MM 313.0
 #define RAD_2_DEG 57.29577951308f
+#define DEG_2_RAD 0.01745329251994f
 
 typedef struct
 {
@@ -31,12 +32,22 @@ typedef struct
 	float set_position;
 
 	float actual_angle;
-	float set_angle;
+
 
 	float max_speed_Rad_per_Sec;
 
 	TPid	 *Pid_Position;
 	TMotor 	 Motors[4];
+
+	float X;
+	float Y;
+	float Set_X;
+	float Set_Y;
+
+	float TargetDistanceMM;
+
+
+	float Set_angle;
 }TRobot;
 
 void ROBOT_Init(TRobot *R);

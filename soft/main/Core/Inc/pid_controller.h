@@ -14,10 +14,10 @@
 
 
 
-#define MOTOR_Kp					0.035
-#define MOTOR_Ki					0.0016
-#define MOTOR_Kd					0.0002
-#define MOTOR_ANTI_WINDUP		     200
+#define MOTOR_Kp					0.15
+#define MOTOR_Ki					1.0
+#define MOTOR_Kd					0.0005
+#define MOTOR_ANTI_WINDUP		    200
 
 
 typedef struct
@@ -39,6 +39,6 @@ typedef struct
 }TPid;
 
 void PID_Init(TPid *pid, float kp, float ki, float kd, float anti_windup_limit);
-
+void PID_Controller(TPid *pid);
 
 #endif /* INC_PID_CONTROLLER_H_ */

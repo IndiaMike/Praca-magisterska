@@ -198,7 +198,7 @@ int main(void)
 		  R.isPidOn = true;
 		  MOTOR_Front_Left_1.pid ->Set_Value = 6.0;
 		  MOTOR_Front_Right_2.pid->Set_Value = 6.0;
-		  MOTOR_Rear_Left_3.pid  ->Set_Value = 6.0;
+		 // MOTOR_Rear_Left_3.pid  ->Set_Value = 6.0;
 		  MOTOR_Rear_Right_4.pid ->Set_Value = 6.0;
 	  }
 	  else if (Center == BUTTON_Read())

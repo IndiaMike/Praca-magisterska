@@ -39,8 +39,8 @@ void PID_Controller(TPid *pid)
 		pid->total_error = -pid->anti_windup_limit;
 	}
 	 p_term = pid->Kp * pid->error;
-	 i_term = pid->Ki * pid->total_error * TIME_OF_CALCULATION_CYCLE_MS;
-	 d_term = pid->Kd * (pid->error - pid->previous_error) / TIME_OF_CALCULATION_CYCLE_MS;
+	 i_term = pid->Ki * pid->total_error * DELTA_TIME_S;
+	 d_term = pid->Kd * (pid->error - pid->previous_error) / DELTA_TIME_S;
 
 	pid->out = p_term + i_term + d_term;
 

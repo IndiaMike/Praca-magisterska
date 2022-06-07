@@ -54,23 +54,25 @@ void ROBOT_Go_Forward(TRobot *R)
 
 void ROBOT_Calculate(TRobot *R)
 {
+	float srednia = 0.0;
 	for(uint8_t i=0;i<4;i++)
 		{
 			R->actual_position += (R->Motors[i].encoder->Difference_mm)/4.0f;
+		srednia += R->Motors[i].encoder->Difference_mm;
 		}
+	srednia /= 4.0;
+
 	R->Pid_Position->Actual_Value = R->actual_position;
 	R->left_site_distance_MM  += (R->Motors[0].encoder->Difference_mm + R->Motors[2].encoder->Difference_mm) / 2.0f;
 	R->right_site_distance_MM += (R->Motors[1].encoder->Difference_mm + R->Motors[3].encoder->Difference_mm) / 2.0f;
-	R->actual_angle 		   = fmod(atan((R->left_site_distance_MM - R->right_site_distance_MM) / (float)ROBOT_WIDTH_MM) * RAD_2_DEG, 360.0f);
+	R->actual_angle 		   = (R->left_site_distance_MM - R->right_site_distance_MM) / (float)ROBOT_WIDTH_MM * RAD_2_DEG;
+	R->X += sin(R-> actual_angle * DEG_2_RAD) * srednia;
+	R->Y += cos(R-> actual_angle * DEG_2_RAD) * srednia;
+	float deltaX = R->Set_X - R->X;
+	float deltaY = R->Set_Y - R->Y;
+	R->Set_angle = atan2(deltaX,deltaY) * RAD_2_DEG;
+	R->TargetDistanceMM = sqrt( deltaX * deltaX + deltaY * deltaY);
+
 }
 
-void ROBOT_Go_Direction(TRobot *R, float Speed)
-{
-	if(R->set_angle > R->actual_angle)
-	{
-		R->Motors[0].pid->Set_Value = Speed;
-		R->Motors[1].pid->Set_Value = -Speed;
-		R->Motors[2].pid->Set_Value = Speed;
-		R->Motors[3].pid->Set_Value = -Speed;
-	}
-}
+
