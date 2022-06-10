@@ -64,6 +64,8 @@ typedef struct
 	// timer encoder mode
 	TIM_HandleTypeDef *htim_encoder;
 
+	uint16_t encoder_wathdog;
+
 }TEncoder;
 typedef struct
 {
@@ -103,6 +105,7 @@ void MOTOR_Emergency_STOP(TMotor *Motor);
 void ENCODER_Init(TMotor *Motor, TEncoder *encoder, TIM_HandleTypeDef *htim_encoder);
 void ENCODER_Total_Dist_Reset(TMotor *Motor);
 void ENCODER_Speed_Calculate(TMotor *Motor);
+void ENCODER_Diagnostic(TMotor *Motor);
 
 void MOTOR_PID_Connect(TMotor *Motor, TPid *pid);
 

@@ -83,7 +83,7 @@ static void MX_NVIC_Init(void);
 	TPid PID_Motor_3;
 	TPid PID_Motor_4;
 
-	TPid Position_PID;
+
 /* USER CODE END 0 */
 
 /**
@@ -164,8 +164,10 @@ int main(void)
   PID_Init(&PID_Motor_3,MOTOR_Kp, MOTOR_Ki, MOTOR_Kd,  MOTOR_ANTI_WINDUP);
   PID_Init(&PID_Motor_4,MOTOR_Kp, MOTOR_Ki, MOTOR_Kd,  MOTOR_ANTI_WINDUP);
 
-  PID_Init(&Position_PID,0.010, 0, 0, 0);
+
   ROBOT_Init(&R);
+
+
   //PID_Init(&MOTOR_Front_Left_1, &PID_Motor_1, 2, 0, 0, 10);
 
   HAL_TIM_Encoder_Start(&htim1,TIM_CHANNEL_ALL);
@@ -182,6 +184,8 @@ int main(void)
    BUZZER_Off();
    //timer 10Hz start
    HAL_TIM_OC_Start_IT(&htim11,TIM_CHANNEL_1);
+   R.isMotorsPidOn = true;
+
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -195,18 +199,13 @@ int main(void)
 	  }
 	  else if(Left == BUTTON_Read())
 	  {
-		  R.isPidOn = true;
-		  MOTOR_Front_Left_1.pid ->Set_Value = 6.0;
-		  MOTOR_Front_Right_2.pid->Set_Value = 6.0;
-		 // MOTOR_Rear_Left_3.pid  ->Set_Value = 6.0;
-		  MOTOR_Rear_Right_4.pid ->Set_Value = 6.0;
+
 	  }
 	  else if (Center == BUTTON_Read())
 	  {
-		  //ROBOT_Go(&R, 6.0);
 
-		  R.Pid_Position->Set_Value = 150.0;
-		  ROBOT_Go_Forward(&R);
+		  ROBOT_Set_Point(&R, 100, 0, 0);
+
 	  }
 	  else
 	  {
@@ -291,12 +290,12 @@ void HAL_TIM_OC_DelayElapsedCallback(TIM_HandleTypeDef *htim)
 			ENCODER_Speed_Calculate(&MOTOR_Front_Right_2);
 			ENCODER_Speed_Calculate(&MOTOR_Rear_Left_3);
 			ENCODER_Speed_Calculate(&MOTOR_Rear_Right_4);
-
 			ROBOT_Calculate(&R);
-			//forward, to setpoint PID
-			PID_Controller(R.Pid_Position);
 
-			if(true == R.isPidOn)
+			//forward, to setpoint PID
+			ROBOT_Go2Point(&R);
+
+			if(true == R.isMotorsPidOn)
 			{
 				PID_Controller(&PID_Motor_1);
 				PID_Controller(&PID_Motor_2);

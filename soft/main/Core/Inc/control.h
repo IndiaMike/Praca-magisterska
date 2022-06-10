@@ -13,10 +13,7 @@
 #include "motor_encoder.h"
 #include "pid_controller.h"
 
-#define ROBOT_POSITION_Kp					0.035
-#define ROBOT_POSITION_Ki					0.0
-#define ROBOT_POSITION_Kd					0.0
-#define ROBOT_POSITION_ANTI_WINDUP		    200
+
 
 #define ROBOT_WIDTH_MM 313.0
 #define RAD_2_DEG 57.29577951308f
@@ -24,7 +21,7 @@
 
 typedef struct
 {
-	bool 	 isPidOn;
+	bool 	 isMotorsPidOn;
 	float left_site_distance_MM;
 	float right_site_distance_MM;
 
@@ -36,7 +33,10 @@ typedef struct
 
 	float max_speed_Rad_per_Sec;
 
-	TPid	 *Pid_Position;
+
+	TP		 P_direction;
+	TP		 P_distance;
+
 	TMotor 	 Motors[4];
 
 	float X;
@@ -48,10 +48,14 @@ typedef struct
 
 
 	float Set_angle;
+	float tolerance;
+
 }TRobot;
 
 void ROBOT_Init(TRobot *R);
 void ROBOT_Stop(TRobot *R);
 void ROBOT_Go(TRobot *R, float Speed);
 void ROBOT_Calculate(TRobot *R);
+void ROBOT_Set_Point(TRobot *R, float x, float y, float angle);
+void ROBOT_Go2Point(TRobot *R);
 #endif /* INC_CONTROL_H_ */

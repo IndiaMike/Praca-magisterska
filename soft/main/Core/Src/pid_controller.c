@@ -50,4 +50,22 @@ void PID_Controller(TPid *pid)
 		pid->out = -1.0f;
 }
 
+void P_Init(TP *P, float kp)
+{
+	P->Actual_Value = 0.0;
+	P->Set_Value = 0.0;
+	P->error = 0.0;
+
+	P->Kp = kp;
+}
+float P_Controller(TP *P)
+{
+	float out = 0.0;
+	P->error = P->Set_Value - P->Actual_Value;
+	out = P->Kp * P->error;
+
+	if(out >  1.0f) out =  1.0f;
+	if(out < -1.0f) out = -1.0f;
+	return out;
+}
 

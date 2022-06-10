@@ -8,6 +8,7 @@
 #include "motor_encoder.h"
 #include <stdlib.h>
 #include "control.h"
+#include "user_interface.h"
 
 extern TMotor MOTOR_Front_Left_1;
 extern TMotor MOTOR_Front_Right_2;
@@ -15,6 +16,9 @@ extern TMotor MOTOR_Rear_Left_3;
 extern TMotor MOTOR_Rear_Right_4;
 
 extern TRobot R;
+extern TLed LED_4_RED;
+
+
 
 static void MOTOR_PWM_Set_Width(TMotor *Motor,uint16_t Percent);
 static void MOTOR_PWM_Start(TMotor *Motor);
@@ -91,6 +95,7 @@ void MOTOR_Set_Speed(TMotor *Motor)
 	if (Motor->pid->out > -0.05f && Motor->pid->out < 0.05f)
 		{
 		MOTOR_Soft_STOP(Motor);
+
 		}
 	else if( Motor->pid->out >= 0.0f)
 	{
@@ -119,7 +124,7 @@ void ENCODER_Speed_Calculate(TMotor *Motor)
 	Motor->encoder->Difference_Radian	= Motor->encoder->Difference_Angle * PI / 180.0;
 
 	Motor->encoder->Actual_Speed_Rad_per_Sec	= (float)Motor->encoder->Difference_Radian /(float)DELTA_TIME_S;
-	Motor->encoder->Actual_Speed_Deg_per_Sec	= (float)Motor->encoder->Difference_Angle /(float)DELTA_TIME_S;
+	Motor->encoder->Actual_Speed_Deg_per_Sec	= (float)Motor->encoder->Difference_Angle  /(float)DELTA_TIME_S;
 
 	Motor->pid->Actual_Value			= Motor->encoder->Actual_Speed_Rad_per_Sec;
 
@@ -129,9 +134,31 @@ void ENCODER_Speed_Calculate(TMotor *Motor)
 
 	Motor->encoder->Difference_mm		= (float)Motor->encoder->Difference_Pulse * WHEEL_CIRCUMFERENCE_MM / ENCODER_PULSE_PER_REVOLUTION;
 	Motor->encoder->Total_Distance_mm	+=Motor->encoder->Difference_mm;
+	ENCODER_Diagnostic(Motor);
 }
 
 
+void ENCODER_Diagnostic(TMotor *Motor)
+{
+	if(Motor->pid->out > 0.99 || Motor->pid->out < -0.99 )
+	{
+		Motor->encoder->encoder_wathdog++;
+	}
+	else
+	{
+		Motor->encoder->encoder_wathdog=0;
+	}
+
+	if(Motor->encoder->encoder_wathdog > 200)
+	{
+		LED_OnOff(&LED_4_RED, LED_ON);
+		MOTOR_Soft_STOP(&MOTOR_Front_Left_1);
+		MOTOR_Soft_STOP(&MOTOR_Front_Right_2);
+		MOTOR_Soft_STOP(&MOTOR_Rear_Left_3);
+		MOTOR_Soft_STOP(&MOTOR_Rear_Right_4);
+		while(1){}
+	}
+}
 void ENCODER_Total_Dist_Reset(TMotor *Motor)
 {
 	Motor->encoder->Total_Distance_mm = 0.0;

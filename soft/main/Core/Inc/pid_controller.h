@@ -38,7 +38,20 @@ typedef struct
 	float anti_windup_limit;
 }TPid;
 
+
+typedef struct
+{
+	float error;
+	float Kp;
+	float Set_Value;
+	float Actual_Value;
+}TP;
+
+
 void PID_Init(TPid *pid, float kp, float ki, float kd, float anti_windup_limit);
 void PID_Controller(TPid *pid);
+
+void P_Init(TP *P, float kp);
+float P_Controller(TP *P);
 
 #endif /* INC_PID_CONTROLLER_H_ */
