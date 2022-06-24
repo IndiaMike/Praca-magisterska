@@ -21,6 +21,7 @@
 #include "main.h"
 #include "adc.h"
 #include "tim.h"
+#include "usart.h"
 #include "gpio.h"
 
 /* Private includes ----------------------------------------------------------*/
@@ -121,6 +122,7 @@ int main(void)
   MX_TIM5_Init();
   MX_TIM11_Init();
   MX_ADC1_Init();
+  MX_USART1_UART_Init();
 
   /* Initialize interrupts */
   MX_NVIC_Init();
@@ -184,7 +186,7 @@ int main(void)
    BUZZER_Off();
    //timer 10Hz start
    HAL_TIM_OC_Start_IT(&htim11,TIM_CHANNEL_1);
-   R.isMotorsPidOn = true;
+   R.isMotorsPidOn = false;
 
   /* USER CODE END 2 */
 
@@ -199,7 +201,7 @@ int main(void)
 	  }
 	  else if(Left == BUTTON_Read())
 	  {
-
+		  R.isMotorsPidOn = true;
 	  }
 	  else if (Center == BUTTON_Read())
 	  {

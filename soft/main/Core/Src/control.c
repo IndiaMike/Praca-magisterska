@@ -67,8 +67,8 @@ void ROBOT_Go2Point(TRobot *R)
 */
 	//regulacja kąta regulator P
 
-		//dist = P_Controller(&R->P_distance);
-		dir = P_Controller(&R->P_direction);
+		dist = P_Controller(&R->P_distance);
+		//dir = P_Controller(&R->P_direction);
 
 
 
