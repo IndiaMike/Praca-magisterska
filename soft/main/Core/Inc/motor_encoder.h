@@ -30,7 +30,7 @@
 #define WHEEL_R (WHEEL_CIRCUMFERENCE_MM / (2.0 * PI))
 
 #define MAX_PWM_VALUE  600
-#define MIN_PWM_VALUE -600
+//#define MIN_PWM_VALUE -600
 
 typedef enum
 {

@@ -198,6 +198,12 @@ CMAKE_STATIC_LINKER_FLAGS_RELWITHDEBINFO:STRING=
 // Studio IDE projects all commands are done without /nologo.
 CMAKE_VERBOSE_MAKEFILE:BOOL=FALSE
 
+//Path to a file.
+QT3_QGLOBAL_H_FILE:FILEPATH=QT3_QGLOBAL_H_FILE-NOTFOUND
+
+//Path to a file.
+QT4_QGLOBAL_H_FILE:FILEPATH=QT4_QGLOBAL_H_FILE-NOTFOUND
+
 //Skip Qt Creator's package manager auto-setup
 QT_CREATOR_SKIP_PACKAGE_MANAGER_SETUP:BOOL=OFF
 
@@ -207,17 +213,26 @@ QT_DIR:PATH=C:/Qt/5.12.12/msvc2015_64/lib/cmake/Qt5
 //No help, variable specified on the command line.
 QT_QMAKE_EXECUTABLE:FILEPATH=C:/Qt/5.12.12/msvc2015_64/bin/qmake.exe
 
+//Path to a program.
+QT_QMAKE_EXECUTABLE_FINDQT:FILEPATH=C:/Qt/5.12.12/msvc2015_64/bin/qmake.exe
+
 //The directory containing a CMake configuration file for Qt5Core.
 Qt5Core_DIR:PATH=C:/Qt/5.12.12/msvc2015_64/lib/cmake/Qt5Core
 
 //The directory containing a CMake configuration file for Qt5Gui.
 Qt5Gui_DIR:PATH=C:/Qt/5.12.12/msvc2015_64/lib/cmake/Qt5Gui
 
+//The directory containing a CMake configuration file for Qt5Network.
+Qt5Network_DIR:PATH=C:/Qt/5.12.12/msvc2015_64/lib/cmake/Qt5Network
+
 //The directory containing a CMake configuration file for Qt5Widgets.
 Qt5Widgets_DIR:PATH=C:/Qt/5.12.12/msvc2015_64/lib/cmake/Qt5Widgets
 
 //The directory containing a CMake configuration file for Qt5.
 Qt5_DIR:PATH=C:/Qt/5.12.12/msvc2015_64/lib/cmake/Qt5
+
+//The directory containing a CMake configuration file for Qt6.
+Qt6_DIR:PATH=Qt6_DIR-NOTFOUND
 
 //Value Computed by CMake
 map_BINARY_DIR:STATIC=D:/studia/2_st_magisterka_/parca_mgr/qt_app/v3_map/build-map-Desktop_x86_windows_msvc2019_pe_64bit-Debug
@@ -349,4 +364,10 @@ CMAKE_STATIC_LINKER_FLAGS_RELEASE-ADVANCED:INTERNAL=1
 CMAKE_STATIC_LINKER_FLAGS_RELWITHDEBINFO-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_VERBOSE_MAKEFILE
 CMAKE_VERBOSE_MAKEFILE-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: QT3_QGLOBAL_H_FILE
+QT3_QGLOBAL_H_FILE-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: QT4_QGLOBAL_H_FILE
+QT4_QGLOBAL_H_FILE-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: QT_QMAKE_EXECUTABLE_FINDQT
+QT_QMAKE_EXECUTABLE_FINDQT-ADVANCED:INTERNAL=1
 

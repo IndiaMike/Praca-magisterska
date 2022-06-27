@@ -13,7 +13,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
-
+find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Network)
 
 
 
@@ -50,7 +50,7 @@ else()
 endif()
 
 target_link_libraries(map PRIVATE Qt${QT_VERSION_MAJOR}::Widgets)
-
+target_link_libraries(map PRIVATE Qt${QT_VERSION_MAJOR}::Network)
 
 
 set_target_properties(map PROPERTIES

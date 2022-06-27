@@ -1,0 +1,25 @@
+The system is: Windows - 10.0.19043 - AMD64
+Compiling the CXX compiler identification source file "CMakeCXXCompilerId.cpp" succeeded.
+Compiler: C:/Program Files/Microsoft Visual Studio/2022/Community/VC/Tools/MSVC/14.32.31326/bin/HostX64/x64/cl.exe 
+Build flags: 
+Id flags:  
+
+The output was:
+0
+Microsoft (R) C/C++ wersja kompilatora optymalizującego 19.32.31329 dla x64
+Copyright (C) Microsoft Corporation. Wszystkie prawa zastrzeżone.
+
+CMakeCXXCompilerId.cpp
+Microsoft (R) Incremental Linker Version 14.32.31329.0
+Copyright (C) Microsoft Corporation.  All rights reserved.
+
+/out:CMakeCXXCompilerId.exe 
+CMakeCXXCompilerId.obj 
+
+
+Compilation of the CXX compiler identification source "CMakeCXXCompilerId.cpp" produced "CMakeCXXCompilerId.exe"
+
+Compilation of the CXX compiler identification source "CMakeCXXCompilerId.cpp" produced "CMakeCXXCompilerId.obj"
+
+The CXX compiler identification is MSVC, found in "D:/studia/2_st_magisterka_/parca_mgr/qt_app/v3_map/build-map-Desktop_x86_windows_msvc2019_pe_64bit-Release/CMakeFiles/3.21.1/CompilerIdCXX/CMakeCXXCompilerId.exe"
+

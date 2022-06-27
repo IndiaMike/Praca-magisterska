@@ -60,7 +60,13 @@
 		"C:/Qt/5.12.12/msvc2015_64/lib/cmake/Qt5Widgets/Qt5Widgets_QWindowsVistaStylePlugin.cmake",
 		"C:/Qt/5.12.12/msvc2015_64/lib/cmake/Qt5Widgets/Qt5WidgetsConfigExtras.cmake",
 		"C:/Qt/5.12.12/msvc2015_64/lib/cmake/Qt5Widgets/Qt5WidgetsMacros.cmake",
-		"C:/Qt/Tools/CMake_64/share/cmake-3.21/Modules/CMakeParseArguments.cmake"
+		"C:/Qt/Tools/CMake_64/share/cmake-3.21/Modules/CMakeParseArguments.cmake",
+		"C:/Qt/5.12.12/msvc2015_64/lib/cmake/Qt5/Qt5ConfigVersion.cmake",
+		"C:/Qt/5.12.12/msvc2015_64/lib/cmake/Qt5/Qt5Config.cmake",
+		"C:/Qt/5.12.12/msvc2015_64/lib/cmake/Qt5/Qt5ModuleLocation.cmake",
+		"C:/Qt/5.12.12/msvc2015_64/lib/cmake/Qt5Network/Qt5NetworkConfigVersion.cmake",
+		"C:/Qt/5.12.12/msvc2015_64/lib/cmake/Qt5Network/Qt5NetworkConfig.cmake",
+		"C:/Qt/5.12.12/msvc2015_64/lib/cmake/Qt5Network/Qt5Network_QGenericEnginePlugin.cmake"
 	],
 	"CMAKE_SOURCE_DIR" : "D:/studia/2_st_magisterka_/parca_mgr/qt_app/v3_map/map",
 	"DEP_FILE" : "",
@@ -83,7 +89,14 @@
 	"HEADER_EXTENSIONS" : [ "h", "hh", "h++", "hm", "hpp", "hxx", "in", "txx" ],
 	"INCLUDE_DIR" : "D:/studia/2_st_magisterka_/parca_mgr/qt_app/v3_map/build-map-Desktop_x86_windows_msvc2019_pe_64bit-Debug/map_autogen/include",
 	"MOC_COMPILATION_FILE" : "D:/studia/2_st_magisterka_/parca_mgr/qt_app/v3_map/build-map-Desktop_x86_windows_msvc2019_pe_64bit-Debug/map_autogen/mocs_compilation.cpp",
-	"MOC_DEFINITIONS" : [ "QT_CORE_LIB", "QT_GUI_LIB", "QT_WIDGETS_LIB", "WIN32" ],
+	"MOC_DEFINITIONS" : 
+	[
+		"QT_CORE_LIB",
+		"QT_GUI_LIB",
+		"QT_NETWORK_LIB",
+		"QT_WIDGETS_LIB",
+		"WIN32"
+	],
 	"MOC_DEPEND_FILTERS" : 
 	[
 		[
@@ -100,7 +113,8 @@
 		"C:/Qt/5.12.12/msvc2015_64/include/QtGui",
 		"C:/Qt/5.12.12/msvc2015_64/include/QtANGLE",
 		"C:/Qt/5.12.12/msvc2015_64/include/QtCore",
-		"C:/Qt/5.12.12/msvc2015_64/mkspecs/win32-msvc"
+		"C:/Qt/5.12.12/msvc2015_64/mkspecs/win32-msvc",
+		"C:/Qt/5.12.12/msvc2015_64/include/QtNetwork"
 	],
 	"MOC_MACRO_NAMES" : [ "Q_OBJECT", "Q_GADGET", "Q_NAMESPACE", "Q_NAMESPACE_EXPORT" ],
 	"MOC_OPTIONS" : [],

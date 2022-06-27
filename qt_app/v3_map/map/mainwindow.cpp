@@ -4,12 +4,22 @@
 #include "cell.h"
 #include <QMouseEvent>
 #include <QDebug>
+#include <QDateTime>
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-
+    socket = new QTcpSocket();
     Map_GenerateMap();
+
+}
+void MainWindow::wifiRead()
+{
+   QString recieveData;
+
+   recieveData = socket->readAll();
+   qDebug() <<"odebrano: "<<recieveData;
+   addToLogs(recieveData);
 }
 
 MainWindow::~MainWindow()
@@ -49,6 +59,16 @@ void MainWindow::Map_GenerateMap(void)
 
 }
 
+void MainWindow::addToLogs(QString message)
+{
+    QString currentDateTime = QDateTime::currentDateTime().toString("yyyy.MM.dd hh:mm:ss");
+
+
+    ui->textEditLogs->append(currentDateTime + "\t" + message);
+    qDebug()<<message;
+
+}
+
 void MainWindow::mousePressEvent(QMouseEvent *event)
 {
     if ((event->buttons() & Qt::LeftButton))
@@ -83,5 +103,47 @@ void MainWindow::on_pushButtonClearMap_clicked()
         }
     }
 
+}
+
+
+void MainWindow::on_pushButtonConnect_clicked()
+{
+
+    QHostAddress hostAddress;
+    hostAddress.setAddress("10.10.100.254");
+    socket->connectToHost(hostAddress, 8899);
+
+
+    connect(socket, SIGNAL(readyRead()),this, SLOT(wifiRead()));
+
+    qDebug() << "Connect button clicked";
+    if(!socket->waitForConnected(1000))
+    {
+        qDebug() << "TCP error: " << socket->errorString();
+        return;
+    }
+}
+
+
+void MainWindow::on_pushButtonSend_clicked()
+{
+     QString data = ui->lineEditText2Send->text();
+
+    if(socket->isOpen())
+        {
+            socket->write(data.toUtf8());
+            addToLogs(data);
+        }
+    else
+    {
+        addToLogs("Socket not connect!!");
+    }
+}
+
+
+void MainWindow::on_pushButtonClear_clicked()
+{
+    ui->lineEditText2Send->clear();
+    ui->textEditLogs->clear();
 }
 
