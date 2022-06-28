@@ -100,6 +100,10 @@ void Error_Handler(void);
 #define ENCODER_1_A_GPIO_Port GPIOA
 #define ENCODER_1_B_Pin GPIO_PIN_9
 #define ENCODER_1_B_GPIO_Port GPIOA
+#define UART1_WIFI_RX_Pin GPIO_PIN_10
+#define UART1_WIFI_RX_GPIO_Port GPIOA
+#define UART1_WIFI_TX_Pin GPIO_PIN_15
+#define UART1_WIFI_TX_GPIO_Port GPIOA
 #define LED_3_Pin GPIO_PIN_10
 #define LED_3_GPIO_Port GPIOC
 #define LED_4_Pin GPIO_PIN_11

@@ -29,6 +29,7 @@
 #include "user_interface.h"
 #include "motor_encoder.h"
 #include "control.h"
+#include "ring_buffer.h"
 //#include "pid_controller.h"
 
 /* USER CODE END Includes */
@@ -50,7 +51,9 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
-
+//uart receive
+uint8_t uartTmpReceive;
+RingBuffer_t RB_receive;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -83,6 +86,8 @@ static void MX_NVIC_Init(void);
 	TPid PID_Motor_2;
 	TPid PID_Motor_3;
 	TPid PID_Motor_4;
+
+
 
 
 /* USER CODE END 0 */
@@ -188,25 +193,38 @@ int main(void)
    HAL_TIM_OC_Start_IT(&htim11,TIM_CHANNEL_1);
    R.isMotorsPidOn = false;
 
-  /* USER CODE END 2 */
+
+   //UART WIFI232
+   HAL_UART_Receive_IT(&huart1, &uartTmpReceive, 1);
+
+
+
+   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
 
+
+
+
 	  if(Right == BUTTON_Read())
 	  {
-		  ROBOT_Stop(&R);
+	  //temporary!!!
+	  HAL_UART_Transmit(&huart1,"Button test", 11, 1000);
+	  HAL_Delay(1000);
+	  //end
+
 	  }
 	  else if(Left == BUTTON_Read())
 	  {
-		  R.isMotorsPidOn = true;
+		 // R.isMotorsPidOn = true;
 	  }
 	  else if (Center == BUTTON_Read())
 	  {
 
-		  ROBOT_Set_Point(&R, 100, 0, 0);
+		 // ROBOT_Set_Point(&R, 100, 0, 0);
 
 	  }
 	  else
@@ -275,9 +293,24 @@ static void MX_NVIC_Init(void)
   /* TIM1_TRG_COM_TIM11_IRQn interrupt configuration */
   HAL_NVIC_SetPriority(TIM1_TRG_COM_TIM11_IRQn, 0, 0);
   HAL_NVIC_EnableIRQ(TIM1_TRG_COM_TIM11_IRQn);
+  /* USART1_IRQn interrupt configuration */
+  HAL_NVIC_SetPriority(USART1_IRQn, 0, 0);
+  HAL_NVIC_EnableIRQ(USART1_IRQn);
 }
 
 /* USER CODE BEGIN 4 */
+//UART WIFI Callback
+void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
+{
+	if(huart->Instance == USART1) // wifi232
+	{
+
+
+		   RB_Write(&RB_receive,uartTmpReceive);
+		   HAL_UART_Receive_IT(&huart1, &uartTmpReceive, 1);
+	}
+}
+
 /**
   * @brief  This function is for TIM11 Callback 100Hz cyclic interrupt for e.g. wheel speed calculation
   *
