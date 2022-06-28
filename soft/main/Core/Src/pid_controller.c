@@ -61,7 +61,7 @@ void P_Init(TP *P, float kp)
 float P_Controller(TP *P)
 {
 	float out = 0.0;
-	P->error = P->Set_Value - P->Actual_Value;
+	P->error = P->Actual_Value;
 	out = P->Kp * P->error;
 
 	if(out >  1.0f) out =  1.0f;
@@ -69,3 +69,22 @@ float P_Controller(TP *P)
 	return out;
 }
 
+float P_ControllerAngle(TP *P)
+{
+
+	float out = 0.0;
+	P->error = P->Set_Value - P->Actual_Value;
+	if(fabs(P->error) < 180.0);
+	else if (P->error > 180.0)
+	{
+		P->error = (fabs(P->error)-360.0);
+	}
+	else if (P->error < -180.0)
+		P->error = 360.0 - fabs(P->error);
+
+	out = P->Kp * P->error;
+
+	if(out >  1.0f) out =  1.0f;
+	if(out < -1.0f) out = -1.0f;
+	return out;
+}

@@ -65,21 +65,16 @@ void ROBOT_Go2Point(TRobot *R)
 	}
 	R->isMotorsPidOn = true;
 */
+
 	//regulacja kąta regulator P
 
 		dist = P_Controller(&R->P_distance);
-		//dir = P_Controller(&R->P_direction);
-
-
-
-
+		dir  = P_ControllerAngle(&R->P_direction);
 
 		R->Motors[0].pid->Set_Value = (dist + dir) * R->max_speed_Rad_per_Sec;
 		R->Motors[1].pid->Set_Value = (dist - dir) * R->max_speed_Rad_per_Sec;
 		R->Motors[2].pid->Set_Value = (dist + dir) * R->max_speed_Rad_per_Sec;
 		R->Motors[3].pid->Set_Value = (dist - dir) * R->max_speed_Rad_per_Sec;
-
-
 }
 void ROBOT_Calculate(TRobot *R)
 {

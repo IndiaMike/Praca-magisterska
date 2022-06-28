@@ -219,13 +219,18 @@ int main(void)
 	  }
 	  else if(Left == BUTTON_Read())
 	  {
-		 // R.isMotorsPidOn = true;
+		  R.isMotorsPidOn = true;
 	  }
 	  else if (Center == BUTTON_Read())
 	  {
 
-		 // ROBOT_Set_Point(&R, 100, 0, 0);
-
+		  ROBOT_Set_Point(&R, 0, 1000, 0);
+		  /*
+		  R.Motors[0].pid->Set_Value = 4.0;
+		  R.Motors[1].pid->Set_Value = 4.0;
+		  R.Motors[2].pid->Set_Value = 4.0;
+		  R.Motors[3].pid->Set_Value = 4.0;
+		  */
 	  }
 	  else
 	  {

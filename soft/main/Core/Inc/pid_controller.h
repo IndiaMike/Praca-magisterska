@@ -16,7 +16,7 @@
 
 #define MOTOR_Kp					0.15
 #define MOTOR_Ki					1.0
-#define MOTOR_Kd					0.0005
+#define MOTOR_Kd					0.0
 #define MOTOR_ANTI_WINDUP		    200
 
 
@@ -53,5 +53,7 @@ void PID_Controller(TPid *pid);
 
 void P_Init(TP *P, float kp);
 float P_Controller(TP *P);
+
+float P_ControllerAngle(TP *P);
 
 #endif /* INC_PID_CONTROLLER_H_ */
