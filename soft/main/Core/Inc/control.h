@@ -18,6 +18,7 @@
 #define ROBOT_WIDTH_MM 313.0
 #define RAD_2_DEG 57.29577951308f
 #define DEG_2_RAD 0.01745329251994f
+#define ONE_CELL_DIM 100.0f
 
 typedef struct
 {
@@ -54,10 +55,14 @@ typedef struct
 
 }TRobot;
 
+
+typedef enum {dW=0,dS,dL,dR}dir;
+
 void ROBOT_Init(TRobot *R);
 void ROBOT_Stop(TRobot *R);
 void ROBOT_Go(TRobot *R, float Speed);
 void ROBOT_Calculate(TRobot *R);
 void ROBOT_Set_Point(TRobot *R, float x, float y, float angle);
 void ROBOT_Go2Point(TRobot *R);
+void ROBOT_Manual(TRobot *R, dir direction);
 #endif /* INC_CONTROL_H_ */

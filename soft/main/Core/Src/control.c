@@ -45,7 +45,33 @@ void ROBOT_Init(TRobot *R)
 }
 
 
+void ROBOT_Manual(TRobot *R, dir direction)
+{
+	float X = R->X;
+	float Y = R->Y;
+	float angle = R->actual_angle;
 
+	switch(direction){
+	case dW:
+		R->Set_X = X + cos(angle) * ONE_CELL_DIM;
+		R->Set_Y = Y + sin(angle) * ONE_CELL_DIM;
+		break;
+
+	case dS:
+		R->Set_X = X - cos(angle) * ONE_CELL_DIM;
+		R->Set_Y = Y - sin(angle) * ONE_CELL_DIM;
+		break;
+
+	case dL:
+
+		break;
+
+	case dR:
+
+		break;
+
+	}
+}
 
 void ROBOT_Set_Point(TRobot *R, float x, float y, float angle)
 {

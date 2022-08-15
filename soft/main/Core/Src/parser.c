@@ -89,19 +89,19 @@ static void Parser_ParsePOINT(void)
 	float PointParameters[3]; // Array for each parameter
 	char Message[32]; // Return log message
 
-	char *ParsePointer = strtok(NULL, ",");
-	if(strcmp("?", ParsePointer) == 0) // Check if someone asked for our name
-		{
-			sprintf(Message, "My position P=%.1f,%.1f,%.1f,", R.X,R.Y,R.actual_angle); // Just return the name
-			UartLog(Message);
-		}
-	else
-	{
+
 		for(i = 0; i < 3; i++) // For each of parameters
 			{
+
 				 // Cut a sub-string
+			char *ParsePointer = strtok(NULL, ","); // Cut a sub-string
 
-
+			if(strcmp("?", ParsePointer) == 0) // Check if someone asked for our name
+				{
+					sprintf(Message, "My position P=%.1f,%.1f,%.1f,", R.X,  R.Y,  R.actual_angle); // Just return the name
+					UartLog(Message);
+					return;
+				}
 
 				if(strlen(ParsePointer) > 0) // Check if sub-string exists
 				{
@@ -125,12 +125,13 @@ static void Parser_ParsePOINT(void)
 					UartLog("POINT too less values. P=X,Y,Z\\n\r\n");
 					return;
 				}
-	}
+			}
 		// Reaction - Send to log received values
 		ROBOT_Set_Point(&R, PointParameters[0], PointParameters[1], PointParameters[2]);
-		sprintf(Message, "Point P= %.1f, %.1f, %.1f,  \r\n", R.Set_X, R.Set_Y, R.Set_angle);
+
+		sprintf(Message, "Set Point P= %.1f, %.1f, %.1f,  \r\n", R.Set_X, R.Set_Y, R.Set_angle);
 		UartLog(Message);
-	}
+
 
 
 
@@ -181,6 +182,15 @@ void Parser_Parse(uint8_t *DataToParse)
 		else if(strcmp("STOP", ParsePointer) == 0)
 		{
 			ROBOT_Stop(&R);
+		}
+
+		else if(strcmp("GoW", ParsePointer) == 0)
+		{
+			ROBOT_Manual(&R, dW);
+		}
+		else if(strcmp("GoS", ParsePointer) == 0)
+		{
+			ROBOT_Manual(&R, dS);
 		}
 		else
 		{

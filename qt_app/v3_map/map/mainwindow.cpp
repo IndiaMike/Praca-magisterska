@@ -162,7 +162,7 @@ void MainWindow::on_pushButtonClear_clicked()
 
 void MainWindow::on_pushButtonW_clicked()
 {
-    QString comand = ("GoW");
+    QString comand = ("GoW;");
     ui->lineEditText2Send->clear();
     ui->lineEditText2Send->setText(comand);
     on_pushButtonSend_clicked();
@@ -181,7 +181,7 @@ void MainWindow::on_pushButtonSTOP_clicked()
 
 void MainWindow::on_pushButtonR_clicked()
 {
-    QString comand = ("GoR");
+    QString comand = ("GoR;");
     ui->lineEditText2Send->clear();
     ui->lineEditText2Send->setText(comand);
     on_pushButtonSend_clicked();
@@ -190,7 +190,7 @@ void MainWindow::on_pushButtonR_clicked()
 
 void MainWindow::on_pushButtonL_clicked()
 {
-    QString comand = ("GoL");
+    QString comand = ("GoL;");
     ui->lineEditText2Send->clear();
     ui->lineEditText2Send->setText(comand);
     on_pushButtonSend_clicked();
@@ -199,7 +199,7 @@ void MainWindow::on_pushButtonL_clicked()
 
 void MainWindow::on_pushButtonS_clicked()
 {
-    QString comand = ("GoS");
+    QString comand = ("GoS;");
     ui->lineEditText2Send->clear();
     ui->lineEditText2Send->setText(comand);
     on_pushButtonSend_clicked();
