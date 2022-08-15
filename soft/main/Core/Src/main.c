@@ -30,6 +30,8 @@
 #include "motor_encoder.h"
 #include "control.h"
 #include "ring_buffer.h"
+#include "parser.h"
+#include "utils.h"
 //#include "pid_controller.h"
 
 /* USER CODE END Includes */
@@ -54,6 +56,13 @@
 //uart receive
 uint8_t uartTmpReceive;
 RingBuffer_t RB_receive;
+
+//parser
+uint8_t ReceivedLines;
+uint8_t ReceivedData[32];
+
+
+
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -205,7 +214,12 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-
+	  if(ReceivedLines > 0)
+	  {
+		  Parser_TakeLine(&RB_receive, ReceivedData);
+		  ReceivedLines--;
+		  Parser_Parse(ReceivedData);
+	  }
 
 
 
@@ -309,9 +323,12 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 {
 	if(huart->Instance == USART1) // wifi232
 	{
+		if(RB_OK == RB_Write(&RB_receive,uartTmpReceive))
 
-
-		   RB_Write(&RB_receive,uartTmpReceive);
+		   if(uartTmpReceive == ENDLINE)
+		   {
+			   ReceivedLines++;
+		   }
 		   HAL_UART_Receive_IT(&huart1, &uartTmpReceive, 1);
 	}
 }
