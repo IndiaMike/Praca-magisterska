@@ -94,6 +94,9 @@
      <property name="text">
       <string>Send</string>
      </property>
+     <property name="shortcut">
+      <string>Return</string>
+     </property>
     </widget>
     <widget class="QPushButton" name="pushButtonConnect">
      <property name="geometry">
@@ -121,6 +124,89 @@
       <string>Clear</string>
      </property>
     </widget>
+   </widget>
+   <widget class="QPushButton" name="pushButtonW">
+    <property name="geometry">
+     <rect>
+      <x>1130</x>
+      <y>580</y>
+      <width>41</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>W</string>
+    </property>
+    <property name="shortcut">
+     <string>Up</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButtonS">
+    <property name="geometry">
+     <rect>
+      <x>1130</x>
+      <y>660</y>
+      <width>41</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>S</string>
+    </property>
+    <property name="shortcut">
+     <string>Down</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButtonR">
+    <property name="geometry">
+     <rect>
+      <x>1180</x>
+      <y>620</y>
+      <width>41</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>R</string>
+    </property>
+    <property name="shortcut">
+     <string>Right</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButtonL">
+    <property name="geometry">
+     <rect>
+      <x>1080</x>
+      <y>620</y>
+      <width>41</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>L</string>
+    </property>
+    <property name="shortcut">
+     <string>Left</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButtonSTOP">
+    <property name="geometry">
+     <rect>
+      <x>1290</x>
+      <y>620</y>
+      <width>101</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="autoFillBackground">
+     <bool>false</bool>
+    </property>
+    <property name="text">
+     <string>STOP!</string>
+    </property>
+    <property name="shortcut">
+     <string>Esc</string>
+    </property>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">

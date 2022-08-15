@@ -28,19 +28,25 @@
 			{
 				"command" : 0,
 				"file" : 0,
-				"line" : 46,
-				"parent" : 0
-			},
-			{
-				"command" : 1,
-				"file" : 0,
-				"line" : 52,
+				"line" : 47,
 				"parent" : 0
 			},
 			{
 				"command" : 1,
 				"file" : 0,
 				"line" : 53,
+				"parent" : 0
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 54,
+				"parent" : 0
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 55,
 				"parent" : 0
 			}
 		]
@@ -173,6 +179,7 @@
 				"role" : "libraries"
 			},
 			{
+				"backtrace" : 4,
 				"fragment" : "C:\\Qt\\5.12.12\\msvc2015_64\\lib\\Qt5Guid.lib",
 				"role" : "libraries"
 			},

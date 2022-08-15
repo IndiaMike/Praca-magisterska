@@ -66,7 +66,12 @@
 		"C:/Qt/5.12.12/msvc2015_64/lib/cmake/Qt5/Qt5ModuleLocation.cmake",
 		"C:/Qt/5.12.12/msvc2015_64/lib/cmake/Qt5Network/Qt5NetworkConfigVersion.cmake",
 		"C:/Qt/5.12.12/msvc2015_64/lib/cmake/Qt5Network/Qt5NetworkConfig.cmake",
-		"C:/Qt/5.12.12/msvc2015_64/lib/cmake/Qt5Network/Qt5Network_QGenericEnginePlugin.cmake"
+		"C:/Qt/5.12.12/msvc2015_64/lib/cmake/Qt5Network/Qt5Network_QGenericEnginePlugin.cmake",
+		"C:/Qt/5.12.12/msvc2015_64/lib/cmake/Qt5/Qt5ConfigVersion.cmake",
+		"C:/Qt/5.12.12/msvc2015_64/lib/cmake/Qt5/Qt5Config.cmake",
+		"C:/Qt/5.12.12/msvc2015_64/lib/cmake/Qt5/Qt5ModuleLocation.cmake",
+		"C:/Qt/5.12.12/msvc2015_64/lib/cmake/Qt5Gui/Qt5GuiConfigVersion.cmake",
+		"C:/Qt/5.12.12/msvc2015_64/lib/cmake/Qt5Gui/Qt5GuiConfig.cmake"
 	],
 	"CMAKE_SOURCE_DIR" : "D:/studia/2_st_magisterka_/parca_mgr/qt_app/v3_map/map",
 	"DEP_FILE" : "",

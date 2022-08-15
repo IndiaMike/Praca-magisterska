@@ -5,6 +5,7 @@
 #include <QMouseEvent>
 #include <QDebug>
 #include <QDateTime>
+#include <QKeyEvent>
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow)
 {
@@ -133,6 +134,7 @@ void MainWindow::on_pushButtonSend_clicked()
         {
             socket->write(data.toUtf8());
             addToLogs(data);
+            ui->lineEditText2Send->clear();
         }
     else
     {
@@ -140,10 +142,66 @@ void MainWindow::on_pushButtonSend_clicked()
     }
 }
 
+void MainWindow::keyPressEvent(QKeyEvent* event)
+{
+    if(event->key()==Qt::Key_Enter) {
+        qDebug()<<"Enter pressed";
+      if(ui->lineEditText2Send->text() != "")
+      {
+          on_pushButtonSend_clicked();
+      }
+    }
+}
 
 void MainWindow::on_pushButtonClear_clicked()
 {
     ui->lineEditText2Send->clear();
     ui->textEditLogs->clear();
+}
+
+
+void MainWindow::on_pushButtonW_clicked()
+{
+    QString comand = ("GoW");
+    ui->lineEditText2Send->clear();
+    ui->lineEditText2Send->setText(comand);
+    on_pushButtonSend_clicked();
+}
+
+
+void MainWindow::on_pushButtonSTOP_clicked()
+{
+    QString stop = ("STOP;");
+    ui->lineEditText2Send->clear();
+    ui->lineEditText2Send->setText(stop);
+    on_pushButtonSend_clicked();
+    qDebug()<<stop;
+}
+
+
+void MainWindow::on_pushButtonR_clicked()
+{
+    QString comand = ("GoR");
+    ui->lineEditText2Send->clear();
+    ui->lineEditText2Send->setText(comand);
+    on_pushButtonSend_clicked();
+}
+
+
+void MainWindow::on_pushButtonL_clicked()
+{
+    QString comand = ("GoL");
+    ui->lineEditText2Send->clear();
+    ui->lineEditText2Send->setText(comand);
+    on_pushButtonSend_clicked();
+}
+
+
+void MainWindow::on_pushButtonS_clicked()
+{
+    QString comand = ("GoS");
+    ui->lineEditText2Send->clear();
+    ui->lineEditText2Send->setText(comand);
+    on_pushButtonSend_clicked();
 }
 

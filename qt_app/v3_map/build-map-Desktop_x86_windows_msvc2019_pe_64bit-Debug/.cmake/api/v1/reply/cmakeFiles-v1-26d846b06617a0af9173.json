@@ -259,6 +259,26 @@
 		{
 			"isExternal" : true,
 			"path" : "C:/Qt/5.12.12/msvc2015_64/lib/cmake/Qt5Network/Qt5Network_QGenericEnginePlugin.cmake"
+		},
+		{
+			"isExternal" : true,
+			"path" : "C:/Qt/5.12.12/msvc2015_64/lib/cmake/Qt5/Qt5ConfigVersion.cmake"
+		},
+		{
+			"isExternal" : true,
+			"path" : "C:/Qt/5.12.12/msvc2015_64/lib/cmake/Qt5/Qt5Config.cmake"
+		},
+		{
+			"isExternal" : true,
+			"path" : "C:/Qt/5.12.12/msvc2015_64/lib/cmake/Qt5/Qt5ModuleLocation.cmake"
+		},
+		{
+			"isExternal" : true,
+			"path" : "C:/Qt/5.12.12/msvc2015_64/lib/cmake/Qt5Gui/Qt5GuiConfigVersion.cmake"
+		},
+		{
+			"isExternal" : true,
+			"path" : "C:/Qt/5.12.12/msvc2015_64/lib/cmake/Qt5Gui/Qt5GuiConfig.cmake"
 		}
 	],
 	"kind" : "cmakeFiles",

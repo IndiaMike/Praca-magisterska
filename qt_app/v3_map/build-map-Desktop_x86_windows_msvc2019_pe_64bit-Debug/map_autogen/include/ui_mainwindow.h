@@ -36,6 +36,11 @@ public:
     QPushButton *pushButtonSend;
     QPushButton *pushButtonConnect;
     QPushButton *pushButtonClear;
+    QPushButton *pushButtonW;
+    QPushButton *pushButtonS;
+    QPushButton *pushButtonR;
+    QPushButton *pushButtonL;
+    QPushButton *pushButtonSTOP;
     QMenuBar *menubar;
     QStatusBar *statusbar;
 
@@ -73,6 +78,22 @@ public:
         pushButtonClear = new QPushButton(groupBox_2);
         pushButtonClear->setObjectName(QString::fromUtf8("pushButtonClear"));
         pushButtonClear->setGeometry(QRect(580, 30, 83, 29));
+        pushButtonW = new QPushButton(centralwidget);
+        pushButtonW->setObjectName(QString::fromUtf8("pushButtonW"));
+        pushButtonW->setGeometry(QRect(1130, 580, 41, 41));
+        pushButtonS = new QPushButton(centralwidget);
+        pushButtonS->setObjectName(QString::fromUtf8("pushButtonS"));
+        pushButtonS->setGeometry(QRect(1130, 660, 41, 41));
+        pushButtonR = new QPushButton(centralwidget);
+        pushButtonR->setObjectName(QString::fromUtf8("pushButtonR"));
+        pushButtonR->setGeometry(QRect(1180, 620, 41, 41));
+        pushButtonL = new QPushButton(centralwidget);
+        pushButtonL->setObjectName(QString::fromUtf8("pushButtonL"));
+        pushButtonL->setGeometry(QRect(1080, 620, 41, 41));
+        pushButtonSTOP = new QPushButton(centralwidget);
+        pushButtonSTOP->setObjectName(QString::fromUtf8("pushButtonSTOP"));
+        pushButtonSTOP->setGeometry(QRect(1290, 620, 101, 41));
+        pushButtonSTOP->setAutoFillBackground(false);
         MainWindow->setCentralWidget(centralwidget);
         menubar = new QMenuBar(MainWindow);
         menubar->setObjectName(QString::fromUtf8("menubar"));
@@ -94,8 +115,31 @@ public:
         pushButtonClearMap->setText(QApplication::translate("MainWindow", "Clear", nullptr));
         groupBox_2->setTitle(QApplication::translate("MainWindow", "Communication", nullptr));
         pushButtonSend->setText(QApplication::translate("MainWindow", "Send", nullptr));
+#ifndef QT_NO_SHORTCUT
+        pushButtonSend->setShortcut(QApplication::translate("MainWindow", "Return", nullptr));
+#endif // QT_NO_SHORTCUT
         pushButtonConnect->setText(QApplication::translate("MainWindow", "Connect", nullptr));
         pushButtonClear->setText(QApplication::translate("MainWindow", "Clear", nullptr));
+        pushButtonW->setText(QApplication::translate("MainWindow", "W", nullptr));
+#ifndef QT_NO_SHORTCUT
+        pushButtonW->setShortcut(QApplication::translate("MainWindow", "Up", nullptr));
+#endif // QT_NO_SHORTCUT
+        pushButtonS->setText(QApplication::translate("MainWindow", "S", nullptr));
+#ifndef QT_NO_SHORTCUT
+        pushButtonS->setShortcut(QApplication::translate("MainWindow", "Down", nullptr));
+#endif // QT_NO_SHORTCUT
+        pushButtonR->setText(QApplication::translate("MainWindow", "R", nullptr));
+#ifndef QT_NO_SHORTCUT
+        pushButtonR->setShortcut(QApplication::translate("MainWindow", "Right", nullptr));
+#endif // QT_NO_SHORTCUT
+        pushButtonL->setText(QApplication::translate("MainWindow", "L", nullptr));
+#ifndef QT_NO_SHORTCUT
+        pushButtonL->setShortcut(QApplication::translate("MainWindow", "Left", nullptr));
+#endif // QT_NO_SHORTCUT
+        pushButtonSTOP->setText(QApplication::translate("MainWindow", "STOP!", nullptr));
+#ifndef QT_NO_SHORTCUT
+        pushButtonSTOP->setShortcut(QApplication::translate("MainWindow", "Esc", nullptr));
+#endif // QT_NO_SHORTCUT
     } // retranslateUi
 
 };

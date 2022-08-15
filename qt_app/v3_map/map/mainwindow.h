@@ -26,7 +26,7 @@ public:
 
 private:
     void addToLogs(QString message);
-
+    void keyPressEvent(QKeyEvent *event);
 
 
 protected:
@@ -43,6 +43,16 @@ private slots:
     void on_pushButtonSend_clicked();
 
     void on_pushButtonClear_clicked();
+
+    void on_pushButtonW_clicked();
+
+    void on_pushButtonSTOP_clicked();
+
+    void on_pushButtonR_clicked();
+
+    void on_pushButtonL_clicked();
+
+    void on_pushButtonS_clicked();
 
 private:
     Ui::MainWindow *ui;
