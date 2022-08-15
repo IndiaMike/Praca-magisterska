@@ -34,12 +34,12 @@ void ROBOT_Init(TRobot *R)
 	R->left_site_distance_MM = 0.0;
 	R->right_site_distance_MM= 0.0;
 	R->actual_angle			 = 0.0;
-	R->max_speed_Rad_per_Sec = 3.0;
+	R->max_speed_Rad_per_Sec = 4.0;
 
 
-	R->tolerance = 5.0;
-	P_Init(&R->P_direction, 0.03);
-	P_Init(&R->P_distance,  0.03);
+	R->tolerance = 10.0;
+	P_Init(&R->P_direction, 0.05);
+	P_Init(&R->P_distance,  0.05);
 
 
 }
@@ -58,17 +58,24 @@ void ROBOT_Go2Point(TRobot *R)
 	float dist= 0.0;
 
 	//jezeli blisko to zakończ regulacje
-	/*if(R->TargetDistanceMM < R->tolerance)
+	if(R->TargetDistanceMM > R->tolerance)
 	{
-		R->isMotorsPidOn = false;
-		return;
+		//R->isDistRegOn = true;
+		if(R->P_direction.error < 10.0 )
+		{
+			dist = P_ControllerDistance(&R->P_distance);
+		}
+		else
+		{
+			dist = 0.0;
+		}
 	}
-	R->isMotorsPidOn = true;
-*/
+	else
+	{
+		R->isDistRegOn = false;
 
-	//regulacja kąta regulator P
+	}
 
-		dist = P_Controller(&R->P_distance);
 		dir  = P_ControllerAngle(&R->P_direction);
 
 		R->Motors[0].pid->Set_Value = (dist + dir) * R->max_speed_Rad_per_Sec;

@@ -22,6 +22,8 @@
 typedef struct
 {
 	bool 	 isMotorsPidOn;
+	bool	 isDistRegOn;
+	bool	 isAngleRegOn;
 	float left_site_distance_MM;
 	float right_site_distance_MM;
 

@@ -224,7 +224,7 @@ int main(void)
 	  else if (Center == BUTTON_Read())
 	  {
 
-		  ROBOT_Set_Point(&R, 0, 1000, 0);
+		  ROBOT_Set_Point(&R, 300, 300, 0);
 		  /*
 		  R.Motors[0].pid->Set_Value = 4.0;
 		  R.Motors[1].pid->Set_Value = 4.0;

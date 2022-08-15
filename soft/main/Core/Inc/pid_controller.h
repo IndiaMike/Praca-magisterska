@@ -52,7 +52,7 @@ void PID_Init(TPid *pid, float kp, float ki, float kd, float anti_windup_limit);
 void PID_Controller(TPid *pid);
 
 void P_Init(TP *P, float kp);
-float P_Controller(TP *P);
+float P_ControllerDistance(TP *P);
 
 float P_ControllerAngle(TP *P);
 

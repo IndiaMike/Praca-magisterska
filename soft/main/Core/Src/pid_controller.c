@@ -58,7 +58,7 @@ void P_Init(TP *P, float kp)
 
 	P->Kp = kp;
 }
-float P_Controller(TP *P)
+float P_ControllerDistance(TP *P)
 {
 	float out = 0.0;
 	P->error = P->Actual_Value;
