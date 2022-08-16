@@ -120,6 +120,8 @@ void Error_Handler(void);
 #define ENCODER_4_B_GPIO_Port GPIOB
 #define ENCODER_4_A_Pin GPIO_PIN_7
 #define ENCODER_4_A_GPIO_Port GPIOB
+#define PWM_LIDAR_Pin GPIO_PIN_8
+#define PWM_LIDAR_GPIO_Port GPIOB
 /* USER CODE BEGIN Private defines */
 
 /* USER CODE END Private defines */

@@ -65,4 +65,6 @@ void ROBOT_Calculate(TRobot *R);
 void ROBOT_Set_Point(TRobot *R, float x, float y, float angle);
 void ROBOT_Go2Point(TRobot *R);
 void ROBOT_Manual(TRobot *R, dir direction);
+
+void LIDAR_Set_PWM(uint8_t Percent);
 #endif /* INC_CONTROL_H_ */

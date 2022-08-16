@@ -7,6 +7,7 @@
 #include "control.h"
 #include "pid_controller.h"
 #include "math.h"
+#include "tim.h"
 
 extern TMotor MOTOR_Front_Left_1;
 extern TMotor MOTOR_Front_Right_2;
@@ -142,4 +143,11 @@ void ROBOT_Calculate(TRobot *R)
 
 }
 
+void LIDAR_Set_PWM(uint8_t Percent)
+{
 
+		if(Percent > 100) Percent = 100;
+		if(Percent < 0)   Percent = 0;
+		__HAL_TIM_SET_COMPARE(&htim10, TIM_CHANNEL_1,Percent * 10);
+		HAL_TIM_PWM_Start(&htim10, TIM_CHANNEL_1);
+}

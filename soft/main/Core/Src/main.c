@@ -134,9 +134,11 @@ int main(void)
   MX_TIM3_Init();
   MX_TIM4_Init();
   MX_TIM5_Init();
-  MX_TIM11_Init();
   MX_ADC1_Init();
   MX_USART1_UART_Init();
+  MX_TIM10_Init();
+  MX_USART6_UART_Init();
+  MX_TIM11_Init();
 
   /* Initialize interrupts */
   MX_NVIC_Init();
@@ -193,12 +195,13 @@ int main(void)
 
 
 
-  __HAL_TIM_ENABLE_IT(&htim11,TIM_IT_UPDATE);
+
 
 
 
    BUZZER_Off();
    //timer 10Hz start
+   __HAL_TIM_ENABLE_IT(&htim11,TIM_IT_UPDATE);
    HAL_TIM_OC_Start_IT(&htim11,TIM_CHANNEL_1);
    R.isMotorsPidOn = false;
 
@@ -208,7 +211,8 @@ int main(void)
 
 
 
-   /* USER CODE END 2 */
+
+  /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
@@ -239,6 +243,7 @@ int main(void)
 	  {
 
 		  ROBOT_Set_Point(&R, 300, 300, 0);
+		  LIDAR_Set_PWM(30);
 		  /*
 		  R.Motors[0].pid->Set_Value = 4.0;
 		  R.Motors[1].pid->Set_Value = 4.0;
