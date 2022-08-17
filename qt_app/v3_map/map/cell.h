@@ -4,9 +4,12 @@
 #include "qgraphicsscene.h"
 #include <QObject>
 
+
+
+
 typedef enum
 {
-    CellType_Start = 0, CellType_finish, CellType_free,
+    CellType_Free =0 , CellType_Position =1, CellType_Obstacle =2, CellType_Destination =3, CellType_Path =4
 }eCellType;
 
 class cell : public QObject
@@ -19,7 +22,15 @@ public:
     int y; //y position
     eCellType type;
 
-    void SetBrush();
+    bool visited;
+
+    int gCost;
+    int hCost;
+    int get_fCost(void);
+
+    cell *parent;
+
+    void SetBrush(eCellType type);
 signals:
 
 };

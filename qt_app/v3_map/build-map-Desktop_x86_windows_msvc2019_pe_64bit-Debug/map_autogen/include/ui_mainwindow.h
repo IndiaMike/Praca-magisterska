@@ -11,6 +11,7 @@
 
 #include <QtCore/QVariant>
 #include <QtWidgets/QApplication>
+#include <QtWidgets/QComboBox>
 #include <QtWidgets/QGraphicsView>
 #include <QtWidgets/QGroupBox>
 #include <QtWidgets/QLineEdit>
@@ -30,6 +31,8 @@ public:
     QGraphicsView *graphicsView;
     QGroupBox *groupBox;
     QPushButton *pushButtonClearMap;
+    QComboBox *comboBoxCellType;
+    QPushButton *pushButton;
     QGroupBox *groupBox_2;
     QTextEdit *textEditLogs;
     QLineEdit *lineEditText2Send;
@@ -41,6 +44,7 @@ public:
     QPushButton *pushButtonR;
     QPushButton *pushButtonL;
     QPushButton *pushButtonSTOP;
+    QPushButton *pushButtonTest;
     QMenuBar *menubar;
     QStatusBar *statusbar;
 
@@ -56,10 +60,20 @@ public:
         graphicsView->setGeometry(QRect(-90, 0, 1011, 621));
         groupBox = new QGroupBox(centralwidget);
         groupBox->setObjectName(QString::fromUtf8("groupBox"));
-        groupBox->setGeometry(QRect(1060, 40, 261, 91));
+        groupBox->setGeometry(QRect(1060, 40, 661, 91));
         pushButtonClearMap = new QPushButton(groupBox);
         pushButtonClearMap->setObjectName(QString::fromUtf8("pushButtonClearMap"));
         pushButtonClearMap->setGeometry(QRect(10, 40, 83, 29));
+        comboBoxCellType = new QComboBox(groupBox);
+        comboBoxCellType->addItem(QString());
+        comboBoxCellType->addItem(QString());
+        comboBoxCellType->addItem(QString());
+        comboBoxCellType->addItem(QString());
+        comboBoxCellType->setObjectName(QString::fromUtf8("comboBoxCellType"));
+        comboBoxCellType->setGeometry(QRect(110, 40, 121, 28));
+        pushButton = new QPushButton(groupBox);
+        pushButton->setObjectName(QString::fromUtf8("pushButton"));
+        pushButton->setGeometry(QRect(420, 40, 83, 29));
         groupBox_2 = new QGroupBox(centralwidget);
         groupBox_2->setObjectName(QString::fromUtf8("groupBox_2"));
         groupBox_2->setGeometry(QRect(1050, 140, 671, 421));
@@ -94,6 +108,9 @@ public:
         pushButtonSTOP->setObjectName(QString::fromUtf8("pushButtonSTOP"));
         pushButtonSTOP->setGeometry(QRect(1290, 620, 101, 41));
         pushButtonSTOP->setAutoFillBackground(false);
+        pushButtonTest = new QPushButton(centralwidget);
+        pushButtonTest->setObjectName(QString::fromUtf8("pushButtonTest"));
+        pushButtonTest->setGeometry(QRect(1180, 20, 83, 29));
         MainWindow->setCentralWidget(centralwidget);
         menubar = new QMenuBar(MainWindow);
         menubar->setObjectName(QString::fromUtf8("menubar"));
@@ -113,6 +130,12 @@ public:
         MainWindow->setWindowTitle(QApplication::translate("MainWindow", "MainWindow", nullptr));
         groupBox->setTitle(QApplication::translate("MainWindow", "Map", nullptr));
         pushButtonClearMap->setText(QApplication::translate("MainWindow", "Clear", nullptr));
+        comboBoxCellType->setItemText(0, QApplication::translate("MainWindow", "Free", nullptr));
+        comboBoxCellType->setItemText(1, QApplication::translate("MainWindow", "Position", nullptr));
+        comboBoxCellType->setItemText(2, QApplication::translate("MainWindow", "Obstacle", nullptr));
+        comboBoxCellType->setItemText(3, QApplication::translate("MainWindow", "Destination", nullptr));
+
+        pushButton->setText(QApplication::translate("MainWindow", "Find Path", nullptr));
         groupBox_2->setTitle(QApplication::translate("MainWindow", "Communication", nullptr));
         pushButtonSend->setText(QApplication::translate("MainWindow", "Send", nullptr));
 #ifndef QT_NO_SHORTCUT
@@ -140,6 +163,7 @@ public:
 #ifndef QT_NO_SHORTCUT
         pushButtonSTOP->setShortcut(QApplication::translate("MainWindow", "Esc", nullptr));
 #endif // QT_NO_SHORTCUT
+        pushButtonTest->setText(QApplication::translate("MainWindow", "Test", nullptr));
     } // retranslateUi
 
 };
