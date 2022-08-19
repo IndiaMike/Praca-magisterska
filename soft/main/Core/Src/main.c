@@ -385,7 +385,7 @@ void HAL_TIM_OC_DelayElapsedCallback(TIM_HandleTypeDef *htim)
 				MOTOR_Set_Speed(&MOTOR_Rear_Left_3);
 				MOTOR_Set_Speed(&MOTOR_Rear_Right_4);
 			}
-
+			RareInterrupt();
 
 
 

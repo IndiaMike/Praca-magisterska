@@ -126,23 +126,20 @@ void BUZZER_Impulse_Blocked(uint8_t Number_of_impulse, uint8_t cycle_time)
 }
 void BATERRYLowVoltageProtect(uint16_t *AdcValue)
 {
-
 	float tmp, voltage;
 	for(int i=0; i<20;i++)
 		{
 			tmp +=(AdcValue[i] );
 		}
 		tmp/=20;
-		voltage = 4096.0/3.3 * tmp;
-	if (voltage > 14.2)
+		voltage = tmp * 20.823 / 4096.0 * 1.03; // 1.03 calibration
+
+	if (voltage > 14.2) // >3.5V on cell
 	{
-		LED_OnOff(&LED_4_RED, LED_OFF);
-		LED_OnOff(&LED_2_GREEN, LED_OFF);
-		BUZZER_Off();
+		return;
 	}
 
-
-	else if(voltage< 14.2 &&  voltage>= 12.5)
+	else if(voltage< 14.2 &&  voltage>= 12.0) // 3.0 - 3.5V on cell
 	{
 		LED_OnOff(&LED_4_RED, LED_ON);
 		LED_OnOff(&LED_2_GREEN, LED_ON);
@@ -150,9 +147,13 @@ void BATERRYLowVoltageProtect(uint16_t *AdcValue)
 	}
 
 
-	else if(voltage<12.5)
+	else if(voltage<12.0) // < 3.0V on cell
 	{
 		BUZZER_On();
+		LED_OnOff(&LED_4_RED, LED_ON);
+		LED_OnOff(&LED_1_GREEN, LED_ON);
+		LED_OnOff(&LED_2_GREEN, LED_ON);
 		ROBOT_Stop(&R);
+		while(1);
 	}
 }
