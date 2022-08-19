@@ -95,8 +95,8 @@ void MOTOR_Set_Speed(TMotor *Motor)
 	if (Motor->pid->out > -0.05f && Motor->pid->out < 0.05f)
 		{
 		MOTOR_Soft_STOP(Motor);
-
 		}
+
 	else if( Motor->pid->out >= 0.0f)
 	{
 		HAL_GPIO_WritePin(Motor->IN_A_GpioPort, Motor->IN_A_GpioPin, RESET);

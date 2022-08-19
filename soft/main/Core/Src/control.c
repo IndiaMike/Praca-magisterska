@@ -8,13 +8,19 @@
 #include "pid_controller.h"
 #include "math.h"
 #include "tim.h"
+#include "utils.h"
+
+#include "stdio.h"
+#include "stdlib.h"
 
 extern TMotor MOTOR_Front_Left_1;
 extern TMotor MOTOR_Front_Right_2;
 extern TMotor MOTOR_Rear_Left_3;
 extern TMotor MOTOR_Rear_Right_4;
 
-
+extern TRobot R;
+// to angle calibration
+//uint8_t i_calibration_counter =0;
 
 void ROBOT_Stop(TRobot *R)
 {
@@ -39,6 +45,9 @@ void ROBOT_Init(TRobot *R)
 
 
 	R->tolerance = 10.0;
+
+	R->control_mode = Manual_Mode;
+
 	P_Init(&R->P_direction, 0.05);
 	P_Init(&R->P_distance,  0.05);
 
@@ -46,29 +55,43 @@ void ROBOT_Init(TRobot *R)
 }
 
 
-void ROBOT_Manual(TRobot *R, dir direction)
+void ROBOT_Manual(dir direction)
 {
-	float X = R->X;
-	float Y = R->Y;
-	float angle = R->actual_angle;
 
 	switch(direction){
 	case dW:
-		R->Set_X = X + cos(angle) * ONE_CELL_DIM;
-		R->Set_Y = Y + sin(angle) * ONE_CELL_DIM;
+		R.Motors[0].pid->Set_Value += 2.0;
+		R.Motors[1].pid->Set_Value += 2.0;
+		R.Motors[2].pid->Set_Value += 2.0;
+		R.Motors[3].pid->Set_Value += 2.0;
 		break;
 
 	case dS:
-		R->Set_X = X - cos(angle) * ONE_CELL_DIM;
-		R->Set_Y = Y - sin(angle) * ONE_CELL_DIM;
+		R.Motors[0].pid->Set_Value -= 2.0;
+		R.Motors[1].pid->Set_Value -= 2.0;
+		R.Motors[2].pid->Set_Value -= 2.0;
+		R.Motors[3].pid->Set_Value -= 2.0;
 		break;
 
-	case dL:
-
+	case dA:
+		R.Motors[0].pid->Set_Value -= 1.0;
+		R.Motors[1].pid->Set_Value += 1.0;
+		R.Motors[2].pid->Set_Value -= 1.0;
+		R.Motors[3].pid->Set_Value += 1.0;
 		break;
 
-	case dR:
+	case dD:
+		R.Motors[0].pid->Set_Value += 1.0;
+		R.Motors[1].pid->Set_Value -= 1.0;
+		R.Motors[2].pid->Set_Value += 1.0;
+		R.Motors[3].pid->Set_Value -= 1.0;
+		break;
 
+	case dSpeed0:
+		R.Motors[0].pid->Set_Value = 0.0;
+		R.Motors[1].pid->Set_Value = 0.0;
+		R.Motors[2].pid->Set_Value = 0.0;
+		R.Motors[3].pid->Set_Value = 0.0;
 		break;
 
 	}
@@ -83,10 +106,10 @@ void ROBOT_Go2Point(TRobot *R)
 {
 	float dir = 0.0;
 	float dist= 0.0;
-
+	R->isMotorsPidOn = true;
 	//jezeli blisko to zakończ regulacje
 	if(R->TargetDistanceMM > R->tolerance)
-	{
+	{	R->isMotorsPidOn = false;
 		//R->isDistRegOn = true;
 		if(R->P_direction.error < 10.0 )
 		{
@@ -110,6 +133,7 @@ void ROBOT_Go2Point(TRobot *R)
 		R->Motors[2].pid->Set_Value = (dist + dir) * R->max_speed_Rad_per_Sec;
 		R->Motors[3].pid->Set_Value = (dist - dir) * R->max_speed_Rad_per_Sec;
 }
+
 void ROBOT_Calculate(TRobot *R)
 {
 	float mean = 0.0;
@@ -126,7 +150,21 @@ void ROBOT_Calculate(TRobot *R)
 
 	R->actual_angle 		   = fmod((R->left_site_distance_MM - R->right_site_distance_MM) / (float)ROBOT_WIDTH_MM * RAD_2_DEG , 360.f);
 
+/*
+	//__________tmp for calibration angle_______________
+	i_calibration_counter++;
+	uint8_t Message[32];
+	if(i_calibration_counter > 99)
+	{
 
+		float tmp_calibration_ratio = (R->left_site_distance_MM - R->right_site_distance_MM) / (float)ROBOT_WIDTH_MM * RAD_2_DEG;
+		sprintf(Message,"a= %2.f", tmp_calibration_ratio);
+		UartLog(Message);
+		i_calibration_counter = 0;
+	}
+
+	//____________________end_calibration_______________
+*/
 
 	R->X += sin(R-> actual_angle * DEG_2_RAD) * mean;
 	R->Y += cos(R-> actual_angle * DEG_2_RAD) * mean;
@@ -141,6 +179,32 @@ void ROBOT_Calculate(TRobot *R)
 	R->P_distance.Set_Value  = 0.0;
 	R->P_distance.Actual_Value  = R->TargetDistanceMM;
 
+}
+
+void ROBOT_HomeIsHere(void)
+{
+
+
+	R.isMotorsPidOn = false;
+	R.actual_position 		 = 0.0;
+	R.left_site_distance_MM = 0.0;
+	R.right_site_distance_MM= 0.0;
+	R.actual_angle			 = 0.0;
+	R.max_speed_Rad_per_Sec = 4.0;
+
+	R.X=0.0;
+	R.Y=0.0;
+
+	R.Set_X=0;
+	R.Set_Y=0;
+}
+void ROBOT_Set_Mode(TMode mode)
+{
+	if(mode == Go2Point_Mode)
+		R.control_mode = Go2Point_Mode;
+
+	if(mode == Manual_Mode)
+		R.control_mode = Manual_Mode;
 }
 
 void LIDAR_Set_PWM(uint8_t Percent)

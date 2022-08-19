@@ -14,17 +14,23 @@
 #include "pid_controller.h"
 
 
-
-#define ROBOT_WIDTH_MM 313.0
+#define ROBOT_ANGLE_COEF 0.689655f
+#define ROBOT_WIDTH_MM 313.0 * ROBOT_ANGLE_COEF
 #define RAD_2_DEG 57.29577951308f
 #define DEG_2_RAD 0.01745329251994f
-#define ONE_CELL_DIM 100.0f
+#define ONE_CELL_DIM 300.0f
+
+typedef enum {dW=0,dS,dA,dD,dSpeed0}dir;
+typedef enum {Manual_Mode =0, Go2Point_Mode} TMode;
 
 typedef struct
 {
 	bool 	 isMotorsPidOn;
 	bool	 isDistRegOn;
 	bool	 isAngleRegOn;
+
+	TMode	control_mode;
+
 	float left_site_distance_MM;
 	float right_site_distance_MM;
 
@@ -53,10 +59,12 @@ typedef struct
 	float Set_angle;
 	float tolerance;
 
+	float baterryVoltage;
+
 }TRobot;
 
 
-typedef enum {dW=0,dS,dL,dR}dir;
+
 
 void ROBOT_Init(TRobot *R);
 void ROBOT_Stop(TRobot *R);
@@ -64,7 +72,9 @@ void ROBOT_Go(TRobot *R, float Speed);
 void ROBOT_Calculate(TRobot *R);
 void ROBOT_Set_Point(TRobot *R, float x, float y, float angle);
 void ROBOT_Go2Point(TRobot *R);
-void ROBOT_Manual(TRobot *R, dir direction);
+void ROBOT_Manual(dir direction);
+void ROBOT_HomeIsHere(void);
+void ROBOT_Set_Mode(TMode mode);
 
 void LIDAR_Set_PWM(uint8_t Percent);
 #endif /* INC_CONTROL_H_ */

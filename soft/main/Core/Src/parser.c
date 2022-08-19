@@ -59,7 +59,7 @@ static void Parser_ParseLED(void)
 	{
 		if(ParsePointer[0] < '0' || ParsePointer[0] > '1') // Check if allowed char is in command parameter
 		{
-			UartLog("LED wrong value. Please type 0 or 1!\r\n");
+			UartLog("LED wrong value. Please type 0 or 1!");
 			return; // return from function if error
 		}
 
@@ -67,12 +67,12 @@ static void Parser_ParseLED(void)
 		if(ParsePointer[0] == '1')
 		{
 			LED_OnOff(&LED_1_GREEN, LED_ON);
-			UartLog("LED On\r\n");
+			UartLog("LED On");
 		}
 		else if (ParsePointer[0] == '0')
 		{
 			LED_OnOff(&LED_1_GREEN, LED_OFF);
-			UartLog("LED Off\r\n");
+			UartLog("LED Off");
 		}
 	}
 }
@@ -111,9 +111,9 @@ static void Parser_ParsePOINT(void)
 
 					for(j = 0; ParsePointer[j] != 0; j++) // Check if only allowed chars are in sub-string
 					{
-						if((ParsePointer[j] < '0' || ParsePointer[j] > '9') && ParsePointer[j] != '.')
+						if((ParsePointer[j] < '0' || ParsePointer[j] > '9') && ParsePointer[j] != '.' && ParsePointer[j] != '-')
 						{
-							UartLog("POINT wrong value. Don't use letters dude!\r\n");
+							UartLog("POINT wrong value. Don't use letters dude!");
 							return;
 						}
 					}
@@ -122,14 +122,14 @@ static void Parser_ParsePOINT(void)
 				}
 				else
 				{
-					UartLog("POINT too less values. P=X,Y,Z\\n\r\n");
+					UartLog("POINT too less values. P=X,Y,Z");
 					return;
 				}
 			}
 		// Reaction - Send to log received values
 		ROBOT_Set_Point(&R, PointParameters[0], PointParameters[1], PointParameters[2]);
 
-		sprintf(Message, "Set Point P= %.1f, %.1f, %.1f,  \r\n", R.Set_X, R.Set_Y, R.Set_angle);
+		sprintf(Message, "Set Point P= %.1f, %.1f, %.1f, ", R.Set_X, R.Set_Y, R.Set_angle);
 		UartLog(Message);
 
 
@@ -186,11 +186,38 @@ void Parser_Parse(uint8_t *DataToParse)
 
 		else if(strcmp("GoW", ParsePointer) == 0)
 		{
-			ROBOT_Manual(&R, dW);
+			ROBOT_Manual(dW);
 		}
 		else if(strcmp("GoS", ParsePointer) == 0)
 		{
-			ROBOT_Manual(&R, dS);
+			ROBOT_Manual(dS);
+		}
+		else if(strcmp("GoA", ParsePointer) == 0)
+		{
+			ROBOT_Manual(dA);
+		}
+		else if(strcmp("GoD", ParsePointer) == 0)
+		{
+			ROBOT_Manual(dD);
+		}
+		else if(strcmp("Speed0", ParsePointer) == 0)
+		{
+			ROBOT_Manual(dSpeed0);
+		}
+		else if(strcmp("HomeHere", ParsePointer) == 0)
+		{
+			ROBOT_HomeIsHere();
+		}
+		else if(strcmp("ModeM", ParsePointer) == 0)
+		{
+			ROBOT_Set_Mode(Manual_Mode);
+		}
+		else if(strcmp("ModeG2P", ParsePointer) == 0)
+		{
+			R.Set_X = R.X;
+			R.Set_Y = R.Y;
+			R.Set_angle = R.actual_angle;
+			ROBOT_Set_Mode(Go2Point_Mode);
 		}
 		else
 		{

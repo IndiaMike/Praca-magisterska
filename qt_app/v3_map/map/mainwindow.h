@@ -72,6 +72,24 @@ private slots:
 
     void on_pushButtonTest_clicked();
 
+    void on_pushButtonGoHome_clicked();
+
+    void on_pushButtonAtHome_clicked();
+
+   // void on_checkBox_clicked();
+
+    void on_radioButtonLED_clicked(bool value);
+
+   // void on_radioButtonLED_released();
+
+   //void on_radioButtonLED_pressed();
+
+    void on_pushButtonSpeed0_clicked();
+
+    void on_comboBox_currentTextChanged(const QString &arg1);
+
+    void on_graphicsView_rubberBandChanged(const QRect &viewportRect, const QPointF &fromScenePoint, const QPointF &toScenePoint);
+
 private:
     Ui::MainWindow *ui;
 

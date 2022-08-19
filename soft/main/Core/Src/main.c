@@ -20,6 +20,7 @@
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include "adc.h"
+#include "dma.h"
 #include "tim.h"
 #include "usart.h"
 #include "gpio.h"
@@ -96,6 +97,7 @@ static void MX_NVIC_Init(void);
 	TPid PID_Motor_3;
 	TPid PID_Motor_4;
 
+	uint16_t AdcValue[20];
 
 
 
@@ -129,6 +131,7 @@ int main(void)
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
+  MX_DMA_Init();
   MX_TIM2_Init();
   MX_TIM1_Init();
   MX_TIM3_Init();
@@ -210,6 +213,8 @@ int main(void)
    HAL_UART_Receive_IT(&huart1, &uartTmpReceive, 1);
 
 
+   HAL_ADC_Start_DMA(&hadc1, (uint32_t*) AdcValue, 20);
+
 
 
   /* USER CODE END 2 */
@@ -218,6 +223,16 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
+
+/*
+		  R.Motors[0].pid->Set_Value = 4.0;
+		  R.Motors[1].pid->Set_Value = -4.0;
+		  R.Motors[2].pid->Set_Value = 4.0;
+		  R.Motors[3].pid->Set_Value = -4.0;
+*/
+
+
+
 	  if(ReceivedLines > 0)
 	  {
 		  Parser_TakeLine(&RB_receive, ReceivedData);
@@ -242,14 +257,12 @@ int main(void)
 	  else if (Center == BUTTON_Read())
 	  {
 
-		  ROBOT_Set_Point(&R, 300, 300, 0);
-		  LIDAR_Set_PWM(30);
-		  /*
-		  R.Motors[0].pid->Set_Value = 4.0;
-		  R.Motors[1].pid->Set_Value = 4.0;
-		  R.Motors[2].pid->Set_Value = 4.0;
-		  R.Motors[3].pid->Set_Value = 4.0;
-		  */
+
+		  //LIDAR_Set_PWM(30);
+
+
+
+
 	  }
 	  else
 	  {
@@ -352,10 +365,13 @@ void HAL_TIM_OC_DelayElapsedCallback(TIM_HandleTypeDef *htim)
 			ENCODER_Speed_Calculate(&MOTOR_Front_Right_2);
 			ENCODER_Speed_Calculate(&MOTOR_Rear_Left_3);
 			ENCODER_Speed_Calculate(&MOTOR_Rear_Right_4);
+
 			ROBOT_Calculate(&R);
 
 			//forward, to setpoint PID
-			ROBOT_Go2Point(&R);
+			if(R.control_mode == Go2Point_Mode)ROBOT_Go2Point(&R);
+
+
 
 			if(true == R.isMotorsPidOn)
 			{

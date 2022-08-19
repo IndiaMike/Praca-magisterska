@@ -22,6 +22,8 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     scene->addItem(triangle);
     triangle->setVisible(false);
 
+
+
 }
 void MainWindow::wifiRead()
 {
@@ -103,26 +105,13 @@ void MainWindow::mousePressEvent(QMouseEvent *event)
 
                     cells[i][j]->SetBrush(cells[i][j]->type);
 
-/*
-                    switch (cells[i][j]->type)
-                    {
-                    case CellType_Position:
-                       cells[i][j]->rect->setBrush(Qt::red);
-                        break;
-                    case CellType_Destination:
-                        cells[i][j]->rect->setBrush(Qt::blue);
 
-                    case CellType_Free:
-                       cells[i][j]->rect->setBrush(Qt::gray);
-                        break;
-                    };
-*/
 
                     qDebug() << "x : " << cells[j][i]->x;
                     qDebug() << "y : " << cells[j][i]->y;
 
-                    qDebug() << "mouse x : " << event->x();
-                    qDebug() << "mouse y : " << event->y();
+            //        qDebug() << "mouse x : " << event->x();
+            //        qDebug() << "mouse y : " << event->y();
                 }
 
             }
@@ -220,7 +209,7 @@ void MainWindow::on_pushButtonSTOP_clicked()
 
 void MainWindow::on_pushButtonR_clicked()
 {
-    QString comand = ("GoR;");
+    QString comand = ("GoD;");
     ui->lineEditText2Send->clear();
     ui->lineEditText2Send->setText(comand);
     on_pushButtonSend_clicked();
@@ -229,7 +218,7 @@ void MainWindow::on_pushButtonR_clicked()
 
 void MainWindow::on_pushButtonL_clicked()
 {
-    QString comand = ("GoL;");
+    QString comand = ("GoA;");
     ui->lineEditText2Send->clear();
     ui->lineEditText2Send->setText(comand);
     on_pushButtonSend_clicked();
@@ -516,3 +505,96 @@ void MainWindow::A_STAR_GENERATE_PATH(cell *startCell, cell *finishCell)
        ui->graphicsView->repaint();
     }
 }
+
+void MainWindow::on_pushButtonGoHome_clicked()
+{
+    QString comand = ("P=0,0,0;");
+    ui->lineEditText2Send->clear();
+    ui->lineEditText2Send->setText(comand);
+    on_pushButtonSend_clicked();
+
+    comand = ("GO2P;");
+    ui->lineEditText2Send->clear();
+    ui->lineEditText2Send->setText(comand);
+    on_pushButtonSend_clicked();
+    ui->lineEditText2Send->clear();
+}
+
+
+void MainWindow::on_pushButtonAtHome_clicked()
+{
+    QString comand = ("HomeHere;");
+    ui->lineEditText2Send->clear();
+    ui->lineEditText2Send->setText(comand);
+    on_pushButtonSend_clicked();
+}
+
+
+void MainWindow::on_radioButtonLED_clicked(bool value)
+{
+     QString comand;
+    if(value == true)
+     comand = ("LED=1;");
+     else
+     comand = ("LED=0;");
+
+     ui->lineEditText2Send->clear();
+     ui->lineEditText2Send->setText(comand);
+     on_pushButtonSend_clicked();
+}
+
+/*
+void MainWindow::on_radioButtonLED_released()
+{
+
+}
+
+
+void MainWindow::on_radioButtonLED_pressed()
+{
+
+}
+*/
+
+void MainWindow::on_pushButtonSpeed0_clicked()
+{
+    QString comand = ("Speed0;");
+    ui->lineEditText2Send->clear();
+    ui->lineEditText2Send->setText(comand);
+    on_pushButtonSend_clicked();
+}
+
+
+void MainWindow::on_comboBox_currentTextChanged(const QString &arg1)
+{
+     QString comand;
+    if(arg1 == "Manual")
+    {
+       ui->groupBox_4->setDisabled(false);
+       comand = ("ModeM;");
+     }
+
+    if(arg1 == "To point")
+    {
+        ui->groupBox_4->setDisabled(true);
+        comand = ("ModeG2P;");
+    }
+
+    ui->lineEditText2Send->clear();
+    ui->lineEditText2Send->setText(comand);
+    on_pushButtonSend_clicked();
+}
+
+
+void MainWindow::on_graphicsView_rubberBandChanged(const QRect &viewportRect, const QPointF &fromScenePoint, const QPointF &toScenePoint)
+{
+
+}
+/*
+void change_coordination(int *X, int *Y, int *newX, int *newY)
+{
+    newX =  Y;
+    newY = -X;
+
+}
+*/

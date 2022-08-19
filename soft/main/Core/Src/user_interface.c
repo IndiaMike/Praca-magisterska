@@ -6,11 +6,14 @@
  */
 #include "main.h"
 #include "user_interface.h"
+#include "control.h"
 
 extern  TLed LED_1_GREEN;
 extern  TLed LED_2_GREEN;
 extern  TLed LED_3_YELLOW;
 extern  TLed LED_4_RED;
+
+extern TRobot R;
 
 static uint32_t lastTick_Heart=0;	// zmienne pomocnicze do timera softwarowego /Static aby nie były widoczne na zewnątrz
 static uint32_t lastTick_Buzzer=0;  // zmienne pomocnicze do timera softwarowego /Static aby nie były widoczne na zewnątrz
@@ -119,5 +122,37 @@ void BUZZER_Impulse_Blocked(uint8_t Number_of_impulse, uint8_t cycle_time)
 		HAL_Delay(cycle_time);
 		BUZZER_Off();
 		HAL_Delay(cycle_time);
+	}
+}
+void BATERRYLowVoltageProtect(uint16_t *AdcValue)
+{
+
+	float tmp, voltage;
+	for(int i=0; i<20;i++)
+		{
+			tmp +=(AdcValue[i] );
+		}
+		tmp/=20;
+		voltage = 4096.0/3.3 * tmp;
+	if (voltage > 14.2)
+	{
+		LED_OnOff(&LED_4_RED, LED_OFF);
+		LED_OnOff(&LED_2_GREEN, LED_OFF);
+		BUZZER_Off();
+	}
+
+
+	else if(voltage< 14.2 &&  voltage>= 12.5)
+	{
+		LED_OnOff(&LED_4_RED, LED_ON);
+		LED_OnOff(&LED_2_GREEN, LED_ON);
+		BUZZER_Off();
+	}
+
+
+	else if(voltage<12.5)
+	{
+		BUZZER_On();
+		ROBOT_Stop(&R);
 	}
 }
