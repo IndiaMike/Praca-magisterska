@@ -48,6 +48,6 @@ void BUZZER_Off(void);
 void BUZZER_Impulse_Blocked(uint8_t Number_of_impulse, uint8_t cycle_time);
 
 //ADC BATERRY
-void BATTERYLowVoltageProtect(float voltage);
+void BATTERYLowVoltageProtect(uint16_t *AdcValue);
 
 #endif /* INC_USER_INTERFACE_H_ */

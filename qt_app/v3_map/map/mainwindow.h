@@ -7,6 +7,7 @@
 #include <QHostAddress>
 #include <QTcpSocket>
 #include <qlist.h>
+#include <QTimer>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -37,11 +38,18 @@ public:
     QList<cell*> A_STAR_GET_NEIGHBOURS(cell* cella);
     int GET_DISTANCE_BETWEEN_CELLS(cell* cellA, cell* cellB);
     void A_STAR_GENERATE_PATH(cell *startCell, cell *finishCell);
+
+public slots:
+    void WatchDogComunicationReset();
+
+
+
 private:
     void addToLogs(QString message);
     void keyPressEvent(QKeyEvent *event);
     void DRAW_TRIANGLE(cell *cell, int direction);
 
+    QTimer *timer;
 
 protected:
     void mousePressEvent(QMouseEvent *event) override;

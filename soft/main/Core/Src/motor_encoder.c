@@ -156,6 +156,7 @@ void ENCODER_Diagnostic(TMotor *Motor)
 		MOTOR_Soft_STOP(&MOTOR_Front_Right_2);
 		MOTOR_Soft_STOP(&MOTOR_Rear_Left_3);
 		MOTOR_Soft_STOP(&MOTOR_Rear_Right_4);
+		UartLog("Speed error! Probably Encoder damaged!");
 		while(1){}
 	}
 }

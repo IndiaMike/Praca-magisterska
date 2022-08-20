@@ -26,7 +26,7 @@ typedef enum {Manual_Mode =0, Go2Point_Mode} TMode;
 typedef struct
 {
 	bool 	 isMotorsPidOn;
-	bool	 isDistRegOn;
+	bool	 isG2PControllerEN;
 	bool	 isAngleRegOn;
 
 	TMode	control_mode;
@@ -77,4 +77,6 @@ void ROBOT_HomeIsHere(void);
 void ROBOT_Set_Mode(TMode mode);
 
 void LIDAR_Set_PWM(uint8_t Percent);
+
+void COMUNICATION_Watchdog_Incerement(void);
 #endif /* INC_CONTROL_H_ */

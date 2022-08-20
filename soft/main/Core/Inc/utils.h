@@ -10,6 +10,6 @@
 
 
 void UartLog(char * Message);
-
+void RareInterrupt(void);
 
 #endif /* INC_UTILS_H_ */

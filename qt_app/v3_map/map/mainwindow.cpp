@@ -9,6 +9,7 @@
 #include <qmessagebox.h>
 #include <qlist.h>
 
+
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
@@ -21,6 +22,10 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     triangle->setBrush(Qt::red);
     scene->addItem(triangle);
     triangle->setVisible(false);
+
+    timer = new QTimer(this);
+    connect(timer, SIGNAL(timeout()),this,SLOT(WatchDogComunicationReset()));
+    timer->setInterval(500);
 
 
 
@@ -150,6 +155,8 @@ void MainWindow::on_pushButtonConnect_clicked()
         qDebug() << "TCP error: " << socket->errorString();
         return;
     }
+
+    timer->start();
 }
 
 
@@ -506,6 +513,21 @@ void MainWindow::A_STAR_GENERATE_PATH(cell *startCell, cell *finishCell)
     }
 }
 
+void MainWindow::WatchDogComunicationReset()
+{
+    QString data = "W0;";
+
+   if(socket->isOpen())
+       {
+           socket->write(data.toUtf8());
+       }
+   else
+   {
+       addToLogs("Watchdog send error");
+   }
+
+}
+
 void MainWindow::on_pushButtonGoHome_clicked()
 {
     QString comand = ("P=0,0,0;");
@@ -513,7 +535,7 @@ void MainWindow::on_pushButtonGoHome_clicked()
     ui->lineEditText2Send->setText(comand);
     on_pushButtonSend_clicked();
 
-    comand = ("GO2P;");
+    comand = ("MotorON;");
     ui->lineEditText2Send->clear();
     ui->lineEditText2Send->setText(comand);
     on_pushButtonSend_clicked();

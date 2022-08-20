@@ -9,6 +9,7 @@
 #include "math.h"
 #include "tim.h"
 #include "utils.h"
+#include "user_interface.h"
 
 #include "stdio.h"
 #include "stdlib.h"
@@ -19,6 +20,14 @@ extern TMotor MOTOR_Rear_Left_3;
 extern TMotor MOTOR_Rear_Right_4;
 
 extern TRobot R;
+extern uint8_t robot_mode_change_first_scan_flag;
+extern uint8_t wifi_connection_watchdog_counter;
+
+extern TLed LED_1_GREEN;
+extern TLed LED_2_GREEN;
+extern TLed LED_3_YELLOW;
+extern TLed LED_4_RED;
+
 // to angle calibration
 //uint8_t i_calibration_counter =0;
 
@@ -46,6 +55,7 @@ void ROBOT_Init(TRobot *R)
 
 	R->tolerance = 10.0;
 
+	R->isMotorsPidOn = false;
 	R->control_mode = Manual_Mode;
 
 	P_Init(&R->P_direction, 0.05);
@@ -57,43 +67,45 @@ void ROBOT_Init(TRobot *R)
 
 void ROBOT_Manual(dir direction)
 {
+	if(R.control_mode == Manual_Mode && R.isG2PControllerEN == false)
+	{
+		switch(direction){
+		case dW:
+			R.Motors[0].pid->Set_Value += 1.0;
+			R.Motors[1].pid->Set_Value += 1.0;
+			R.Motors[2].pid->Set_Value += 1.0;
+			R.Motors[3].pid->Set_Value += 1.0;
+			break;
 
-	switch(direction){
-	case dW:
-		R.Motors[0].pid->Set_Value += 2.0;
-		R.Motors[1].pid->Set_Value += 2.0;
-		R.Motors[2].pid->Set_Value += 2.0;
-		R.Motors[3].pid->Set_Value += 2.0;
-		break;
+		case dS:
+			R.Motors[0].pid->Set_Value -= 1.0;
+			R.Motors[1].pid->Set_Value -= 1.0;
+			R.Motors[2].pid->Set_Value -= 1.0;
+			R.Motors[3].pid->Set_Value -= 1.0;
+			break;
 
-	case dS:
-		R.Motors[0].pid->Set_Value -= 2.0;
-		R.Motors[1].pid->Set_Value -= 2.0;
-		R.Motors[2].pid->Set_Value -= 2.0;
-		R.Motors[3].pid->Set_Value -= 2.0;
-		break;
+		case dA:
+			R.Motors[0].pid->Set_Value -= 1.0;
+			R.Motors[1].pid->Set_Value += 1.0;
+			R.Motors[2].pid->Set_Value -= 1.0;
+			R.Motors[3].pid->Set_Value += 1.0;
+			break;
 
-	case dA:
-		R.Motors[0].pid->Set_Value -= 1.0;
-		R.Motors[1].pid->Set_Value += 1.0;
-		R.Motors[2].pid->Set_Value -= 1.0;
-		R.Motors[3].pid->Set_Value += 1.0;
-		break;
+		case dD:
+			R.Motors[0].pid->Set_Value += 1.0;
+			R.Motors[1].pid->Set_Value -= 1.0;
+			R.Motors[2].pid->Set_Value += 1.0;
+			R.Motors[3].pid->Set_Value -= 1.0;
+			break;
 
-	case dD:
-		R.Motors[0].pid->Set_Value += 1.0;
-		R.Motors[1].pid->Set_Value -= 1.0;
-		R.Motors[2].pid->Set_Value += 1.0;
-		R.Motors[3].pid->Set_Value -= 1.0;
-		break;
+		case dSpeed0:
+			R.Motors[0].pid->Set_Value = 0.0;
+			R.Motors[1].pid->Set_Value = 0.0;
+			R.Motors[2].pid->Set_Value = 0.0;
+			R.Motors[3].pid->Set_Value = 0.0;
+			break;
 
-	case dSpeed0:
-		R.Motors[0].pid->Set_Value = 0.0;
-		R.Motors[1].pid->Set_Value = 0.0;
-		R.Motors[2].pid->Set_Value = 0.0;
-		R.Motors[3].pid->Set_Value = 0.0;
-		break;
-
+		}
 	}
 }
 
@@ -106,27 +118,31 @@ void ROBOT_Go2Point(TRobot *R)
 {
 	float dir = 0.0;
 	float dist= 0.0;
-	R->isMotorsPidOn = true;
-	//jezeli blisko to zakończ regulacje
+
+
 	if(R->TargetDistanceMM > R->tolerance)
-	{	R->isMotorsPidOn = false;
-		//R->isDistRegOn = true;
-		if(R->P_direction.error < 10.0 )
+	{
+
+		if(R->P_direction.error < 10.0 ) // angle < 10deg  dist. Controller & angle Controller
 		{
 			dist = P_ControllerDistance(&R->P_distance);
 		}
-		else
+		else							 // angle > 10deg  angle Controller only
 		{
 			dist = 0.0;
 		}
-	}
-	else
-	{
-		R->isDistRegOn = false;
-
-	}
-
 		dir  = P_ControllerAngle(&R->P_direction);
+	}
+	else								// Robot in tolerance; Controller Disable
+	{
+		R->isG2PControllerEN = false;
+		R->Motors[0].pid->Set_Value = 0.0;
+		R->Motors[1].pid->Set_Value = 0.0;
+		R->Motors[2].pid->Set_Value = 0.0;
+		R->Motors[3].pid->Set_Value = 0.0;
+	}
+
+
 
 		R->Motors[0].pid->Set_Value = (dist + dir) * R->max_speed_Rad_per_Sec;
 		R->Motors[1].pid->Set_Value = (dist - dir) * R->max_speed_Rad_per_Sec;
@@ -171,6 +187,15 @@ void ROBOT_Calculate(TRobot *R)
 	float deltaX = R->Set_X - R->X;
 	float deltaY = R->Set_Y - R->Y;
 	R->Set_angle = atan2(deltaX,deltaY) * RAD_2_DEG;
+
+	//_____ walk around mode change_____________________
+	if(robot_mode_change_first_scan_flag == 1)
+	{
+		R->Set_angle = R->actual_angle;
+		robot_mode_change_first_scan_flag = 0;
+	}
+	//___________________end____________________________
+
 	R->TargetDistanceMM = sqrt( deltaX * deltaX + deltaY * deltaY);
 
 	R->P_direction.Set_Value = R->Set_angle;
@@ -185,7 +210,7 @@ void ROBOT_HomeIsHere(void)
 {
 
 
-	R.isMotorsPidOn = false;
+
 	R.actual_position 		 = 0.0;
 	R.left_site_distance_MM = 0.0;
 	R.right_site_distance_MM= 0.0;
@@ -201,10 +226,53 @@ void ROBOT_HomeIsHere(void)
 void ROBOT_Set_Mode(TMode mode)
 {
 	if(mode == Go2Point_Mode)
+	{
+
+		R.isG2PControllerEN = false;
+		R.isMotorsPidOn = false;
+		robot_mode_change_first_scan_flag = 1;
+
+		R.Set_X = R.X;
+		R.Set_Y = R.Y;
+		R.Set_angle = R.actual_angle;
+
+		for (uint8_t i=0; i<4; i++)
+		{
+
+			R.Motors[i].pid->error = 0.0;
+			R.Motors[i].pid->previous_error= 0.0;
+			R.Motors[i].pid->total_error= 0.0;
+			R.Motors[i].pid->out= 0.0;
+			R.Motors[i].pid->Set_Value= 0.0;
+			R.Motors[i].pid->Actual_Value= 0.0;
+
+		}
+
+
+		//direction
+		R.P_direction.Actual_Value = 0.0;
+		R.P_direction.Set_Value	=	0.0;
+		R.P_direction.error = 0.0;
+
+		//distance
+		R.P_distance.Actual_Value = 0.0;
+		R.P_distance.Set_Value = 0.0;
+		R.P_distance.error = 0.0;
+
+
+
+		R.isMotorsPidOn = true;
+		R.isG2PControllerEN = true;
 		R.control_mode = Go2Point_Mode;
+	}
+
 
 	if(mode == Manual_Mode)
+	{
+		R.isG2PControllerEN = false;
 		R.control_mode = Manual_Mode;
+	}
+
 }
 
 void LIDAR_Set_PWM(uint8_t Percent)
@@ -214,4 +282,19 @@ void LIDAR_Set_PWM(uint8_t Percent)
 		if(Percent < 0)   Percent = 0;
 		__HAL_TIM_SET_COMPARE(&htim10, TIM_CHANNEL_1,Percent * 10);
 		HAL_TIM_PWM_Start(&htim10, TIM_CHANNEL_1);
+}
+void COMUNICATION_Watchdog_Incerement(void)
+{
+	wifi_connection_watchdog_counter++;
+	if(wifi_connection_watchdog_counter > 200)
+	{
+		ROBOT_Stop(&R);
+		LED_OnOff(&LED_4_RED, LED_ON);
+		UartLog("WIFI Watchdog timeout!");
+	}
+}
+
+void COMUNICATION_Watchdog_Reset(void)
+{
+	wifi_connection_watchdog_counter = 0;
 }

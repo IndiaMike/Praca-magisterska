@@ -9,6 +9,7 @@
 #include "usart.h"
 #include "control.h"
 
+
 extern uint16_t AdcValue[20];
 
 
@@ -24,7 +25,8 @@ void RareInterrupt(void)
 	interrupt_counter++;
 		if(interrupt_counter > 200)
 		{
-			BATERRYLowVoltageProtect(&AdcValue);
+			BATTERYLowVoltageProtect(&AdcValue);
 			interrupt_counter = 0;
 		}
+
 }

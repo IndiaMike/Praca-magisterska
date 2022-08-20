@@ -16,7 +16,7 @@ extern  TLed LED_4_RED;
 extern TRobot R;
 
 static uint32_t lastTick_Heart=0;	// zmienne pomocnicze do timera softwarowego /Static aby nie były widoczne na zewnątrz
-static uint32_t lastTick_Buzzer=0;  // zmienne pomocnicze do timera softwarowego /Static aby nie były widoczne na zewnątrz
+//static uint32_t lastTick_Buzzer=0;// zmienne pomocnicze do timera softwarowego /Static aby nie były widoczne na zewnątrz
 
 void LEDs_test(TLed Led_1, TLed Led_2, TLed Led_3, TLed Led_4)
 {
@@ -124,16 +124,17 @@ void BUZZER_Impulse_Blocked(uint8_t Number_of_impulse, uint8_t cycle_time)
 		HAL_Delay(cycle_time);
 	}
 }
-void BATERRYLowVoltageProtect(uint16_t *AdcValue)
+void BATTERYLowVoltageProtect(uint16_t *AdcValue)
 {
 	float tmp, voltage;
+	char Message[32];
 	for(int i=0; i<20;i++)
 		{
 			tmp +=(AdcValue[i] );
 		}
 		tmp/=20;
 		voltage = tmp * 20.823 / 4096.0 * 1.03; // 1.03 calibration
-
+		R.baterryVoltage = voltage;
 	if (voltage > 14.2) // >3.5V on cell
 	{
 		return;
@@ -144,6 +145,10 @@ void BATERRYLowVoltageProtect(uint16_t *AdcValue)
 		LED_OnOff(&LED_4_RED, LED_ON);
 		LED_OnOff(&LED_2_GREEN, LED_ON);
 		BUZZER_Off();
+
+		sprintf(Message, "BATTERY! %.2fV %.2fV/cell",R.baterryVoltage,(R.baterryVoltage/4.0));
+		UartLog(Message);
+
 	}
 
 
@@ -154,6 +159,8 @@ void BATERRYLowVoltageProtect(uint16_t *AdcValue)
 		LED_OnOff(&LED_1_GREEN, LED_ON);
 		LED_OnOff(&LED_2_GREEN, LED_ON);
 		ROBOT_Stop(&R);
-		while(1);
+
+		UartLog("LOW BATTERY level!");
+		while(1){};
 	}
 }

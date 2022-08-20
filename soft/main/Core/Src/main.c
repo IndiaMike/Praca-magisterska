@@ -100,7 +100,9 @@ static void MX_NVIC_Init(void);
 	uint16_t AdcValue[20];
 
 
-
+	uint8_t robot_mode_change_first_scan_flag=0;
+	uint8_t wifi_connection_watchdog_counter=0;
+	uint8_t is_communication_start_flag= 0;
 /* USER CODE END 0 */
 
 /**
@@ -206,7 +208,7 @@ int main(void)
    //timer 10Hz start
    __HAL_TIM_ENABLE_IT(&htim11,TIM_IT_UPDATE);
    HAL_TIM_OC_Start_IT(&htim11,TIM_CHANNEL_1);
-   R.isMotorsPidOn = false;
+
 
 
    //UART WIFI232
@@ -224,17 +226,10 @@ int main(void)
   while (1)
   {
 
-/*
-		  R.Motors[0].pid->Set_Value = 4.0;
-		  R.Motors[1].pid->Set_Value = -4.0;
-		  R.Motors[2].pid->Set_Value = 4.0;
-		  R.Motors[3].pid->Set_Value = -4.0;
-*/
-
-
 
 	  if(ReceivedLines > 0)
 	  {
+		  is_communication_start_flag =1;
 		  Parser_TakeLine(&RB_receive, ReceivedData);
 		  ReceivedLines--;
 		  Parser_Parse(ReceivedData);
@@ -245,7 +240,7 @@ int main(void)
 	  if(Right == BUTTON_Read())
 	  {
 	  //temporary!!!
-	  HAL_UART_Transmit(&huart1,"Button test", 11, 1000);
+	  HAL_UART_Transmit(&huart1,(uint8_t*)"Button test", 11, 1000);
 	  HAL_Delay(1000);
 	  //end
 
@@ -341,13 +336,14 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 {
 	if(huart->Instance == USART1) // wifi232
 	{
-		if(RB_OK == RB_Write(&RB_receive,uartTmpReceive))
-
-		   if(uartTmpReceive == ENDLINE)
-		   {
-			   ReceivedLines++;
-		   }
-		   HAL_UART_Receive_IT(&huart1, &uartTmpReceive, 1);
+		if(RB_OK==RB_Write(&RB_receive,uartTmpReceive))
+		{
+			if(uartTmpReceive==ENDLINE)
+			   {
+				   ReceivedLines++;
+			   }
+			   HAL_UART_Receive_IT(&huart1, &uartTmpReceive, 1);
+		}
 	}
 }
 
@@ -369,7 +365,7 @@ void HAL_TIM_OC_DelayElapsedCallback(TIM_HandleTypeDef *htim)
 			ROBOT_Calculate(&R);
 
 			//forward, to setpoint PID
-			if(R.control_mode == Go2Point_Mode)ROBOT_Go2Point(&R);
+			if(R.control_mode == Go2Point_Mode && R.isG2PControllerEN == true) ROBOT_Go2Point(&R);
 
 
 
@@ -385,6 +381,7 @@ void HAL_TIM_OC_DelayElapsedCallback(TIM_HandleTypeDef *htim)
 				MOTOR_Set_Speed(&MOTOR_Rear_Left_3);
 				MOTOR_Set_Speed(&MOTOR_Rear_Right_4);
 			}
+			if(is_communication_start_flag >0) COMUNICATION_Watchdog_Incerement();
 			RareInterrupt();
 
 

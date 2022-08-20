@@ -16,6 +16,9 @@
 
 extern  TLed LED_1_GREEN;
 extern  TLed LED_2_GREEN;
+extern	TLed LED_3_YELLOW;
+extern	TLed LED_4_RED;
+
 extern	TRobot R;
 
 
@@ -67,12 +70,16 @@ static void Parser_ParseLED(void)
 		if(ParsePointer[0] == '1')
 		{
 			LED_OnOff(&LED_1_GREEN, LED_ON);
-			UartLog("LED On");
+			LED_OnOff(&LED_2_GREEN, LED_ON);
+			LED_OnOff(&LED_3_YELLOW, LED_ON);
+			LED_OnOff(&LED_3_YELLOW, LED_ON);
 		}
 		else if (ParsePointer[0] == '0')
 		{
 			LED_OnOff(&LED_1_GREEN, LED_OFF);
-			UartLog("LED Off");
+			LED_OnOff(&LED_2_GREEN, LED_OFF);
+			LED_OnOff(&LED_3_YELLOW, LED_OFF);
+			LED_OnOff(&LED_3_YELLOW, LED_OFF);
 		}
 	}
 }
@@ -128,7 +135,7 @@ static void Parser_ParsePOINT(void)
 			}
 		// Reaction - Send to log received values
 		ROBOT_Set_Point(&R, PointParameters[0], PointParameters[1], PointParameters[2]);
-
+		R.isG2PControllerEN = true;
 		sprintf(Message, "Set Point P= %.1f, %.1f, %.1f, ", R.Set_X, R.Set_Y, R.Set_angle);
 		UartLog(Message);
 
@@ -142,16 +149,40 @@ static void Parser_ParsePOINT(void)
 static void Parser_ParseHELP(void)
 {
 	char Message[64]; // Return log message
-	UartLog("Possibility comands:\n\r");
+	UartLog("\n\rPossibility commands:\n\r");
 
 	sprintf(Message, "LED={1-0};\n\r");
 	UartLog(Message);
 
 	sprintf(Message, "P=X.X,Y.Y,a.a;\n\r");
 	UartLog(Message);
+
+	sprintf(Message, "P=?;\n\r");
+	UartLog(Message);
+
+	sprintf(Message, "MotorON;\n\r");
+	UartLog(Message);
+
+	sprintf(Message, "STOP;\n\r");
+	UartLog(Message);
+
+	sprintf(Message, "HomeHere;\n\r");
+	UartLog(Message);
+
+	sprintf(Message, "ModeM;\n\r");
+	UartLog(Message);
+
+	sprintf(Message, "ModeG2P;\n\r");
+	UartLog(Message);
+
+	sprintf(Message, "IN MANUAL MODE ONLY!\n\r");
+	UartLog(Message);
+	sprintf(Message, "GoW, GoS, GoA, GoD, Speed0;\n\r");
+	UartLog(Message);
+
 }
 
-static void Parser_ParseGO2P(void)
+static void Parser_ParseMotorON(void)
 {
 	R.isMotorsPidOn = true;
 }
@@ -166,6 +197,10 @@ void Parser_Parse(uint8_t *DataToParse)
 		{
 			Parser_ParseLED(); // Call a parsing function for the LED command
 		}
+		else if(strcmp("W0", ParsePointer) == 0)
+		{
+			COMUNICATION_Watchdog_Reset();
+		}
 		else if(strcmp("P", ParsePointer) == 0)
 		{
 			Parser_ParsePOINT(); // Call a parsing function for the ENV command
@@ -175,9 +210,9 @@ void Parser_Parse(uint8_t *DataToParse)
 			Parser_ParseHELP(); // Call a parsing function for the NAME command
 		}
 
-		else if(strcmp("GO2P", ParsePointer) == 0)
+		else if(strcmp("MotorON", ParsePointer) == 0)
 		{
-			Parser_ParseGO2P();
+			Parser_ParseMotorON();
 		}
 		else if(strcmp("STOP", ParsePointer) == 0)
 		{
@@ -214,9 +249,6 @@ void Parser_Parse(uint8_t *DataToParse)
 		}
 		else if(strcmp("ModeG2P", ParsePointer) == 0)
 		{
-			R.Set_X = R.X;
-			R.Set_Y = R.Y;
-			R.Set_angle = R.actual_angle;
 			ROBOT_Set_Mode(Go2Point_Mode);
 		}
 		else
