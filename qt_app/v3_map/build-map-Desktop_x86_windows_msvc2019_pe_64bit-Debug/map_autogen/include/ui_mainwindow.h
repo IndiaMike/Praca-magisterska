@@ -36,6 +36,7 @@ public:
     QPushButton *pushButtonClearMap;
     QComboBox *comboBoxCellType;
     QPushButton *pushButton;
+    QPushButton *pushButtonAddSafetyZone;
     QGroupBox *groupBox_2;
     QTextEdit *textEditLogs;
     QLineEdit *lineEditText2Send;
@@ -74,17 +75,20 @@ public:
         groupBox->setGeometry(QRect(1050, 40, 671, 91));
         pushButtonClearMap = new QPushButton(groupBox);
         pushButtonClearMap->setObjectName(QString::fromUtf8("pushButtonClearMap"));
-        pushButtonClearMap->setGeometry(QRect(10, 40, 83, 29));
+        pushButtonClearMap->setGeometry(QRect(10, 10, 121, 29));
         comboBoxCellType = new QComboBox(groupBox);
         comboBoxCellType->addItem(QString());
         comboBoxCellType->addItem(QString());
         comboBoxCellType->addItem(QString());
         comboBoxCellType->addItem(QString());
         comboBoxCellType->setObjectName(QString::fromUtf8("comboBoxCellType"));
-        comboBoxCellType->setGeometry(QRect(110, 40, 121, 28));
+        comboBoxCellType->setGeometry(QRect(350, 30, 121, 28));
         pushButton = new QPushButton(groupBox);
         pushButton->setObjectName(QString::fromUtf8("pushButton"));
-        pushButton->setGeometry(QRect(420, 40, 83, 29));
+        pushButton->setGeometry(QRect(490, 30, 83, 29));
+        pushButtonAddSafetyZone = new QPushButton(groupBox);
+        pushButtonAddSafetyZone->setObjectName(QString::fromUtf8("pushButtonAddSafetyZone"));
+        pushButtonAddSafetyZone->setGeometry(QRect(10, 50, 121, 29));
         groupBox_2 = new QGroupBox(centralwidget);
         groupBox_2->setObjectName(QString::fromUtf8("groupBox_2"));
         groupBox_2->setGeometry(QRect(1050, 140, 671, 421));
@@ -108,7 +112,7 @@ public:
         radioButtonLED->setGeometry(QRect(110, 30, 112, 26));
         pushButtonTest = new QPushButton(centralwidget);
         pushButtonTest->setObjectName(QString::fromUtf8("pushButtonTest"));
-        pushButtonTest->setGeometry(QRect(1180, 20, 83, 29));
+        pushButtonTest->setGeometry(QRect(1210, 20, 83, 29));
         groupBox_3 = new QGroupBox(centralwidget);
         groupBox_3->setObjectName(QString::fromUtf8("groupBox_3"));
         groupBox_3->setGeometry(QRect(1050, 560, 671, 311));
@@ -208,6 +212,7 @@ public:
         comboBoxCellType->setItemText(3, QApplication::translate("MainWindow", "Destination", nullptr));
 
         pushButton->setText(QApplication::translate("MainWindow", "Find Path", nullptr));
+        pushButtonAddSafetyZone->setText(QApplication::translate("MainWindow", "Add Safety Zone", nullptr));
         groupBox_2->setTitle(QApplication::translate("MainWindow", "Communication", nullptr));
         pushButtonSend->setText(QApplication::translate("MainWindow", "Send", nullptr));
 #ifndef QT_NO_SHORTCUT

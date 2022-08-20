@@ -40,8 +40,8 @@
      <property name="geometry">
       <rect>
        <x>10</x>
-       <y>40</y>
-       <width>83</width>
+       <y>10</y>
+       <width>121</width>
        <height>29</height>
       </rect>
      </property>
@@ -52,8 +52,8 @@
     <widget class="QComboBox" name="comboBoxCellType">
      <property name="geometry">
       <rect>
-       <x>110</x>
-       <y>40</y>
+       <x>350</x>
+       <y>30</y>
        <width>121</width>
        <height>28</height>
       </rect>
@@ -82,14 +82,27 @@
     <widget class="QPushButton" name="pushButton">
      <property name="geometry">
       <rect>
-       <x>420</x>
-       <y>40</y>
+       <x>490</x>
+       <y>30</y>
        <width>83</width>
        <height>29</height>
       </rect>
      </property>
      <property name="text">
       <string>Find Path</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="pushButtonAddSafetyZone">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>50</y>
+       <width>121</width>
+       <height>29</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Add Safety Zone</string>
      </property>
     </widget>
    </widget>
@@ -184,7 +197,7 @@
    <widget class="QPushButton" name="pushButtonTest">
     <property name="geometry">
      <rect>
-      <x>1180</x>
+      <x>1210</x>
       <y>20</y>
       <width>83</width>
       <height>29</height>

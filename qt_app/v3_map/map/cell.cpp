@@ -8,11 +8,12 @@ cell::cell()
 
 void cell::SetBrush(eCellType type)
 {
-     QBrush defaulteBrush(Qt::darkGray);
+     QBrush defaulteBrush(Qt::gray);
      QBrush obstacleBrush(Qt::black);
      QBrush destinationBrush(Qt::blue);
      QBrush positionBrush(Qt::red);
      QBrush pathBrush(Qt::green);
+     QBrush safeZoneBrush(Qt::darkGray);
 
 // CellType_Position = 0, CellType_Destination, CellType_Free, CellType_Obstacle
       switch (type) {
@@ -35,7 +36,10 @@ void cell::SetBrush(eCellType type)
 
         case CellType_Path:
         rect->setBrush(pathBrush);
-         break;
+        break;
+
+        case CellType_SafeZone:
+        rect->setBrush(safeZoneBrush);
       }
 }
 

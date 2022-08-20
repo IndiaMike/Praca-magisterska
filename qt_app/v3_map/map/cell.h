@@ -9,7 +9,7 @@
 
 typedef enum
 {
-    CellType_Free =0 , CellType_Position =1, CellType_Obstacle =2, CellType_Destination =3, CellType_Path =4
+    CellType_Free =0 , CellType_Position =1, CellType_Obstacle =2, CellType_Destination =3, CellType_Path =4, CellType_SafeZone=5
 }eCellType;
 
 class cell : public QObject

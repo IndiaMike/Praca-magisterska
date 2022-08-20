@@ -52,7 +52,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::Map_GenerateMap(void)
 {
-    QBrush gray(Qt::darkGray);
+    QBrush gray(Qt::gray);
     QPen blackpen(Qt::black);
     blackpen.setWidth(2);
 
@@ -620,3 +620,41 @@ void change_coordination(int *X, int *Y, int *newX, int *newY)
 
 }
 */
+
+void MainWindow::on_pushButtonAddSafetyZone_clicked()
+{
+    for(int i=1;i<49;i++)
+    {
+        for(int j=1;j<49;j++)
+        {
+            if( cells[i][j]->type != CellType_Obstacle
+                    &&
+               (cells[i-1][j-1]->   type == CellType_Obstacle ||
+                cells[i-1][j]->     type == CellType_Obstacle ||
+                cells[i-1][j+1]->   type == CellType_Obstacle ||
+
+                cells[i][j-1]->     type == CellType_Obstacle ||
+                cells[i][j+1]->     type == CellType_Obstacle ||
+
+                cells[i+1][j-1]->   type == CellType_Obstacle ||
+                cells[i+1][j]->     type == CellType_Obstacle ||
+                cells[i+1][j+1]->   type == CellType_Obstacle))
+            {
+                cells[i][j]->type = CellType_SafeZone;
+                cells[i][j]->SetBrush(CellType_SafeZone);
+            }
+         }
+    }
+
+    for(int i=0;i<50;i++)
+    {
+        for(int j=0;j<50;j++)
+        {
+            if(cells[i][j]->type == CellType_SafeZone)
+            {
+                cells[i][j-1]->type = CellType_Obstacle;
+            }
+        }
+    }
+}
+
