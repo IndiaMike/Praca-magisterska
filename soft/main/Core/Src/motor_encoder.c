@@ -20,7 +20,7 @@ extern TLed LED_4_RED;
 
 
 
-static void MOTOR_PWM_Set_Width(TMotor *Motor,uint16_t Percent);
+
 static void MOTOR_PWM_Start(TMotor *Motor);
 
 void MOTOR_Init(TMotor *Motor,GPIO_TypeDef *IN_A_GpioPort, uint16_t IN_A_GpioPin,
@@ -62,14 +62,14 @@ void MOTOR_PID_Connect(TMotor *Motor, TPid *pid)
 	Motor->pid = pid;
 }
 
-static void MOTOR_PWM_Set_Width(TMotor *Motor,uint16_t Permil)
+void MOTOR_PWM_Set_Width(TMotor *Motor,uint16_t Permil)
 {
 	if(Permil > MAX_PWM_VALUE)
 		Permil = MAX_PWM_VALUE;
 	__HAL_TIM_SET_COMPARE(Motor->htim, Motor->TIM_CHANNEL,Permil);
 }
 
-static void MOTOR_PWM_Start(TMotor *Motor)
+void MOTOR_PWM_Start(TMotor *Motor)
 {
 	MOTOR_PWM_Set_Width(Motor,0);
 	HAL_TIM_PWM_Start(Motor->htim, Motor->TIM_CHANNEL);

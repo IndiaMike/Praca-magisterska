@@ -101,7 +101,7 @@ void MOTOR_Init(TMotor *Motor,GPIO_TypeDef *IN_A_GpioPort, uint16_t IN_A_GpioPin
 void MOTOR_Set_Speed(TMotor *Motor);
 void MOTOR_Soft_STOP(TMotor *Motor);
 void MOTOR_Emergency_STOP(TMotor *Motor);
-
+void MOTOR_PWM_Set_Width(TMotor *Motor,uint16_t Permil);
 
 
 // ENCODERS

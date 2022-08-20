@@ -23,7 +23,7 @@ static uint16_t interrupt_counter = 0;
 void RareInterrupt(void)
 {
 	interrupt_counter++;
-		if(interrupt_counter > 200)
+		if(interrupt_counter > 1000)
 		{
 			BATTERYLowVoltageProtect(&AdcValue);
 			interrupt_counter = 0;

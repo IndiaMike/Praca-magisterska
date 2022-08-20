@@ -28,6 +28,8 @@ extern TLed LED_2_GREEN;
 extern TLed LED_3_YELLOW;
 extern TLed LED_4_RED;
 
+extern bool isPidsON;
+
 // to angle calibration
 //uint8_t i_calibration_counter =0;
 
@@ -69,33 +71,44 @@ void ROBOT_Manual(dir direction)
 {
 	if(R.control_mode == Manual_Mode && R.isG2PControllerEN == false)
 	{
+		float angle = 1.0,dist = 1.0;
+		if( R.Motors[0].pid->Set_Value  == 0.0 &&
+			R.Motors[1].pid->Set_Value == 0.0 &&
+			R.Motors[2].pid->Set_Value == 0.0 &&
+			R.Motors[3].pid->Set_Value == 0.0 )
+		{
+			angle = 2.0,dist = 2.0;
+		}
+
+
+
 		switch(direction){
 		case dW:
-			R.Motors[0].pid->Set_Value += 1.0;
-			R.Motors[1].pid->Set_Value += 1.0;
-			R.Motors[2].pid->Set_Value += 1.0;
-			R.Motors[3].pid->Set_Value += 1.0;
+			R.Motors[0].pid->Set_Value += dist;
+			R.Motors[1].pid->Set_Value += dist;
+			R.Motors[2].pid->Set_Value += dist;
+			R.Motors[3].pid->Set_Value += dist;
 			break;
 
 		case dS:
-			R.Motors[0].pid->Set_Value -= 1.0;
-			R.Motors[1].pid->Set_Value -= 1.0;
-			R.Motors[2].pid->Set_Value -= 1.0;
-			R.Motors[3].pid->Set_Value -= 1.0;
+			R.Motors[0].pid->Set_Value -= dist;
+			R.Motors[1].pid->Set_Value -= dist;
+			R.Motors[2].pid->Set_Value -= dist;
+			R.Motors[3].pid->Set_Value -= dist;
 			break;
 
 		case dA:
-			R.Motors[0].pid->Set_Value -= 1.0;
-			R.Motors[1].pid->Set_Value += 1.0;
-			R.Motors[2].pid->Set_Value -= 1.0;
-			R.Motors[3].pid->Set_Value += 1.0;
+			R.Motors[0].pid->Set_Value -= angle;
+			R.Motors[1].pid->Set_Value += angle;
+			R.Motors[2].pid->Set_Value -= angle;
+			R.Motors[3].pid->Set_Value += angle;
 			break;
 
 		case dD:
-			R.Motors[0].pid->Set_Value += 1.0;
-			R.Motors[1].pid->Set_Value -= 1.0;
-			R.Motors[2].pid->Set_Value += 1.0;
-			R.Motors[3].pid->Set_Value -= 1.0;
+			R.Motors[0].pid->Set_Value += angle;
+			R.Motors[1].pid->Set_Value -= angle;
+			R.Motors[2].pid->Set_Value += angle;
+			R.Motors[3].pid->Set_Value -= angle;
 			break;
 
 		case dSpeed0:
@@ -203,8 +216,8 @@ void ROBOT_Calculate(TRobot *R)
 
 	R->P_distance.Set_Value  = 0.0;
 	R->P_distance.Actual_Value  = R->TargetDistanceMM;
-
 }
+
 
 void ROBOT_HomeIsHere(void)
 {

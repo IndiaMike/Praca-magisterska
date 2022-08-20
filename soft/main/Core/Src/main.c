@@ -103,6 +103,7 @@ static void MX_NVIC_Init(void);
 	uint8_t robot_mode_change_first_scan_flag=0;
 	uint8_t wifi_connection_watchdog_counter=0;
 	uint8_t is_communication_start_flag= 0;
+	bool	isPidsON = true;
 /* USER CODE END 0 */
 
 /**
@@ -369,7 +370,7 @@ void HAL_TIM_OC_DelayElapsedCallback(TIM_HandleTypeDef *htim)
 
 
 
-			if(true == R.isMotorsPidOn)
+			if(true == R.isMotorsPidOn && true == isPidsON )
 			{
 				PID_Controller(&PID_Motor_1);
 				PID_Controller(&PID_Motor_2);
@@ -384,7 +385,23 @@ void HAL_TIM_OC_DelayElapsedCallback(TIM_HandleTypeDef *htim)
 			if(is_communication_start_flag >0) COMUNICATION_Watchdog_Incerement();
 			RareInterrupt();
 
-
+			if(	R.Motors[0].pid->Set_Value >0.2 || R.Motors[0].pid->Set_Value <-0.2 ||
+				R.Motors[1].pid->Set_Value >0.2 || R.Motors[1].pid->Set_Value <-0.2 ||
+				R.Motors[2].pid->Set_Value >0.2 || R.Motors[2].pid->Set_Value <-0.2 ||
+				R.Motors[3].pid->Set_Value >0.2 || R.Motors[3].pid->Set_Value <-0.2)
+			{
+				isPidsON = true;//R.isMotorsPidOn = false;
+			}
+			else
+			{
+				isPidsON = false;
+				for(uint8_t i=0; i<4; i++)
+				{
+					MOTOR_PWM_Set_Width(&R.Motors[i],0);
+					R.Motors[i].pid->Set_Value = 0.0;
+					R.Motors[i].pid->out = 0.0;
+				}
+			}
 
 		}
 	}
