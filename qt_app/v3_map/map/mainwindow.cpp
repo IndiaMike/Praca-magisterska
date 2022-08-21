@@ -9,6 +9,19 @@
 #include <qmessagebox.h>
 #include <qlist.h>
 
+int8_t map_sequence_path[1000][2];
+int16_t map_sequence_points_counter = 0;
+
+int map_sequence_path_new[1000][2];
+
+int map_smooth_path[1000][2];
+int16_t map_smooth_counter = 0;
+
+int8_t point00X = 0;
+int8_t point00Y = 0;
+
+bool start_flag00_point = false;
+bool point00_is_selected = false;
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow)
 {
@@ -112,11 +125,31 @@ void MainWindow::mousePressEvent(QMouseEvent *event)
 
 
 
-                    qDebug() << "x : " << cells[j][i]->x;
-                    qDebug() << "y : " << cells[j][i]->y;
+                    qDebug() << "x : " << cells[i][j]->x;
+                    qDebug() << "y : " << cells[i][j]->y;
 
             //        qDebug() << "mouse x : " << event->x();
             //        qDebug() << "mouse y : " << event->y();
+                }
+
+            }
+        }
+    }
+    if ((event->buttons() & Qt::RightButton) && (start_flag00_point == false))
+    {
+        for(int i=0;i<50;i++)
+        {
+            for(int j=0;j<50;j++)
+            {
+                if(cells[i][j]->rect->isUnderMouse())
+                {
+                    QPen blackpen(Qt::black);
+                    blackpen.setWidth(6);
+                    cells[i][j]->rect->setPen(blackpen);
+                    point00X=cells[i][j]->x;
+                    point00Y=cells[i][j]->y;
+                    start_flag00_point = true;
+                    point00_is_selected = true;
                 }
 
             }
@@ -357,8 +390,13 @@ void MainWindow::A_STAR_FIND_PATH(cell* startCell, cell* finishCell)
 
         openSet.removeOne(currentCell);
         closeSet.append(currentCell);
-        currentCell->rect->setBrush(Qt::magenta);
-        ui->graphicsView->repaint();
+        if(currentCell != startCell && currentCell != finishCell && currentCell->type != CellType_Obstacle)
+        {
+            currentCell->rect->setBrush(Qt::magenta);
+            ui->graphicsView->repaint();
+        }
+
+
 
         if(currentCell == finishCell)
         {
@@ -380,7 +418,12 @@ void MainWindow::A_STAR_FIND_PATH(cell* startCell, cell* finishCell)
                 neighbour->gCost = newMovmentCostToNeighbour;
                 neighbour->hCost = GET_DISTANCE_BETWEEN_CELLS(finishCell, neighbour);
                 neighbour->parent = currentCell;
-                neighbour->rect->setBrush(Qt::yellow);
+
+                if(neighbour->type != CellType_Obstacle && neighbour->type != CellType_Destination)
+                {
+                     neighbour->rect->setBrush(Qt::yellow);
+                }
+
 
                 if(!openSet.contains(neighbour))
                 {
@@ -503,15 +546,118 @@ void MainWindow::A_STAR_GENERATE_PATH(cell *startCell, cell *finishCell)
     while(currentCell != startCell)
     {
         path.append(currentCell);
-        currentCell->type = CellType_Path;
-        currentCell->SetBrush(CellType_Path);
+
+        if(currentCell != finishCell)
+        {
+            currentCell->SetBrush(CellType_Path);
+
+        }
+            currentCell->type = CellType_Path;
 
 
         currentCell = currentCell->parent;
 
        ui->graphicsView->repaint();
     }
+    map_sequence_points_counter = path.count();
+
+    //przepisanie tablicy -> od startu do mety
+
+    map_sequence_path[0][0] = startCell->x;
+    map_sequence_path[0][1] = startCell->y;
+
+    for(int i=map_sequence_points_counter; i>0; i--)
+    {
+    qDebug()<<"Point"<<i<<" X="<<path.at(i-1)->x<<" Y="<<path.at(i-1)->y;
+    map_sequence_path[map_sequence_points_counter - i +1][0]=path.at(i-1)->x;
+    map_sequence_path[map_sequence_points_counter - i +1][1]=path.at(i-1)->y;
+    }
+    qDebug()<<" ";
+
+
+    for(int i=0;i<=map_sequence_points_counter;i++)
+    {
+        qDebug()<<"tab["<<i<<"] X="<<map_sequence_path[i][0]<<"Y="<<map_sequence_path[i][1];
+
+    }
+    if(point00_is_selected == true)
+    { // zamiana na uklad wsp robota
+
+
+        for(int i=0;i<=map_sequence_points_counter;i++)
+        {
+             map_sequence_path_new[i][0] = map_sequence_path[i][0] - point00X;
+             map_sequence_path_new[i][1] = abs(point00Y) - abs(map_sequence_path[i][1]);
+             qDebug()<<"tab new["<<i<<"] X="<<map_sequence_path_new[i][0]<<"Y="<<map_sequence_path_new[i][1];
+        }
+        qDebug()<<"map_sequence_points_counter"<<map_sequence_points_counter;
+
+       //pozostawienie wylacznei punktów przegięcia łamanej
+
+        int i_straight = 1;
+
+        map_smooth_path[map_smooth_counter][0] = map_sequence_path_new[0][0];
+        map_smooth_path[map_smooth_counter][1] = map_sequence_path_new[0][1];
+        map_smooth_counter++;
+        while(i_straight<map_sequence_points_counter) // jest map_sequence_points_counter+1 elementów
+        {
+            if(map_sequence_path_new[i_straight-1][0] == map_sequence_path_new[i_straight][0])
+            {
+             //przypadek prostej pionowej;
+            }
+            else
+            {
+               float a_straight_prev=map_sequence_path_new[i_straight][0]-map_sequence_path_new[i_straight-1][0]/
+                            map_sequence_path_new[i_straight][1]-map_sequence_path_new[i_straight-1][1];
+
+               //float b_straight_prev = map_sequence_path_new[i+1][1]-(a_straight * map_sequence_path_new[i+1][0]);
+
+               float a_straight_next=map_sequence_path_new[i_straight+1][0]-map_sequence_path_new[i_straight][0]/
+                       map_sequence_path_new[i_straight+1][1]-map_sequence_path_new[i_straight][1];
+
+               if(abs(a_straight_prev - a_straight_next) < 0.2) // czy sa takie same  - przyrównanie floatow
+               {
+                   i_straight++;
+                   if(i_straight + 1 == map_sequence_points_counter) // jeżeli to przed ostatni punkt
+                   {
+                       map_smooth_path[map_smooth_counter][0] = map_sequence_path_new[i_straight][0];
+                       map_smooth_path[map_smooth_counter][1] = map_sequence_path_new[i_straight][1];
+                   }
+
+               }
+               else
+               {
+                    map_smooth_path[map_smooth_counter][0] = map_sequence_path_new[i_straight][0];
+                    map_smooth_path[map_smooth_counter][1] = map_sequence_path_new[i_straight][1];
+                    map_smooth_counter++;
+               }
+
+
+
+            }
+
+        }
+        qDebug()<<"map_smooth_counter = "<<map_smooth_counter;
+        for(int i=0;i<=map_smooth_counter;i++)
+        {
+            qDebug()<<"smoth tab["<<i<<"] X="<<map_smooth_path[map_smooth_counter][0]<<"Y="<<map_smooth_path[map_smooth_counter][1];
+        }
+
+
+    }
+    else
+    {
+        QMessageBox msgBox;
+        msgBox.setText("Point 0.0 not Selected!");
+        msgBox.exec();
+    }
+
+
+
+
 }
+
+
 
 void MainWindow::WatchDogComunicationReset()
 {
@@ -652,7 +798,7 @@ void MainWindow::on_pushButtonAddSafetyZone_clicked()
         {
             if(cells[i][j]->type == CellType_SafeZone)
             {
-                cells[i][j-1]->type = CellType_Obstacle;
+                cells[i][j]->type = CellType_Obstacle;
             }
         }
     }
