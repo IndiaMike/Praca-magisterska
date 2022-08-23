@@ -12,10 +12,14 @@
 int8_t map_sequence_path[1000][2];
 int16_t map_sequence_points_counter = 0;
 
+
+int8_t map_smooth_counter_global=0;
+
+
 int map_sequence_path_new[1000][2];
 
 int map_smooth_path[1000][2];
-int16_t map_smooth_counter = 0;
+
 
 int8_t point00X = 0;
 int8_t point00Y = 0;
@@ -595,55 +599,72 @@ void MainWindow::A_STAR_GENERATE_PATH(cell *startCell, cell *finishCell)
        //pozostawienie wylacznei punktów przegięcia łamanej
 
         int i_straight = 1;
-
+        int16_t map_smooth_counter = 0;
         map_smooth_path[map_smooth_counter][0] = map_sequence_path_new[0][0];
         map_smooth_path[map_smooth_counter][1] = map_sequence_path_new[0][1];
         map_smooth_counter++;
         while(i_straight<map_sequence_points_counter) // jest map_sequence_points_counter+1 elementów
         {
-            if(map_sequence_path_new[i_straight-1][0] == map_sequence_path_new[i_straight][0])
-            {
-             //przypadek prostej pionowej;
-            }
-            else
-            {
-               float a_straight_prev=map_sequence_path_new[i_straight][0]-map_sequence_path_new[i_straight-1][0]/
-                            map_sequence_path_new[i_straight][1]-map_sequence_path_new[i_straight-1][1];
+            float a_straight_prev;
+            float a_straight_next;
+            //przypadek prostej pionowej;
 
-               //float b_straight_prev = map_sequence_path_new[i+1][1]-(a_straight * map_sequence_path_new[i+1][0]);
-
-               float a_straight_next=map_sequence_path_new[i_straight+1][0]-map_sequence_path_new[i_straight][0]/
-                       map_sequence_path_new[i_straight+1][1]-map_sequence_path_new[i_straight][1];
-
+                if(map_sequence_path_new[i_straight-1][0] == map_sequence_path_new[i_straight][0])
+                {
+                    a_straight_prev = 99.0;
+                }
+                else
+                {
+                    a_straight_prev=(map_sequence_path_new[i_straight][1]-map_sequence_path_new[i_straight-1][1])/
+                                 (map_sequence_path_new[i_straight][0]-map_sequence_path_new[i_straight-1][0]);
+                }
+                if(map_sequence_path_new[i_straight][0] == map_sequence_path_new[i_straight+1][0])
+                {
+                    a_straight_next = 99.0;
+                }
+                else
+                {
+                    a_straight_next=(map_sequence_path_new[i_straight+1][1]-map_sequence_path_new[i_straight][1])/
+                            (map_sequence_path_new[i_straight+1][0]-map_sequence_path_new[i_straight][0]);
+                }
                if(abs(a_straight_prev - a_straight_next) < 0.2) // czy sa takie same  - przyrównanie floatow
                {
-                   i_straight++;
-                   if(i_straight + 1 == map_sequence_points_counter) // jeżeli to przed ostatni punkt
-                   {
-                       map_smooth_path[map_smooth_counter][0] = map_sequence_path_new[i_straight][0];
-                       map_smooth_path[map_smooth_counter][1] = map_sequence_path_new[i_straight][1];
-                   }
-
+                i_straight++;                
                }
                else
                {
                     map_smooth_path[map_smooth_counter][0] = map_sequence_path_new[i_straight][0];
                     map_smooth_path[map_smooth_counter][1] = map_sequence_path_new[i_straight][1];
                     map_smooth_counter++;
+                    i_straight++;
                }
-
-
-
-            }
-
         }
+        map_smooth_path[map_smooth_counter][0] = map_sequence_path_new[i_straight][0];
+        map_smooth_path[map_smooth_counter][1] = map_sequence_path_new[i_straight][1];
         qDebug()<<"map_smooth_counter = "<<map_smooth_counter;
+
+        addToLogs("Robot path:");
         for(int i=0;i<=map_smooth_counter;i++)
         {
-            qDebug()<<"smoth tab["<<i<<"] X="<<map_smooth_path[map_smooth_counter][0]<<"Y="<<map_smooth_path[map_smooth_counter][1];
+            while(!socket->isOpen())
+            {
+
+            }
+            char Message[32];
+            qDebug()<<"smoth tab["<<i<<"] X="<<map_smooth_path[i][0]<<"Y="<<map_smooth_path[i][1];
+
+
+
+            sprintf(Message,"Path=%d,%d,%d;",i,map_smooth_path[i][0], map_smooth_path[i][1]);
+            //addToLogs((QString)Message);
+
+            QString comand = (Message);
+            ui->lineEditText2Send->clear();
+            ui->lineEditText2Send->setText(comand);
+            on_pushButtonSend_clicked();
+
         }
-
-
+        map_smooth_counter_global = map_smooth_counter;
     }
     else
     {
@@ -651,10 +672,6 @@ void MainWindow::A_STAR_GENERATE_PATH(cell *startCell, cell *finishCell)
         msgBox.setText("Point 0.0 not Selected!");
         msgBox.exec();
     }
-
-
-
-
 }
 
 
@@ -802,5 +819,33 @@ void MainWindow::on_pushButtonAddSafetyZone_clicked()
             }
         }
     }
+}
+
+
+void MainWindow::on_pushButtonClear_saveObst_clicked()
+{
+    for(int i=0;i<50;i++)
+    {
+        for(int j=0;j<50;j++)
+        {
+          if(cells[i][j]->type != CellType_Obstacle)
+          {
+          cells[i][j]->type = CellType_Free;
+          cells[i][j]->SetBrush(CellType_Free);
+          cells[i][j]->visited = false;
+          }
+        }
+    }
+}
+
+
+void MainWindow::on_pushButtonGoThePath_clicked()
+{
+    char Message[32];
+    sprintf(Message,"PathGO=%d;",map_smooth_counter_global);
+    QString comand = (QString)Message;
+    ui->lineEditText2Send->clear();
+    ui->lineEditText2Send->setText(comand);
+    on_pushButtonSend_clicked();
 }
 

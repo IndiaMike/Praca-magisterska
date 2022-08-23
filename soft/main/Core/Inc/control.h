@@ -28,6 +28,7 @@ typedef struct
 	bool 	 isMotorsPidOn;
 	bool	 isG2PControllerEN;
 	bool	 isAngleRegOn;
+	bool	 isPathModeEN;
 
 	TMode	control_mode;
 
@@ -58,6 +59,9 @@ typedef struct
 
 	float Set_angle;
 	float tolerance;
+
+	int Cell_X_anctual;
+	int Cell_Y_anctual;
 
 	float baterryVoltage;
 

@@ -30,6 +30,9 @@ extern TLed LED_4_RED;
 
 extern bool isPidsON;
 
+int pathTable[32][3];
+int pathCounter=0;
+int pathStep =0;
 // to angle calibration
 //uint8_t i_calibration_counter =0;
 
@@ -52,13 +55,14 @@ void ROBOT_Init(TRobot *R)
 	R->left_site_distance_MM = 0.0;
 	R->right_site_distance_MM= 0.0;
 	R->actual_angle			 = 0.0;
-	R->max_speed_Rad_per_Sec = 4.0;
+	R->max_speed_Rad_per_Sec = 5.0;
 
 
 	R->tolerance = 10.0;
 
 	R->isMotorsPidOn = false;
 	R->control_mode = Manual_Mode;
+	R->isPathModeEN = false;
 
 	P_Init(&R->P_direction, 0.05);
 	P_Init(&R->P_distance,  0.05);
@@ -127,6 +131,26 @@ void ROBOT_Set_Point(TRobot *R, float x, float y, float angle)
 	R->Set_X = x;
 	R->Set_Y = y;
 }
+void ROBOT_GoPath(TRobot *R)
+{
+	if(pathCounter>(pathStep))
+	{
+	R->Set_X = pathTable[pathStep][1] * ONE_CELL_DIM;
+	R->Set_Y = pathTable[pathStep][2] * ONE_CELL_DIM;
+
+	R->control_mode = Go2Point_Mode;
+	R->isG2PControllerEN = true;
+	R->isPathModeEN = true;
+	R->isMotorsPidOn = true;
+
+	}
+	else
+	{
+		R->isPathModeEN = false;
+		pathStep = 0;
+	}
+}
+
 void ROBOT_Go2Point(TRobot *R)
 {
 	float dir = 0.0;
@@ -153,6 +177,7 @@ void ROBOT_Go2Point(TRobot *R)
 		R->Motors[1].pid->Set_Value = 0.0;
 		R->Motors[2].pid->Set_Value = 0.0;
 		R->Motors[3].pid->Set_Value = 0.0;
+		if(R->isPathModeEN == true)pathStep++;
 	}
 
 
@@ -216,6 +241,9 @@ void ROBOT_Calculate(TRobot *R)
 
 	R->P_distance.Set_Value  = 0.0;
 	R->P_distance.Actual_Value  = R->TargetDistanceMM;
+
+	R->Cell_X_anctual = (int)R->X / ONE_CELL_DIM;
+	R->Cell_Y_anctual = (int)R->Y / ONE_CELL_DIM;
 }
 
 
@@ -299,7 +327,7 @@ void LIDAR_Set_PWM(uint8_t Percent)
 void COMUNICATION_Watchdog_Incerement(void)
 {
 	wifi_connection_watchdog_counter++;
-	if(wifi_connection_watchdog_counter > 200)
+	if(wifi_connection_watchdog_counter > 400)
 	{
 		ROBOT_Stop(&R);
 		LED_OnOff(&LED_4_RED, LED_ON);

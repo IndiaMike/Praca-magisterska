@@ -37,6 +37,7 @@ public:
     QComboBox *comboBoxCellType;
     QPushButton *pushButton;
     QPushButton *pushButtonAddSafetyZone;
+    QPushButton *pushButtonClear_saveObst;
     QGroupBox *groupBox_2;
     QTextEdit *textEditLogs;
     QLineEdit *lineEditText2Send;
@@ -57,6 +58,7 @@ public:
     QPushButton *pushButtonL;
     QComboBox *comboBox;
     QLabel *label;
+    QPushButton *pushButtonGoThePath;
     QMenuBar *menubar;
     QStatusBar *statusbar;
 
@@ -75,20 +77,23 @@ public:
         groupBox->setGeometry(QRect(1050, 40, 671, 91));
         pushButtonClearMap = new QPushButton(groupBox);
         pushButtonClearMap->setObjectName(QString::fromUtf8("pushButtonClearMap"));
-        pushButtonClearMap->setGeometry(QRect(10, 10, 121, 29));
+        pushButtonClearMap->setGeometry(QRect(540, 40, 121, 29));
         comboBoxCellType = new QComboBox(groupBox);
         comboBoxCellType->addItem(QString());
         comboBoxCellType->addItem(QString());
         comboBoxCellType->addItem(QString());
         comboBoxCellType->addItem(QString());
         comboBoxCellType->setObjectName(QString::fromUtf8("comboBoxCellType"));
-        comboBoxCellType->setGeometry(QRect(350, 30, 121, 28));
+        comboBoxCellType->setGeometry(QRect(310, 40, 121, 28));
         pushButton = new QPushButton(groupBox);
         pushButton->setObjectName(QString::fromUtf8("pushButton"));
-        pushButton->setGeometry(QRect(490, 30, 83, 29));
+        pushButton->setGeometry(QRect(450, 40, 83, 29));
         pushButtonAddSafetyZone = new QPushButton(groupBox);
         pushButtonAddSafetyZone->setObjectName(QString::fromUtf8("pushButtonAddSafetyZone"));
         pushButtonAddSafetyZone->setGeometry(QRect(10, 50, 121, 29));
+        pushButtonClear_saveObst = new QPushButton(groupBox);
+        pushButtonClear_saveObst->setObjectName(QString::fromUtf8("pushButtonClear_saveObst"));
+        pushButtonClear_saveObst->setGeometry(QRect(170, 50, 83, 29));
         groupBox_2 = new QGroupBox(centralwidget);
         groupBox_2->setObjectName(QString::fromUtf8("groupBox_2"));
         groupBox_2->setGeometry(QRect(1050, 140, 671, 421));
@@ -173,12 +178,16 @@ public:
         QFont font1;
         font1.setPointSize(10);
         label->setFont(font1);
+        pushButtonGoThePath = new QPushButton(groupBox_3);
+        pushButtonGoThePath->setObjectName(QString::fromUtf8("pushButtonGoThePath"));
+        pushButtonGoThePath->setGeometry(QRect(300, 40, 101, 29));
         groupBox_4->raise();
         pushButtonGoHome->raise();
         pushButtonAtHome->raise();
         pushButtonSTOP->raise();
         comboBox->raise();
         label->raise();
+        pushButtonGoThePath->raise();
         MainWindow->setCentralWidget(centralwidget);
         groupBox_3->raise();
         graphicsView->raise();
@@ -205,7 +214,7 @@ public:
     {
         MainWindow->setWindowTitle(QApplication::translate("MainWindow", "MainWindow", nullptr));
         groupBox->setTitle(QApplication::translate("MainWindow", "Map", nullptr));
-        pushButtonClearMap->setText(QApplication::translate("MainWindow", "Clear", nullptr));
+        pushButtonClearMap->setText(QApplication::translate("MainWindow", "Reset", nullptr));
         comboBoxCellType->setItemText(0, QApplication::translate("MainWindow", "Free", nullptr));
         comboBoxCellType->setItemText(1, QApplication::translate("MainWindow", "Position", nullptr));
         comboBoxCellType->setItemText(2, QApplication::translate("MainWindow", "Obstacle", nullptr));
@@ -213,6 +222,7 @@ public:
 
         pushButton->setText(QApplication::translate("MainWindow", "Find Path", nullptr));
         pushButtonAddSafetyZone->setText(QApplication::translate("MainWindow", "Add Safety Zone", nullptr));
+        pushButtonClear_saveObst->setText(QApplication::translate("MainWindow", "clear", nullptr));
         groupBox_2->setTitle(QApplication::translate("MainWindow", "Communication", nullptr));
         pushButtonSend->setText(QApplication::translate("MainWindow", "Send", nullptr));
 #ifndef QT_NO_SHORTCUT
@@ -257,6 +267,7 @@ public:
         comboBox->setItemText(1, QApplication::translate("MainWindow", "To point", nullptr));
 
         label->setText(QApplication::translate("MainWindow", "Control mode:", nullptr));
+        pushButtonGoThePath->setText(QApplication::translate("MainWindow", "Go the Path", nullptr));
     } // retranslateUi
 
 };

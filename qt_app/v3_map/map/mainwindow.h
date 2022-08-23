@@ -100,6 +100,10 @@ private slots:
 
     void on_pushButtonAddSafetyZone_clicked();
 
+    void on_pushButtonClear_saveObst_clicked();
+
+    void on_pushButtonGoThePath_clicked();
+
 private:
     Ui::MainWindow *ui;
 

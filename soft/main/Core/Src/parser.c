@@ -20,7 +20,9 @@ extern	TLed LED_3_YELLOW;
 extern	TLed LED_4_RED;
 
 extern	TRobot R;
-
+extern int pathTable[32][3];
+extern int pathCounter;
+extern int pathStep;
 
 void Parser_TakeLine(RingBuffer_t *Buf, uint8_t *Destination)
 {
@@ -73,6 +75,7 @@ static void Parser_ParseLED(void)
 			LED_OnOff(&LED_2_GREEN, LED_ON);
 			LED_OnOff(&LED_3_YELLOW, LED_ON);
 			LED_OnOff(&LED_3_YELLOW, LED_ON);
+			BUZZER_On();
 		}
 		else if (ParsePointer[0] == '0')
 		{
@@ -80,6 +83,7 @@ static void Parser_ParseLED(void)
 			LED_OnOff(&LED_2_GREEN, LED_OFF);
 			LED_OnOff(&LED_3_YELLOW, LED_OFF);
 			LED_OnOff(&LED_3_YELLOW, LED_OFF);
+			BUZZER_Off();
 		}
 	}
 }
@@ -145,6 +149,104 @@ static void Parser_ParsePOINT(void)
 }
 
 
+static void Parser_ParsePATH(void)
+{
+	// String to parse:
+	// X,Y,Z - floats
+
+	uint8_t i, j; // Iterators
+	int PointParameters[3]; // Array for each parameter
+	char Message[32]; // Return log message
+
+
+		for(i = 0; i < 3; i++) // For each of parameters
+			{
+
+				 // Cut a sub-string
+			char *ParsePointer = strtok(NULL, ","); // Cut a sub-string
+
+
+				if(strlen(ParsePointer) > 0) // Check if sub-string exists
+				{
+					// X.XX <- i = 0
+					// Y.YY <- i = 1
+					// Z.ZZ <- i = 2 angle
+
+					for(j = 0; ParsePointer[j] != 0; j++) // Check if only allowed chars are in sub-string
+					{
+						if((ParsePointer[j] < '0' || ParsePointer[j] > '9') && ParsePointer[j] != '.' && ParsePointer[j] != '-')
+						{
+							UartLog("POINT wrong value. Don't use letters dude!");
+							return;
+						}
+					}
+
+					PointParameters[i] = atoi(ParsePointer); // Create a float from the sub-string
+					pathCounter = PointParameters[0];
+					pathTable[pathCounter][i] = PointParameters[i];
+				}
+				else
+				{
+					UartLog("POINT too less values. Path=X,Y,;");
+					return;
+				}
+
+			}
+		// Reaction - Send to log received values
+
+
+		sprintf(Message, "R->Path[%.1d]=%.1d,%.1d,\n\r", pathTable[pathCounter][0], pathTable[pathCounter][1], pathTable[pathCounter][2]);
+
+		UartLog(Message);
+		sprintf(Message, " ");
+		UartLog(Message);
+
+
+
+
+}
+static void Parter_Path_GO(void)
+{
+
+	uint8_t  j; // Iterators
+		int PointParameters; // Array for each parameter
+		char Message[32]; // Return log message
+
+
+
+
+					 // Cut a sub-string
+				char *ParsePointer = strtok(NULL, ","); // Cut a sub-string
+
+					if(strlen(ParsePointer) > 0) // Check if sub-string exists
+					{
+
+
+						for(j = 0; ParsePointer[j] != 0; j++) // Check if only allowed chars are in sub-string
+						{
+							if((ParsePointer[j] < '0' || ParsePointer[j] > '9') && ParsePointer[j] != '.' && ParsePointer[j] != '-')
+							{
+								UartLog("POINT wrong value. Don't use letters dude!");
+								return;
+							}
+						}
+
+						PointParameters = atoi(ParsePointer); // Create a float from the sub-string
+					}
+					else
+					{
+						UartLog("wrong Path Go");
+						return;
+					}
+
+
+			//sprintf(Message, "R->GoPath=%d", PointParameters);
+			//UartLog(Message);
+			R.isPathModeEN = true;
+ 			pathCounter = PointParameters;
+			pathStep = 0;
+
+}
 
 static void Parser_ParseHELP(void)
 {
@@ -251,9 +353,17 @@ void Parser_Parse(uint8_t *DataToParse)
 		{
 			ROBOT_Set_Mode(Go2Point_Mode);
 		}
-		else
+		else if(strcmp("Path", ParsePointer) == 0)
+		{
+			Parser_ParsePATH();
+		}
+		else if(strcmp("PathGO", ParsePointer) == 0)
+		{
+			Parter_Path_GO();
+		}
+		/*else
 		{
 			Parser_ParseHELP();
-		}
+		}*/
 }
 

@@ -39,21 +39,21 @@
     <widget class="QPushButton" name="pushButtonClearMap">
      <property name="geometry">
       <rect>
-       <x>10</x>
-       <y>10</y>
+       <x>540</x>
+       <y>40</y>
        <width>121</width>
        <height>29</height>
       </rect>
      </property>
      <property name="text">
-      <string>Clear</string>
+      <string>Reset</string>
      </property>
     </widget>
     <widget class="QComboBox" name="comboBoxCellType">
      <property name="geometry">
       <rect>
-       <x>350</x>
-       <y>30</y>
+       <x>310</x>
+       <y>40</y>
        <width>121</width>
        <height>28</height>
       </rect>
@@ -82,8 +82,8 @@
     <widget class="QPushButton" name="pushButton">
      <property name="geometry">
       <rect>
-       <x>490</x>
-       <y>30</y>
+       <x>450</x>
+       <y>40</y>
        <width>83</width>
        <height>29</height>
       </rect>
@@ -103,6 +103,19 @@
      </property>
      <property name="text">
       <string>Add Safety Zone</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="pushButtonClear_saveObst">
+     <property name="geometry">
+      <rect>
+       <x>170</x>
+       <y>50</y>
+       <width>83</width>
+       <height>29</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>clear</string>
      </property>
     </widget>
    </widget>
@@ -457,12 +470,26 @@
       <string>Control mode:</string>
      </property>
     </widget>
+    <widget class="QPushButton" name="pushButtonGoThePath">
+     <property name="geometry">
+      <rect>
+       <x>300</x>
+       <y>40</y>
+       <width>101</width>
+       <height>29</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Go the Path</string>
+     </property>
+    </widget>
     <zorder>groupBox_4</zorder>
     <zorder>pushButtonGoHome</zorder>
     <zorder>pushButtonAtHome</zorder>
     <zorder>pushButtonSTOP</zorder>
     <zorder>comboBox</zorder>
     <zorder>label</zorder>
+    <zorder>pushButtonGoThePath</zorder>
    </widget>
    <zorder>groupBox_3</zorder>
    <zorder>graphicsView</zorder>

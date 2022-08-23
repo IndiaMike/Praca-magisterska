@@ -60,7 +60,7 @@ RingBuffer_t RB_receive;
 
 //parser
 uint8_t ReceivedLines;
-uint8_t ReceivedData[32];
+uint8_t ReceivedData[256];
 
 
 
@@ -383,7 +383,10 @@ void HAL_TIM_OC_DelayElapsedCallback(TIM_HandleTypeDef *htim)
 				MOTOR_Set_Speed(&MOTOR_Rear_Right_4);
 			}
 			if(is_communication_start_flag >0) COMUNICATION_Watchdog_Incerement();
+
+
 			RareInterrupt();
+			if(R.isPathModeEN == true)ROBOT_GoPath(&R);
 
 			if(	R.Motors[0].pid->Set_Value >0.2 || R.Motors[0].pid->Set_Value <-0.2 ||
 				R.Motors[1].pid->Set_Value >0.2 || R.Motors[1].pid->Set_Value <-0.2 ||
