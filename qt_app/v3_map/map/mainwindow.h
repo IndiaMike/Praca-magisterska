@@ -39,6 +39,14 @@ public:
     int GET_DISTANCE_BETWEEN_CELLS(cell* cellA, cell* cellB);
     void A_STAR_GENERATE_PATH(cell *startCell, cell *finishCell);
 
+    bool goal_reached = false;
+
+    void pushButtonFloodFill_clicked();
+    void SOLVE_FLOOD_FILL(cell *startCell, cell *finishCell);
+    void SOLVE_FLOOD_FILL_FILL_NEIGHBOURS(cell * currentCell, QStack<cell*> *stack, cell *finishCell);
+    void SOLVE_FLOOD_GENERATE_PATH(cell * finishCell);
+
+
 public slots:
     void WatchDogComunicationReset();
 
@@ -103,6 +111,9 @@ private slots:
     void on_pushButtonClear_saveObst_clicked();
 
     void on_pushButtonGoThePath_clicked();
+
+
+    void on_pushButton_2_clicked();
 
 private:
     Ui::MainWindow *ui;

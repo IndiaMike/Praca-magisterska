@@ -28,6 +28,8 @@ public:
     int hCost;
     int get_fCost(void);
 
+    unsigned int solver_index;
+
     cell *parent;
 
     void SetBrush(eCellType type);

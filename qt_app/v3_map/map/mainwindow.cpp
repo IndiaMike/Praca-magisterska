@@ -8,6 +8,7 @@
 #include <QKeyEvent>
 #include <qmessagebox.h>
 #include <qlist.h>
+#include <QStack>
 
 int8_t map_sequence_path[1000][2];
 int16_t map_sequence_points_counter = 0;
@@ -92,6 +93,8 @@ void MainWindow::Map_GenerateMap(void)
             cells[i][j]->rect = scene->addRect(20*i, 20*j, 20, 20, blackpen, gray);
             cells[i][j]->visited = false;
 
+            cells[i][j]->solver_index = 0;
+
             cells[i][j]->hCost = std::numeric_limits<int>::max();
             cells[i][j]->gCost = std::numeric_limits<int>::max();
          }
@@ -170,9 +173,11 @@ void MainWindow::on_pushButtonClearMap_clicked()
           cells[i][j]->type = CellType_Free;
           cells[i][j]->SetBrush(CellType_Free);
           cells[i][j]->visited = false;
+           cells[i][j]->solver_index = 0;//FF
+
         }
     }
-
+        goal_reached = false;//FF
 }
 
 
@@ -833,9 +838,12 @@ void MainWindow::on_pushButtonClear_saveObst_clicked()
           cells[i][j]->type = CellType_Free;
           cells[i][j]->SetBrush(CellType_Free);
           cells[i][j]->visited = false;
+          cells[i][j]->solver_index = 0;
           }
         }
     }
+    goal_reached = false;
+
 }
 
 
@@ -847,5 +855,334 @@ void MainWindow::on_pushButtonGoThePath_clicked()
     ui->lineEditText2Send->clear();
     ui->lineEditText2Send->setText(comand);
     on_pushButtonSend_clicked();
+}
+
+//////////////////////////////////////////////////////////////
+void MainWindow::pushButtonFloodFill_clicked()
+{
+
+    cell *startCell, *finishCell;
+
+    bool startFound = false, finishFound = false;
+
+    for(int i=0;i<50;i++)
+    {
+        for(int j=0;j<50;j++)
+        {
+
+
+
+             if(cells[j][i]->type == CellType_Position)
+            {
+              cells[j][i]->visited = true;
+              startCell = cells[j][i];
+              startFound = true;
+             }
+            if(cells[j][i]->type == CellType_Destination)
+            {
+              finishCell = cells[j][i];
+              finishFound = true;
+
+            }
+        }
+    }
+
+    if(startFound && finishFound)
+    {
+        SOLVE_FLOOD_FILL(startCell, finishCell);
+        if(goal_reached)SOLVE_FLOOD_GENERATE_PATH(finishCell);
+
+    }
+    else
+    {
+        QMessageBox msgBox;
+        msgBox.setText("You need to define start and finish cells!");
+        msgBox.exec();
+    }
+}
+void MainWindow::SOLVE_FLOOD_FILL(cell *startCell, cell *finishCell)
+{
+    cell *currentCell;
+
+    QStack<cell*> *stack = nullptr;
+    stack = new QStack<cell*>();
+
+    QStack<cell*> *temp_stack = nullptr;
+    temp_stack = new QStack<cell*>();
+
+    stack->push(startCell);
+
+    while(!stack->isEmpty() && !goal_reached)
+    {
+
+        if(stack->size() >= 2)
+        {
+            while(!stack->empty())
+            {
+                temp_stack->push(stack->pop());
+            }
+
+            while(!temp_stack->empty())
+            {
+                currentCell = temp_stack->pop();
+
+                for(int i=0;i<50;i++)
+                {
+                    for(int j=0;j<50;j++)
+                    {
+                        if(currentCell == cells[j][i])
+                        {
+                          SOLVE_FLOOD_FILL_FILL_NEIGHBOURS(currentCell, stack, finishCell);
+                        }
+                    }
+                }
+            }
+        }
+        else
+        {
+            currentCell = stack->pop();
+
+            for(int i=0;i<50;i++)
+            {
+                for(int j=0;j<50;j++)
+                {
+                    if(currentCell == cells[j][i])
+                    {
+                      SOLVE_FLOOD_FILL_FILL_NEIGHBOURS(currentCell, stack, finishCell);
+                    }
+                }
+            }
+        }
+    }
+
+    delete(stack);
+    delete(temp_stack);
+}
+
+void MainWindow::SOLVE_FLOOD_FILL_FILL_NEIGHBOURS(cell *currentCell, QStack<cell*> *stack, cell *finishCell)
+{
+
+     int j;
+     int i;
+    for(int x=0;x<50;x++)
+    {
+        for(int y=0;y<50;y++)
+        {
+            if(currentCell == cells[y][x])
+            {
+                  j = y;
+                  i = x;
+            }
+        }
+    }
+
+
+
+
+    if(!cells[j][(i - 1 < 0) ? 0 : i - 1]->visited && cells[j][(i - 1 < 0) ? 0 : i - 1]->type != CellType_Obstacle)
+    {
+        cells[j][(i - 1 < 0) ? 0 : i - 1]->solver_index = cells[j][i]->solver_index + 1;
+
+        cells[j][(i - 1 < 0) ? 0 : i - 1]->visited = true;
+        cells[j][(i - 1 < 0) ? 0 : i - 1]->rect->setBrush(Qt::yellow);
+
+        if(cells[j][(i - 1 < 0) ? 0 : i - 1] == finishCell)
+        {
+            goal_reached = true;
+            return;
+        }
+        stack->push(cells[j][(i - 1 < 0) ? 0 : i - 1]);
+     }
+    if(!cells[j][(i + 1 > 49) ? 49 : i + 1]->visited && cells[j][(i + 1 > 49) ? 49 : i + 1]->type != CellType_Obstacle)
+    {
+        cells[j][(i + 1 > 49) ? 49 : i + 1]->solver_index = cells[j][i]->solver_index + 1;
+
+        cells[j][(i + 1 > 49) ? 49 : i + 1]->visited = true;
+        cells[j][(i + 1 > 49) ? 49 : i + 1]->rect->setBrush(Qt::yellow);
+
+        if(cells[j][(i + 1 > 49) ? 49 : i + 1] == finishCell)
+        {
+            goal_reached = true;
+            return;
+        }
+        stack->push(cells[j][(i + 1 > 49) ? 49 : i + 1]);
+     }
+    if(!cells[(j + 1 > 49) ? 49 : j + 1][i]->visited && cells[(j + 1 > 49) ? 49 : j + 1][i]->type != CellType_Obstacle)
+    {
+        cells[(j + 1 > 49) ? 49 : j + 1][i]->solver_index = cells[j][i]->solver_index + 1;
+
+        cells[(j + 1 > 49) ? 49 : j + 1][i]->visited = true;
+        cells[(j + 1 > 49) ? 49 : j + 1][i]->rect->setBrush(Qt::yellow);
+
+        if(cells[(j + 1 > 49) ? 49 : j + 1][i] == finishCell)
+        {
+            goal_reached = true;
+            return;
+        }
+        stack->push(cells[(j + 1 > 49) ? 49 : j + 1][i]);
+     }
+    if(!cells[(j - 1 < 0) ? 0 : j - 1][i]->visited && cells[(j - 1 < 0) ? 0 : j - 1][i]->type != CellType_Obstacle)
+    {
+        cells[(j - 1 < 0) ? 0 : j - 1][i]->solver_index = cells[j][i]->solver_index + 1;
+        cells[(j - 1 < 0) ? 0 : j - 1][i]->visited = true;
+        cells[(j - 1 < 0) ? 0 : j - 1][i]->rect->setBrush(Qt::yellow);
+
+        if(cells[(j - 1 < 0) ? 0 : j - 1][i] == finishCell)
+        {
+            goal_reached = true;
+            return;
+        }
+        stack->push(cells[(j - 1 < 0) ? 0 : j - 1][i]);
+    }
+
+
+        if(!cells[(j - 1 < 0) ? 0 : j - 1][(i - 1 < 0) ? 0 : i - 1]->visited && cells[(j - 1 < 0) ? 0 : j - 1][(i - 1 < 0) ? 0 : i - 1]->type != CellType_Obstacle)
+        {
+           cells[(j - 1 < 0) ? 0 : j - 1][(i - 1 < 0) ? 0 : i - 1]->solver_index = cells[j][i]->solver_index + 1;
+           cells[(j - 1 < 0) ? 0 : j - 1][(i - 1 < 0) ? 0 : i - 1]->visited = true;
+           cells[(j - 1 < 0) ? 0 : j - 1][(i - 1 < 0) ? 0 : i - 1]->rect->setBrush(Qt::yellow);
+
+           if(cells[(j - 1 < 0) ? 0 : j - 1][(i - 1 < 0) ? 0 : i - 1] == finishCell)
+           {
+               goal_reached = true;
+               return;
+           }
+           stack->push(cells[(j - 1 < 0) ? 0 : j - 1][(i - 1 < 0) ? 0 : i - 1]);
+        }
+        if(!cells[(j - 1 < 0) ? 0 : j - 1][(i + 1 > 49) ? 49 : i + 1]->visited &&   // right top corner
+                cells[(j - 1 < 0) ? 0 : j - 1][(i + 1 > 49) ? 49 : i + 1]->type != CellType_Obstacle)
+        {
+            cells[(j - 1 < 0) ? 0 : j - 1][(i + 1 > 49) ? 49 : i + 1]->solver_index = cells[j][i]->solver_index + 1;
+            cells[(j - 1 < 0) ? 0 : j - 1][(i + 1 > 49) ? 49 : i + 1]->visited = true;
+            cells[(j - 1 < 0) ? 0 : j - 1][(i + 1 > 49) ? 49 : i + 1]->rect->setBrush(Qt::yellow);
+
+            if(cells[(j - 1 < 0) ? 0 : j - 1][(i + 1 > 49) ? 49 : i + 1] == finishCell)
+            {
+                goal_reached = true;
+                return;
+            }
+            stack->push(cells[(j - 1 < 0) ? 0 : j - 1][(i + 1 > 49) ? 49 : i + 1]);
+        }
+        if(!cells[(j + 1 > 49) ? 49 : j + 1][(i + 1 > 49) ? 49 : i + 1]->visited && cells[(j + 1 > 49) ? 49 : j + 1][(i + 1 > 49) ? 49 : i + 1]->type != CellType_Obstacle)// right bottom corner
+
+        {
+            cells[(j + 1 > 49) ? 49 : j + 1][(i + 1 > 49) ? 49 : i + 1]->solver_index = cells[j][i]->solver_index + 1;
+            cells[(j + 1 > 49) ? 49 : j + 1][(i + 1 > 49) ? 49 : i + 1]->visited = true;
+            cells[(j + 1 > 49) ? 49 : j + 1][(i + 1 > 49) ? 49 : i + 1]->rect->setBrush(Qt::yellow);
+
+            if(cells[(j + 1 > 49) ? 49 : j + 1][(i + 1 > 49) ? 49 : i + 1]== finishCell)
+            {
+                goal_reached = true;
+                return;
+            }
+            stack->push(cells[(j + 1 > 49) ? 49 : j + 1][(i + 1 > 49) ? 49 : i + 1]);
+        }
+        if(!cells[(j + 1 > 49) ? 49 : j + 1][(i - 1 < 0) ? 0 : i - 1]->visited &&   // left bottom corner
+               cells[(j + 1 > 49) ? 49 : j + 1][(i - 1 < 0) ? 0 : i - 1]->type != CellType_Obstacle)
+        {
+            cells[(j + 1 > 49) ? 49 : j + 1][(i - 1 < 0) ? 0 : i - 1]->solver_index = cells[j][i]->solver_index + 1;
+            cells[(j + 1 > 49) ? 49 : j + 1][(i - 1 < 0) ? 0 : i - 1]->visited = true;
+            cells[(j + 1 > 49) ? 49 : j + 1][(i - 1 < 0) ? 0 : i - 1]->rect->setBrush(Qt::yellow);
+
+            if(cells[(j + 1 > 49) ? 49 : j + 1][(i - 1 < 0) ? 0 : i - 1] == finishCell)
+            {
+                goal_reached = true;
+                return;
+            }
+            stack->push(cells[(j + 1 > 49) ? 49 : j + 1][(i - 1 < 0) ? 0 : i - 1]);
+        }
+
+       // ui->graphicsView->repaint();
+ qApp->processEvents();
+}
+
+void MainWindow::SOLVE_FLOOD_GENERATE_PATH(cell *finishCell)
+{
+     QStack<cell*> stack;
+
+      QStack<cell*> path;
+     cell *currentCell;
+
+    finishCell->type = CellType_Path;
+    finishCell->SetBrush(CellType_Path);
+    stack.push(finishCell);
+    path.push(finishCell);
+     while(!stack.isEmpty())
+     {
+        currentCell = stack.pop();
+        path.push(currentCell);
+
+        for(int i=0;i<50;i++)
+        {
+            for(int j=0;j<50;j++)
+            {
+                if(currentCell == cells[j][i])
+                {
+
+                    if(cells[j][(i - 1 < 0) ? 0 : i - 1]->solver_index == (cells[j][i]->solver_index - 1))
+                    {
+                        cells[j][(i - 1 < 0) ? 0 : i - 1]->type = CellType_Path;
+                        cells[j][(i - 1 < 0) ? 0 : i - 1]->SetBrush(CellType_Path);
+                        stack.push(cells[j][(i - 1 < 0) ? 0 : i - 1]);
+                     }
+                    else if(cells[j][(i + 1 > 50) ? 50 : i + 1]->solver_index == (cells[j][i]->solver_index - 1) )
+                    {
+                        cells[j][(i + 1 > 50) ? 50 : i + 1]->type = CellType_Path;
+                        cells[j][(i + 1 > 50) ? 50 : i + 1]->SetBrush(CellType_Path);
+                        stack.push(cells[j][(i + 1 > 50) ? 50 : i + 1]);
+                     }
+                    else if(cells[(j + 1 > 50) ? 50 : j + 1][i]->solver_index == (cells[j][i]->solver_index - 1) )
+                    {
+                        cells[(j + 1 > 50) ? 50 : j + 1][i]->type = CellType_Path;
+                        cells[(j + 1 > 50) ? 50 : j + 1][i]->SetBrush(CellType_Path);
+                        stack.push(cells[(j + 1 > 50) ? 50 : j + 1][i]);
+                     }
+                    else if(cells[(j - 1 < 0) ? 0 : j - 1][i]->solver_index == (cells[j][i]->solver_index - 1) )
+                    {
+                        cells[(j - 1 < 0) ? 0 : j - 1][i]->type = CellType_Path;
+                        cells[(j - 1 < 0) ? 0 : j - 1][i]->SetBrush(CellType_Path);
+                        stack.push(cells[(j - 1 < 0) ? 0 : j - 1][i]);
+                    }
+
+
+                       else if(cells[(j - 1 < 0) ? 0 : j - 1][(i - 1 < 0) ? 0 : i - 1]->solver_index == (cells[j][i]->solver_index - 1))
+                        {
+                            cells[(j - 1 < 0) ? 0 : j - 1][(i - 1 < 0) ? 0 : i - 1]->type = CellType_Path;
+                            cells[(j - 1 < 0) ? 0 : j - 1][(i - 1 < 0) ? 0 : i - 1]->SetBrush(CellType_Path);
+                            stack.push(cells[(j - 1 < 0) ? 0 : j - 1][(i - 1 < 0) ? 0 : i - 1]);
+                        }
+                        else if(cells[(j - 1 < 0) ? 0 : j - 1][(i + 1 > 50) ? 50 : i + 1]->solver_index == (cells[j][i]->solver_index - 1))
+                        {
+                            cells[(j - 1 < 0) ? 0 : j - 1][(i + 1 > 50) ? 50 : i + 1]->type = CellType_Path;
+                            cells[(j - 1 < 0) ? 0 : j - 1][(i + 1 > 50) ? 50 : i + 1]->SetBrush(CellType_Path);
+                            stack.push(cells[(j - 1 < 0) ? 0 : j - 1][(i + 1 > 50) ? 50 : i + 1]);
+                        }
+                        else if(cells[(j + 1 > 50) ? 50 : j + 1][(i + 1 > 50) ? 50 : i + 1]->solver_index == (cells[j][i]->solver_index - 1))
+                        {
+                            cells[(j + 1 > 50) ? 50 : j + 1][(i + 1 > 50) ? 50 : i + 1]->type = CellType_Path;
+                            cells[(j + 1 > 50) ? 50 : j + 1][(i + 1 > 50) ? 50 : i + 1]->SetBrush(CellType_Path);
+                            stack.push(cells[(j + 1 > 50) ? 50 : j + 1][(i + 1 > 50) ? 50 : i + 1]);
+                        }
+                        else if(cells[(j + 1 > 50) ? 50 : j + 1][(i - 1 < 0) ? 0 : i - 1]->solver_index == (cells[j][i]->solver_index - 1))
+                        {
+                            cells[(j + 1 > 50) ? 50 : j + 1][(i - 1 < 0) ? 0 : i - 1]->type = CellType_Path;
+                            cells[(j + 1 > 50) ? 50 : j + 1][(i - 1 < 0) ? 0 : i - 1]->SetBrush(CellType_Path);
+                            stack.push(cells[(j + 1 > 50) ? 50 : j + 1][(i - 1 < 0) ? 0 : i - 1]);
+                        }
+                }
+            }
+        }
+     }
+     path.reserve(path.count());
+     for(int i=0;i<path.count();i++)
+     {
+         qDebug()<< "X=" <<path.at(i)->x<<" Y="<<path.at(i)->y;
+     }
+
+}
+
+void MainWindow::on_pushButton_2_clicked()
+{
+    pushButtonFloodFill_clicked();
 }
 

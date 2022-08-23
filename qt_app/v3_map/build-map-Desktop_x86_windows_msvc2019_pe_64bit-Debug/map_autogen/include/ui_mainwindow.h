@@ -59,6 +59,7 @@ public:
     QComboBox *comboBox;
     QLabel *label;
     QPushButton *pushButtonGoThePath;
+    QPushButton *pushButton_2;
     QMenuBar *menubar;
     QStatusBar *statusbar;
 
@@ -188,12 +189,16 @@ public:
         comboBox->raise();
         label->raise();
         pushButtonGoThePath->raise();
+        pushButton_2 = new QPushButton(centralwidget);
+        pushButton_2->setObjectName(QString::fromUtf8("pushButton_2"));
+        pushButton_2->setGeometry(QRect(930, 140, 83, 29));
         MainWindow->setCentralWidget(centralwidget);
         groupBox_3->raise();
         graphicsView->raise();
         groupBox->raise();
         groupBox_2->raise();
         pushButtonTest->raise();
+        pushButton_2->raise();
         menubar = new QMenuBar(MainWindow);
         menubar->setObjectName(QString::fromUtf8("menubar"));
         menubar->setGeometry(QRect(0, 0, 1737, 25));
@@ -268,6 +273,7 @@ public:
 
         label->setText(QApplication::translate("MainWindow", "Control mode:", nullptr));
         pushButtonGoThePath->setText(QApplication::translate("MainWindow", "Go the Path", nullptr));
+        pushButton_2->setText(QApplication::translate("MainWindow", "floodFill", nullptr));
     } // retranslateUi
 
 };
