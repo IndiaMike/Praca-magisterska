@@ -12,6 +12,7 @@
 #include <stdbool.h>
 #include "motor_encoder.h"
 #include "pid_controller.h"
+#include "sensor_map.h"
 
 
 #define ROBOT_ANGLE_COEF 0.689655f
@@ -64,6 +65,8 @@ typedef struct
 	int Cell_Y_anctual;
 
 	float baterryVoltage;
+
+	TSensor Sensors[3];
 
 }TRobot;
 

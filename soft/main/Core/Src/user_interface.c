@@ -152,7 +152,7 @@ void BATTERYLowVoltageProtect(uint16_t *AdcValue)
 	}
 
 
-	else if(voltage<12.0) // < 3.0V on cell
+	/*else if(voltage<12.0) // < 3.0V on cell
 	{
 		BUZZER_On();
 		LED_OnOff(&LED_4_RED, LED_ON);
@@ -162,5 +162,5 @@ void BATTERYLowVoltageProtect(uint16_t *AdcValue)
 
 		UartLog("LOW BATTERY level!");
 		while(1){};
-	}
+	}*/
 }

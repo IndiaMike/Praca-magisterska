@@ -21,12 +21,14 @@ extern TMotor MOTOR_Rear_Right_4;
 
 extern TRobot R;
 extern uint8_t robot_mode_change_first_scan_flag;
-extern uint8_t wifi_connection_watchdog_counter;
+extern uint16_t wifi_connection_watchdog_counter;
 
 extern TLed LED_1_GREEN;
 extern TLed LED_2_GREEN;
 extern TLed LED_3_YELLOW;
 extern TLed LED_4_RED;
+
+
 
 extern bool isPidsON;
 

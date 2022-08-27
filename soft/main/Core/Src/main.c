@@ -97,13 +97,21 @@ static void MX_NVIC_Init(void);
 	TPid PID_Motor_3;
 	TPid PID_Motor_4;
 
+
+	extern TSensor Sensor_Left_1;
+	extern TSensor Sensor_Front_2;
+	extern TSensor Sensor_Right_3;
+
+
 	uint16_t AdcValue[20];
 
 
 	uint8_t robot_mode_change_first_scan_flag=0;
-	uint8_t wifi_connection_watchdog_counter=0;
+	uint16_t wifi_connection_watchdog_counter=0;
 	uint8_t is_communication_start_flag= 0;
 	bool	isPidsON = true;
+
+
 /* USER CODE END 0 */
 
 /**
@@ -143,8 +151,8 @@ int main(void)
   MX_ADC1_Init();
   MX_USART1_UART_Init();
   MX_TIM10_Init();
-  MX_USART6_UART_Init();
   MX_TIM11_Init();
+  MX_TIM9_Init();
 
   /* Initialize interrupts */
   MX_NVIC_Init();
@@ -202,13 +210,15 @@ int main(void)
 
 
 
-
+  SENSORS_Init();
 
 
    BUZZER_Off();
    //timer 10Hz start
    __HAL_TIM_ENABLE_IT(&htim11,TIM_IT_UPDATE);
    HAL_TIM_OC_Start_IT(&htim11,TIM_CHANNEL_1);
+
+
 
 
 
@@ -252,9 +262,7 @@ int main(void)
 	  }
 	  else if (Center == BUTTON_Read())
 	  {
-
-
-		  //LIDAR_Set_PWM(30);
+		  MEASURE_Trigger(&Sensor_Front_2);
 
 
 
@@ -329,6 +337,9 @@ static void MX_NVIC_Init(void)
   /* USART1_IRQn interrupt configuration */
   HAL_NVIC_SetPriority(USART1_IRQn, 0, 0);
   HAL_NVIC_EnableIRQ(USART1_IRQn);
+  /* EXTI15_10_IRQn interrupt configuration */
+  HAL_NVIC_SetPriority(EXTI15_10_IRQn, 0, 0);
+  HAL_NVIC_EnableIRQ(EXTI15_10_IRQn);
 }
 
 /* USER CODE BEGIN 4 */
@@ -354,7 +365,9 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
   */
 void HAL_TIM_OC_DelayElapsedCallback(TIM_HandleTypeDef *htim)
 {
-	if(htim->Instance == TIM11 )
+
+
+	if(htim->Instance == TIM11 ) // 10ms interrupt for motors calculate;
 	{
 		if(htim->Channel == HAL_TIM_ACTIVE_CHANNEL_1)
 		{
@@ -403,6 +416,7 @@ void HAL_TIM_OC_DelayElapsedCallback(TIM_HandleTypeDef *htim)
 					MOTOR_PWM_Set_Width(&R.Motors[i],0);
 					R.Motors[i].pid->Set_Value = 0.0;
 					R.Motors[i].pid->out = 0.0;
+
 				}
 			}
 
