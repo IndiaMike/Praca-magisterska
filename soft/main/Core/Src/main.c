@@ -262,7 +262,7 @@ int main(void)
 	  }
 	  else if (Center == BUTTON_Read())
 	  {
-		  MEASURE_Trigger(&Sensor_Front_2);
+		  MEASURE_Sequence();
 
 
 
@@ -340,6 +340,9 @@ static void MX_NVIC_Init(void)
   /* EXTI15_10_IRQn interrupt configuration */
   HAL_NVIC_SetPriority(EXTI15_10_IRQn, 0, 0);
   HAL_NVIC_EnableIRQ(EXTI15_10_IRQn);
+  /* EXTI0_IRQn interrupt configuration */
+  HAL_NVIC_SetPriority(EXTI0_IRQn, 0, 0);
+  HAL_NVIC_EnableIRQ(EXTI0_IRQn);
 }
 
 /* USER CODE BEGIN 4 */

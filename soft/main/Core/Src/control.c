@@ -155,6 +155,7 @@ void ROBOT_GoPath(TRobot *R)
 
 void ROBOT_Go2Point(TRobot *R)
 {
+	char Message[32];
 	float dir = 0.0;
 	float dist= 0.0;
 
@@ -179,6 +180,9 @@ void ROBOT_Go2Point(TRobot *R)
 		R->Motors[1].pid->Set_Value = 0.0;
 		R->Motors[2].pid->Set_Value = 0.0;
 		R->Motors[3].pid->Set_Value = 0.0;
+		sprintf(Message, "Cell# %d, %d, %d, ", R->Cell_X_anctual, R->Cell_Y_anctual,(int)( R->actual_angle));
+		UartLog(Message);
+
 		if(R->isPathModeEN == true)pathStep++;
 	}
 
@@ -244,8 +248,28 @@ void ROBOT_Calculate(TRobot *R)
 	R->P_distance.Set_Value  = 0.0;
 	R->P_distance.Actual_Value  = R->TargetDistanceMM;
 
-	R->Cell_X_anctual = (int)R->X / ONE_CELL_DIM;
-	R->Cell_Y_anctual = (int)R->Y / ONE_CELL_DIM;
+
+		if(R->X >= 0)
+	{
+		R->Cell_X_anctual = (int)((R->X + (ONE_CELL_DIM/2)) / ONE_CELL_DIM);
+	}
+
+	else if(R->X < 0)
+	{
+		R->Cell_X_anctual = (int)((R->X - (ONE_CELL_DIM/2)) / ONE_CELL_DIM);
+	}
+
+
+		if(R->Y >= 0)
+	{
+		R->Cell_Y_anctual = (int)((R->Y + (ONE_CELL_DIM/2)) / ONE_CELL_DIM);
+	}
+
+	else if(R->Y < 0)
+	{
+		R->Cell_Y_anctual = (int)((R->Y - (ONE_CELL_DIM/2)) / ONE_CELL_DIM);
+	}
+
 }
 
 

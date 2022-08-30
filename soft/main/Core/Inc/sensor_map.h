@@ -22,7 +22,8 @@ typedef struct
 
 
 	float 		distance;
+	float		offset;
 }TSensor;
 
-float MEASURE_Trigger(TSensor *sensor);
+void MEASURE_Trigger(TSensor *sensor);
 #endif /* INC_SENSOR_MAP_H_ */

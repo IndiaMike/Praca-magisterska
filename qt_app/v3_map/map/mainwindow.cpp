@@ -54,13 +54,48 @@ void MainWindow::wifiRead()
 
    recieveData = socket->readAll();
    qDebug() <<"odebrano: "<<recieveData;
-
    addToLogs(recieveData);
 
+   if(recieveData.contains("#"))
+   {
+   QStringList splitedData = recieveData.split('#');
+
+       splitedData = splitedData.last().split(',');
+       splitedData.last().remove(QRegularExpression(";"));
 
 
+       if(splitedData.count() >= 3)
+           {
+
+               int X   = splitedData.at(0).toInt();
+               int Y   = splitedData.at(1).toInt();
+               int angle = splitedData.at(2).toInt();
 
 
+              // DRAW_TRIANGLE(cells[1][1],angle);
+       qDebug() << "R->P="<<X<<","<<Y<<","<<angle<<"deg.";
+
+       for(int i=0;i<50;i++)
+       {
+           for(int j=0;j<50;j++)
+            {
+             if(cells[i][j]->type == CellType_Position)
+             {
+                 cells[i][j]->type = CellType_Free;
+                 cells[i][j]->SetBrush(CellType_Free);
+             }
+
+
+            }
+       }
+       cells[X+point00X][point00Y-Y]->type = CellType_Position;
+       cells[X+point00X][point00Y-Y]->SetBrush(CellType_Position);
+       DRAW_TRIANGLE(cells[X+point00X][point00Y-Y],angle);
+
+
+    }
+
+    }
 }
 
 MainWindow::~MainWindow()
@@ -155,6 +190,8 @@ void MainWindow::mousePressEvent(QMouseEvent *event)
                     cells[i][j]->rect->setPen(blackpen);
                     point00X=cells[i][j]->x;
                     point00Y=cells[i][j]->y;
+                    qDebug()<<"point00X = "<<point00X;
+                    qDebug()<<"point00Y = "<<point00Y;
                     start_flag00_point = true;
                     point00_is_selected = true;
                 }
@@ -291,6 +328,8 @@ pushButtonAStar_clicked();
 
 void MainWindow::on_pushButtonTest_clicked()
 {
+
+    /*
     QString recieveData = "P=0.32,100.54,90;";
     //  9 P=X.XX,Y.YY,A.AA
     QStringList splitedData = recieveData.split('=');
@@ -308,20 +347,21 @@ void MainWindow::on_pushButtonTest_clicked()
 
           //  DRAW_TRIANGLE(cells[20][20],angle);
     qDebug() << "P="<<X<<","<<Y<<","<<angle<<"deg.";
-        }
+        }*/
 }
 
 void MainWindow::DRAW_TRIANGLE(cell *cell, int direction)
 {
-    int centerX = cell->x + ((POST_WIDTH + CELL_WIDTH) / 2);
-    int centerY = cell->y + ((POST_HEIGHT + CELL_HEIGHT) / 2);
+    int centerX = cell->x *20 +10;
+    int centerY = cell->y * 20+10;
 
     triangle->polygon().clear();
 
     QPolygonF polygon;
-    polygon << QPointF(centerX, centerY - 10) << QPointF(centerX + 5, centerY + 5) << QPointF(centerX - 5, centerY + 5);
+    polygon << QPointF(centerX, centerY - 20) << QPointF(centerX + 10, centerY + 10) << QPointF(centerX - 10, centerY + 10);
 
     polygon =  QTransform().translate(centerX, centerY).rotate(direction).translate(-centerX, -centerY).map(polygon);
+    triangle->setBrush(Qt::cyan);
     triangle->setPolygon(polygon);
     triangle->setVisible(true);
 }
@@ -1173,11 +1213,138 @@ void MainWindow::SOLVE_FLOOD_GENERATE_PATH(cell *finishCell)
             }
         }
      }
-     path.reserve(path.count());
-     for(int i=0;i<path.count();i++)
+
+
+     qDebug()<<"###########################################################";
+     qDebug()<<"map_sequence_points_counter = "<< path.count();
+path.remove(0);
+     map_sequence_points_counter = path.count();
+
+
+     for(int i=0;i< path.count();i++)
      {
-         qDebug()<< "X=" <<path.at(i)->x<<" Y="<<path.at(i)->y;
+        qDebug()<<"path.list:"<<i<<" X="<<path.at(i)->x<<" Y="<< path.at(i)->y;
      }
+
+
+     //przepisanie tablicy -> od startu do mety
+
+
+
+
+     map_sequence_path[0][0] = path.at(0)->x;
+     map_sequence_path[0][1] = path.at(0)->y;
+
+     for(int i=map_sequence_points_counter; i>0; i--)
+     {
+     qDebug()<<"Point"<<i<<" X="<<path.at(i-1)->x<<" Y="<<path.at(i-1)->y;
+     map_sequence_path[map_sequence_points_counter - i +1][0]=path.at(i-1)->x;
+     map_sequence_path[map_sequence_points_counter - i +1][1]=path.at(i-1)->y;
+     }
+     qDebug()<<" ";
+
+
+     for(int i=0;i<=map_sequence_points_counter;i++)
+     {
+         qDebug()<<"tab["<<i<<"] X="<<map_sequence_path[i][0]<<"Y="<<map_sequence_path[i][1];
+
+     }
+     if(point00_is_selected == true)
+     { // zamiana na uklad wsp robota
+
+
+         for(int i=0;i<=map_sequence_points_counter;i++)
+         {
+              map_sequence_path_new[i][0] = map_sequence_path[i][0] - point00X;
+              map_sequence_path_new[i][1] = abs(point00Y) - abs(map_sequence_path[i][1]);
+              qDebug()<<"tab new["<<i<<"] X="<<map_sequence_path_new[i][0]<<"Y="<<map_sequence_path_new[i][1];
+         }
+         qDebug()<<"map_sequence_points_counter"<<map_sequence_points_counter;
+
+        //pozostawienie wylacznei punktów przegięcia łamanej
+
+         int i_straight = 1;
+         int16_t map_smooth_counter = 0;
+         map_smooth_path[map_smooth_counter][0] = map_sequence_path_new[0][0];
+         map_smooth_path[map_smooth_counter][1] = map_sequence_path_new[0][1];
+         map_smooth_counter++;
+         while(i_straight<map_sequence_points_counter) // jest map_sequence_points_counter+1 elementów
+         {
+             float a_straight_prev;
+             float a_straight_next;
+             //przypadek prostej pionowej;
+
+                 if(map_sequence_path_new[i_straight-1][0] == map_sequence_path_new[i_straight][0])
+                 {
+                     a_straight_prev = 99.0;
+                 }
+                 else
+                 {
+                     a_straight_prev=(map_sequence_path_new[i_straight][1]-map_sequence_path_new[i_straight-1][1])/
+                                  (map_sequence_path_new[i_straight][0]-map_sequence_path_new[i_straight-1][0]);
+                 }
+                 if(map_sequence_path_new[i_straight][0] == map_sequence_path_new[i_straight+1][0])
+                 {
+                     a_straight_next = 99.0;
+                 }
+                 else
+                 {
+                     a_straight_next=(map_sequence_path_new[i_straight+1][1]-map_sequence_path_new[i_straight][1])/
+                             (map_sequence_path_new[i_straight+1][0]-map_sequence_path_new[i_straight][0]);
+                 }
+                if(abs(a_straight_prev - a_straight_next) < 0.2) // czy sa takie same  - przyrównanie floatow
+                {
+                 i_straight++;
+                }
+                else
+                {
+                     map_smooth_path[map_smooth_counter][0] = map_sequence_path_new[i_straight][0];
+                     map_smooth_path[map_smooth_counter][1] = map_sequence_path_new[i_straight][1];
+                     map_smooth_counter++;
+                     i_straight++;
+                }
+         }
+         map_smooth_path[map_smooth_counter][0] = map_sequence_path_new[i_straight][0];
+         map_smooth_path[map_smooth_counter][1] = map_sequence_path_new[i_straight][1];
+         qDebug()<<"map_smooth_counter = "<<map_smooth_counter;
+
+
+         for(int i=0;i<=map_smooth_counter;i++)
+         {
+         map_smooth_path[i][0]=map_smooth_path[i+1][0];
+         map_smooth_path[i][1]=map_smooth_path[i+1][1];
+         }
+         addToLogs("Robot path:");
+         for(int i=0;i<map_smooth_counter;i++)
+         {
+             while(!socket->isOpen())
+             {
+
+             }
+             char Message[32];
+             qDebug()<<"smoth tab["<<i<<"] X="<<map_smooth_path[i][0]<<"Y="<<map_smooth_path[i][1];
+
+
+
+             sprintf(Message,"Path=%d,%d,%d;",i,map_smooth_path[i][0], map_smooth_path[i][1]);
+             //addToLogs((QString)Message);
+
+             QString comand = (Message);
+             ui->lineEditText2Send->clear();
+             ui->lineEditText2Send->setText(comand);
+             on_pushButtonSend_clicked();
+
+         }
+         map_smooth_counter_global = map_smooth_counter;
+     }
+     else
+     {
+         QMessageBox msgBox;
+         msgBox.setText("Point 0.0 not Selected!");
+         msgBox.exec();
+     }
+
+
 
 }
 

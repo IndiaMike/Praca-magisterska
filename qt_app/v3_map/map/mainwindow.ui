@@ -30,7 +30,7 @@
       <x>1050</x>
       <y>40</y>
       <width>671</width>
-      <height>91</height>
+      <height>101</height>
      </rect>
     </property>
     <property name="title">
@@ -89,7 +89,7 @@
       </rect>
      </property>
      <property name="text">
-      <string>Find Path</string>
+      <string>A*</string>
      </property>
     </widget>
     <widget class="QPushButton" name="pushButtonAddSafetyZone">
@@ -116,6 +116,32 @@
      </property>
      <property name="text">
       <string>clear</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="pushButton_2">
+     <property name="geometry">
+      <rect>
+       <x>450</x>
+       <y>70</y>
+       <width>83</width>
+       <height>29</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Flood Fill</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="pushButtonTest">
+     <property name="geometry">
+      <rect>
+       <x>580</x>
+       <y>0</y>
+       <width>83</width>
+       <height>29</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Test</string>
      </property>
     </widget>
    </widget>
@@ -206,19 +232,6 @@
       <string>LED</string>
      </property>
     </widget>
-   </widget>
-   <widget class="QPushButton" name="pushButtonTest">
-    <property name="geometry">
-     <rect>
-      <x>1210</x>
-      <y>20</y>
-      <width>83</width>
-      <height>29</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Test</string>
-    </property>
    </widget>
    <widget class="QGroupBox" name="groupBox_3">
     <property name="geometry">
@@ -491,25 +504,10 @@
     <zorder>label</zorder>
     <zorder>pushButtonGoThePath</zorder>
    </widget>
-   <widget class="QPushButton" name="pushButton_2">
-    <property name="geometry">
-     <rect>
-      <x>930</x>
-      <y>140</y>
-      <width>83</width>
-      <height>29</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>floodFill</string>
-    </property>
-   </widget>
    <zorder>groupBox_3</zorder>
    <zorder>graphicsView</zorder>
    <zorder>groupBox</zorder>
    <zorder>groupBox_2</zorder>
-   <zorder>pushButtonTest</zorder>
-   <zorder>pushButton_2</zorder>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
