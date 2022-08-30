@@ -709,7 +709,7 @@ void MainWindow::A_STAR_GENERATE_PATH(cell *startCell, cell *finishCell)
             on_pushButtonSend_clicked();
 
         }
-        map_smooth_counter_global = map_smooth_counter;
+        map_smooth_counter_global = map_smooth_counter +1;
     }
     else
     {
@@ -875,14 +875,25 @@ void MainWindow::on_pushButtonClear_saveObst_clicked()
         {
           if(cells[i][j]->type != CellType_Obstacle)
           {
-          cells[i][j]->type = CellType_Free;
-          cells[i][j]->SetBrush(CellType_Free);
-          cells[i][j]->visited = false;
-          cells[i][j]->solver_index = 0;
+              if(cells[i][j]->type == CellType_Destination)
+              {
+                  cells[i][j]->visited = false;
+                  cells[i][j]->solver_index = 0;
+              }
+              else
+              {
+                  cells[i][j]->type = CellType_Free;
+                  cells[i][j]->SetBrush(CellType_Free);
+                  cells[i][j]->visited = false;
+                  cells[i][j]->solver_index = 0;
+              }
+
           }
         }
     }
     goal_reached = false;
+
+
 
 }
 

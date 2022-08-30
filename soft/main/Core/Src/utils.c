@@ -11,7 +11,8 @@
 
 
 extern uint16_t AdcValue[20];
-
+extern TRobot R;
+extern  uint8_t is_communication_start_flag;
 
 void UartLog(char * Message)
 {
@@ -22,11 +23,17 @@ void UartLog(char * Message)
 static uint16_t interrupt_counter = 0;
 void RareInterrupt(void)
 {
+	char Message[32];
 	interrupt_counter++;
 		if(interrupt_counter > 1000)
 		{
 			BATTERYLowVoltageProtect(&AdcValue);
 			interrupt_counter = 0;
+		}
+		if((interrupt_counter%100==0)  && (is_communication_start_flag ==1))
+		{
+			sprintf(Message, "Cell# %d, %d, %d, ", R.Cell_X_anctual, R.Cell_Y_anctual,(int)( R.actual_angle));
+			UartLog(Message);
 		}
 
 }
