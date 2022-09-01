@@ -19,6 +19,7 @@ TSensor Sensor_Left_1;
 TSensor Sensor_Front_2;
 TSensor Sensor_Right_3;
 extern TIM_HandleTypeDef htim9;
+extern TRobot R;
 
 void SENSORS_Init()
 {
@@ -164,4 +165,44 @@ void MEASURE_Sequence(void)
 	startTime = HAL_GetTick();
 	MEASURE_Trigger(&Sensor_Right_3);
 	while((Sensor_Right_3.isMeasured == 1) && (HAL_GetTick() - startTime < timeLimitMs)){}
+}
+
+void MAP_Check_Obstacles()
+{
+	float X_obstacle=0;
+	int Y_obstacle=-1;
+	char Message[32];
+	MEASURE_Sequence();
+
+	if(Sensor_Front_2.distance < 600.0)
+	{
+		X_obstacle = R.X + (Sensor_Front_2.distance * cos(R.actual_angle));
+		Y_obstacle = R.Y + (Sensor_Front_2.distance * sin(R.actual_angle));
+
+		sprintf(Message, "Obstacle! F X=%d Y=%d",(int)X_obstacle, (int)Y_obstacle);
+		UartLog(Message);
+
+		//Obstacle is
+	}
+
+	if(Sensor_Left_1.distance < 600.0)
+	{
+		X_obstacle = R.X + (Sensor_Left_1.distance * cos(R.actual_angle + 270.0));
+		Y_obstacle = R.Y + (Sensor_Left_1.distance * sin(R.actual_angle + 270.0));
+
+		sprintf(Message, "Obstacle! L X=%d Y=%d", (int)X_obstacle, (int)Y_obstacle);
+		UartLog(Message);
+		//Obstacle is
+	}
+	if(Sensor_Right_3.distance < 600.0)
+	{
+		X_obstacle = R.X + (Sensor_Right_3.distance * cos(R.actual_angle + 90.0));
+		Y_obstacle = R.Y + (Sensor_Right_3.distance * sin(R.actual_angle + 90.0));
+
+		sprintf(Message, "Obstacle! R X=%d Y=%d", (int)X_obstacle, (int)Y_obstacle);
+		UartLog(Message);
+		//Obstacle is
+
+	}
+
 }

@@ -262,8 +262,9 @@ int main(void)
 	  }
 	  else if (Center == BUTTON_Read())
 	  {
-		  MEASURE_Sequence();
 
+
+		  MAP_Check_Obstacles();
 
 
 
