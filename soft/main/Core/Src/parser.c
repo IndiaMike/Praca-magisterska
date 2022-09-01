@@ -13,6 +13,7 @@
 #include "stdio.h"
 #include "stdlib.h"
 #include "control.h"
+#include "sensor_map.h"
 
 extern  TLed LED_1_GREEN;
 extern  TLed LED_2_GREEN;
@@ -360,6 +361,10 @@ void Parser_Parse(uint8_t *DataToParse)
 		else if(strcmp("PathGO", ParsePointer) == 0)
 		{
 			Parter_Path_GO();
+		}
+		else if(strcmp("Map", ParsePointer) == 0)
+		{
+			MAP_Check_Obstacles();
 		}
 		/*else
 		{

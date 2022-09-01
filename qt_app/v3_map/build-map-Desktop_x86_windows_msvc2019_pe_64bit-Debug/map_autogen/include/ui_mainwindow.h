@@ -40,6 +40,7 @@ public:
     QPushButton *pushButtonClear_saveObst;
     QPushButton *pushButton_2;
     QPushButton *pushButtonTest;
+    QPushButton *pushButtonMapping;
     QGroupBox *groupBox_2;
     QTextEdit *textEditLogs;
     QLineEdit *lineEditText2Send;
@@ -101,6 +102,9 @@ public:
         pushButtonTest = new QPushButton(groupBox);
         pushButtonTest->setObjectName(QString::fromUtf8("pushButtonTest"));
         pushButtonTest->setGeometry(QRect(580, 0, 83, 29));
+        pushButtonMapping = new QPushButton(groupBox);
+        pushButtonMapping->setObjectName(QString::fromUtf8("pushButtonMapping"));
+        pushButtonMapping->setGeometry(QRect(20, 20, 83, 29));
         groupBox_2 = new QGroupBox(centralwidget);
         groupBox_2->setObjectName(QString::fromUtf8("groupBox_2"));
         groupBox_2->setGeometry(QRect(1050, 140, 671, 421));
@@ -199,7 +203,7 @@ public:
         groupBox_2->raise();
         menubar = new QMenuBar(MainWindow);
         menubar->setObjectName(QString::fromUtf8("menubar"));
-        menubar->setGeometry(QRect(0, 0, 1737, 25));
+        menubar->setGeometry(QRect(0, 0, 1737, 21));
         MainWindow->setMenuBar(menubar);
         statusbar = new QStatusBar(MainWindow);
         statusbar->setObjectName(QString::fromUtf8("statusbar"));
@@ -228,6 +232,7 @@ public:
         pushButtonClear_saveObst->setText(QApplication::translate("MainWindow", "clear", nullptr));
         pushButton_2->setText(QApplication::translate("MainWindow", "Flood Fill", nullptr));
         pushButtonTest->setText(QApplication::translate("MainWindow", "Test", nullptr));
+        pushButtonMapping->setText(QApplication::translate("MainWindow", "Mapping", nullptr));
         groupBox_2->setTitle(QApplication::translate("MainWindow", "Communication", nullptr));
         pushButtonSend->setText(QApplication::translate("MainWindow", "Send", nullptr));
 #ifndef QT_NO_SHORTCUT

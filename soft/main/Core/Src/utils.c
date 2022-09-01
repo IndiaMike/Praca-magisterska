@@ -29,7 +29,7 @@ void RareInterrupt(void)
 		if(interrupt_counter > 1000)
 		{
 			BATTERYLowVoltageProtect(&AdcValue);
-			sprintf(Message, "Bat: %1.f", R.baterryVoltage);
+			sprintf(Message, "Bat: %.2f", R.baterryVoltage);
 			UartLog(Message);
 			interrupt_counter = 0;
 		}

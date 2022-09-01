@@ -91,11 +91,38 @@ void MainWindow::wifiRead()
        cells[X+point00X][point00Y-Y]->type = CellType_Position;
        cells[X+point00X][point00Y-Y]->SetBrush(CellType_Position);
        DRAW_TRIANGLE(cells[X+point00X][point00Y-Y],angle);
-
-
+             }
     }
+   if(recieveData.contains("O!P"))
+   {
+   QStringList splitedData = recieveData.split('=');
 
-    }
+       splitedData = splitedData.last().split(',');
+       splitedData.last().remove(QRegularExpression(";"));
+
+    qDebug() << "count"<<splitedData.count();
+       if(splitedData.count() >= 2)
+           {
+
+               int X   = splitedData.at(0).toInt();
+               int Y   = splitedData.at(1).toInt();
+
+         qDebug() << "debug Obs P="<<X<<","<<Y;
+
+
+
+          qDebug() << "OBS X="<<X<<"Y= "<<Y;
+          int ObstacleX=X+point00X;
+          int ObstacleY=point00Y-Y;
+          if(cells[ObstacleX][ObstacleY]->type!=CellType_Position)
+          {
+              cells[ObstacleX][ObstacleY]->type = CellType_Obstacle;
+              cells[ObstacleX][ObstacleY]->SetBrush(CellType_Obstacle);
+          }
+
+
+          }
+     }
 }
 
 MainWindow::~MainWindow()
@@ -1362,5 +1389,14 @@ path.remove(0);
 void MainWindow::on_pushButton_2_clicked()
 {
     pushButtonFloodFill_clicked();
+}
+
+
+void MainWindow::on_pushButtonMapping_clicked()
+{
+    QString comand = ("Map;");
+    ui->lineEditText2Send->clear();
+    ui->lineEditText2Send->setText(comand);
+    on_pushButtonSend_clicked();
 }
 

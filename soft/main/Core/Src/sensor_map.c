@@ -169,38 +169,67 @@ void MEASURE_Sequence(void)
 
 void MAP_Check_Obstacles()
 {
-	float X_obstacle=0;
-	int Y_obstacle=-1;
+	float X_obstacle=0.0;
+	float Y_obstacle=0.0;
+
+	float angleF = R.actual_angle;
+	float angleL = R.actual_angle - 90.0;
+	float angleR = R.actual_angle + 90.0;
+
+	//deg to rad
+	angleF = angleF * PI / 180.0;
+	angleL = angleL * PI / 180.0;
+	angleR = angleR * PI / 180.0;
+
 	char Message[32];
 	MEASURE_Sequence();
 
-	if(Sensor_Front_2.distance < 600.0)
+	if(Sensor_Front_2.distance < 1300.0 && Sensor_Front_2.distance > 150.0)
 	{
-		X_obstacle = R.X + (Sensor_Front_2.distance * cos(R.actual_angle));
-		Y_obstacle = R.Y + (Sensor_Front_2.distance * sin(R.actual_angle));
+		X_obstacle = R.X + (Sensor_Front_2.distance * sin(angleF));
+		Y_obstacle = R.Y + (Sensor_Front_2.distance * cos(angleF));
 
-		sprintf(Message, "Obstacle! F X=%d Y=%d",(int)X_obstacle, (int)Y_obstacle);
+		if(X_obstacle>0)X_obstacle = (X_obstacle + (X_obstacle/2))/	ONE_CELL_DIM;
+		else if(X_obstacle<=0)X_obstacle = (X_obstacle - (X_obstacle/2))/	ONE_CELL_DIM;
+
+		if(Y_obstacle>0)Y_obstacle = (Y_obstacle + (Y_obstacle/2))/	ONE_CELL_DIM;
+		else if(Y_obstacle<=0)Y_obstacle = (Y_obstacle - (Y_obstacle/2))/	ONE_CELL_DIM;
+
+
+		sprintf(Message, "FO!P=%d,%d;\n\r",(int)X_obstacle, (int)Y_obstacle);
 		UartLog(Message);
-
+		HAL_Delay(80);
 		//Obstacle is
 	}
 
-	if(Sensor_Left_1.distance < 600.0)
+	if(Sensor_Left_1.distance < 1300.0 && Sensor_Left_1.distance > 150.0)
 	{
-		X_obstacle = R.X + (Sensor_Left_1.distance * cos(R.actual_angle + 270.0));
-		Y_obstacle = R.Y + (Sensor_Left_1.distance * sin(R.actual_angle + 270.0));
+		X_obstacle = R.X + (Sensor_Left_1.distance * sin(angleL));
+		Y_obstacle = R.Y + (Sensor_Left_1.distance * cos(angleL));
+		if(X_obstacle>0)X_obstacle = (X_obstacle + (X_obstacle/2))/	ONE_CELL_DIM;
+		else if(X_obstacle<=0)X_obstacle = (X_obstacle - (X_obstacle/2))/	ONE_CELL_DIM;
 
-		sprintf(Message, "Obstacle! L X=%d Y=%d", (int)X_obstacle, (int)Y_obstacle);
+		if(Y_obstacle>0)Y_obstacle = (Y_obstacle + (Y_obstacle/2))/	ONE_CELL_DIM;
+		else if(Y_obstacle<=0)Y_obstacle = (Y_obstacle - (Y_obstacle/2))/	ONE_CELL_DIM;
+
+		sprintf(Message, "LO!P=%d,%d;\n\r", (int)X_obstacle, (int)Y_obstacle);
 		UartLog(Message);
+		HAL_Delay(80);
 		//Obstacle is
 	}
-	if(Sensor_Right_3.distance < 600.0)
+	if(Sensor_Right_3.distance < 1300.0 && Sensor_Right_3.distance > 150.0)
 	{
-		X_obstacle = R.X + (Sensor_Right_3.distance * cos(R.actual_angle + 90.0));
-		Y_obstacle = R.Y + (Sensor_Right_3.distance * sin(R.actual_angle + 90.0));
+		X_obstacle = R.X + (Sensor_Right_3.distance * sin(angleR));
+		Y_obstacle = R.Y + (Sensor_Right_3.distance * cos(angleR));
+		if(X_obstacle>0)X_obstacle = (X_obstacle + (X_obstacle/2))/	ONE_CELL_DIM;
+		else if(X_obstacle<=0)X_obstacle = (X_obstacle - (X_obstacle/2))/	ONE_CELL_DIM;
 
-		sprintf(Message, "Obstacle! R X=%d Y=%d", (int)X_obstacle, (int)Y_obstacle);
+		if(Y_obstacle>0)Y_obstacle = (Y_obstacle + (Y_obstacle/2))/	ONE_CELL_DIM;
+		else if(Y_obstacle<=0)Y_obstacle = (Y_obstacle - (Y_obstacle/2))/	ONE_CELL_DIM;
+
+		sprintf(Message, "RO!P=%d,%d;\n\r", (int)X_obstacle, (int)Y_obstacle);
 		UartLog(Message);
+		HAL_Delay(80);
 		//Obstacle is
 
 	}

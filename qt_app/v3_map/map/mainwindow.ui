@@ -144,6 +144,19 @@
       <string>Test</string>
      </property>
     </widget>
+    <widget class="QPushButton" name="pushButtonMapping">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>20</y>
+       <width>83</width>
+       <height>29</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Mapping</string>
+     </property>
+    </widget>
    </widget>
    <widget class="QGroupBox" name="groupBox_2">
     <property name="geometry">
@@ -515,7 +528,7 @@
      <x>0</x>
      <y>0</y>
      <width>1737</width>
-     <height>25</height>
+     <height>21</height>
     </rect>
    </property>
   </widget>

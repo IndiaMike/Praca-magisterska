@@ -180,8 +180,7 @@ void ROBOT_Go2Point(TRobot *R)
 		R->Motors[1].pid->Set_Value = 0.0;
 		R->Motors[2].pid->Set_Value = 0.0;
 		R->Motors[3].pid->Set_Value = 0.0;
-		sprintf(Message, "Cell# %d, %d, %d, ", R->Cell_X_anctual, R->Cell_Y_anctual,(int)( R->actual_angle));
-		UartLog(Message);
+
 
 		if(R->isPathModeEN == true)pathStep++;
 	}
@@ -247,6 +246,8 @@ void ROBOT_Calculate(TRobot *R)
 
 	R->P_distance.Set_Value  = 0.0;
 	R->P_distance.Actual_Value  = R->TargetDistanceMM;
+
+
 
 
 		if(R->X >= 0)
@@ -357,11 +358,13 @@ void COMUNICATION_Watchdog_Incerement(void)
 	{
 		ROBOT_Stop(&R);
 		LED_OnOff(&LED_4_RED, LED_ON);
-		UartLog("WIFI Watchdog timeout!");
+
 	}
 }
 
 void COMUNICATION_Watchdog_Reset(void)
 {
+	if(wifi_connection_watchdog_counter > 400)
+		UartLog("Wifi Timeout!");
 	wifi_connection_watchdog_counter = 0;
 }
