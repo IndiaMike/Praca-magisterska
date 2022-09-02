@@ -189,11 +189,11 @@ void MAP_Check_Obstacles()
 		X_obstacle = R.X + (Sensor_Front_2.distance * sin(angleF));
 		Y_obstacle = R.Y + (Sensor_Front_2.distance * cos(angleF));
 
-		if(X_obstacle>0)X_obstacle = (X_obstacle + (X_obstacle/2))/	ONE_CELL_DIM;
-		else if(X_obstacle<=0)X_obstacle = (X_obstacle - (X_obstacle/2))/	ONE_CELL_DIM;
+		if(X_obstacle>0)X_obstacle = (X_obstacle + (ONE_CELL_DIM/2))/	ONE_CELL_DIM;
+		else if(X_obstacle<=0)X_obstacle = (X_obstacle - (ONE_CELL_DIM/2))/	ONE_CELL_DIM;
 
-		if(Y_obstacle>0)Y_obstacle = (Y_obstacle + (Y_obstacle/2))/	ONE_CELL_DIM;
-		else if(Y_obstacle<=0)Y_obstacle = (Y_obstacle - (Y_obstacle/2))/	ONE_CELL_DIM;
+		if(Y_obstacle>0)Y_obstacle = (Y_obstacle + (ONE_CELL_DIM/2))/	ONE_CELL_DIM;
+		else if(Y_obstacle<=0)Y_obstacle = (Y_obstacle - (ONE_CELL_DIM/2))/	ONE_CELL_DIM;
 
 
 		sprintf(Message, "FO!P=%d,%d;\n\r",(int)X_obstacle, (int)Y_obstacle);
@@ -206,11 +206,11 @@ void MAP_Check_Obstacles()
 	{
 		X_obstacle = R.X + (Sensor_Left_1.distance * sin(angleL));
 		Y_obstacle = R.Y + (Sensor_Left_1.distance * cos(angleL));
-		if(X_obstacle>0)X_obstacle = (X_obstacle + (X_obstacle/2))/	ONE_CELL_DIM;
-		else if(X_obstacle<=0)X_obstacle = (X_obstacle - (X_obstacle/2))/	ONE_CELL_DIM;
+		if(X_obstacle>0)X_obstacle = (X_obstacle + (ONE_CELL_DIM/2))/	ONE_CELL_DIM;
+		else if(X_obstacle<=0)X_obstacle = (X_obstacle - (ONE_CELL_DIM/2))/	ONE_CELL_DIM;
 
-		if(Y_obstacle>0)Y_obstacle = (Y_obstacle + (Y_obstacle/2))/	ONE_CELL_DIM;
-		else if(Y_obstacle<=0)Y_obstacle = (Y_obstacle - (Y_obstacle/2))/	ONE_CELL_DIM;
+		if(Y_obstacle>0)Y_obstacle = (Y_obstacle + (ONE_CELL_DIM/2))/	ONE_CELL_DIM;
+		else if(Y_obstacle<=0)Y_obstacle = (Y_obstacle - (ONE_CELL_DIM/2))/	ONE_CELL_DIM;
 
 		sprintf(Message, "LO!P=%d,%d;\n\r", (int)X_obstacle, (int)Y_obstacle);
 		UartLog(Message);
@@ -221,11 +221,11 @@ void MAP_Check_Obstacles()
 	{
 		X_obstacle = R.X + (Sensor_Right_3.distance * sin(angleR));
 		Y_obstacle = R.Y + (Sensor_Right_3.distance * cos(angleR));
-		if(X_obstacle>0)X_obstacle = (X_obstacle + (X_obstacle/2))/	ONE_CELL_DIM;
-		else if(X_obstacle<=0)X_obstacle = (X_obstacle - (X_obstacle/2))/	ONE_CELL_DIM;
+		if(X_obstacle>0)X_obstacle = (X_obstacle + (ONE_CELL_DIM/2))/	ONE_CELL_DIM;
+		else if(X_obstacle<=0)X_obstacle = (X_obstacle - (ONE_CELL_DIM/2))/	ONE_CELL_DIM;
 
-		if(Y_obstacle>0)Y_obstacle = (Y_obstacle + (Y_obstacle/2))/	ONE_CELL_DIM;
-		else if(Y_obstacle<=0)Y_obstacle = (Y_obstacle - (Y_obstacle/2))/	ONE_CELL_DIM;
+		if(Y_obstacle>0)Y_obstacle = (Y_obstacle + (ONE_CELL_DIM/2))/	ONE_CELL_DIM;
+		else if(Y_obstacle<=0)Y_obstacle = (Y_obstacle - (ONE_CELL_DIM/2))/	ONE_CELL_DIM;
 
 		sprintf(Message, "RO!P=%d,%d;\n\r", (int)X_obstacle, (int)Y_obstacle);
 		UartLog(Message);

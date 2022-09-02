@@ -927,6 +927,7 @@ void MainWindow::on_pushButtonClear_saveObst_clicked()
 
 void MainWindow::on_pushButtonGoThePath_clicked()
 {
+    //on_pushButtonClear_saveObst_clicked();
     char Message[32];
     sprintf(Message,"PathGO=%d;",map_smooth_counter_global);
     QString comand = (QString)Message;

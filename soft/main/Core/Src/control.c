@@ -163,7 +163,7 @@ void ROBOT_Go2Point(TRobot *R)
 	if(R->TargetDistanceMM > R->tolerance)
 	{
 
-		if(R->P_direction.error < 10.0 ) // angle < 10deg  dist. Controller & angle Controller
+		if(abs(R->P_direction.error) < 10.0 ) // angle < 10deg  dist. Controller & angle Controller
 		{
 			dist = P_ControllerDistance(&R->P_distance);
 		}
