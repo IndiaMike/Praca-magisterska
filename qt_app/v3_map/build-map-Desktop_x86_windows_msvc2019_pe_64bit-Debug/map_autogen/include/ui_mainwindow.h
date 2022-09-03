@@ -39,7 +39,6 @@ public:
     QPushButton *pushButtonAddSafetyZone;
     QPushButton *pushButtonClear_saveObst;
     QPushButton *pushButton_2;
-    QPushButton *pushButtonTest;
     QPushButton *pushButtonMapping;
     QGroupBox *groupBox_2;
     QTextEdit *textEditLogs;
@@ -61,6 +60,7 @@ public:
     QComboBox *comboBox;
     QLabel *label;
     QPushButton *pushButtonGoThePath;
+    QPushButton *pushButtonTest;
     QMenuBar *menubar;
     QStatusBar *statusbar;
 
@@ -79,32 +79,29 @@ public:
         groupBox->setGeometry(QRect(1050, 40, 671, 101));
         pushButtonClearMap = new QPushButton(groupBox);
         pushButtonClearMap->setObjectName(QString::fromUtf8("pushButtonClearMap"));
-        pushButtonClearMap->setGeometry(QRect(540, 40, 121, 29));
+        pushButtonClearMap->setGeometry(QRect(560, 40, 101, 29));
         comboBoxCellType = new QComboBox(groupBox);
         comboBoxCellType->addItem(QString());
         comboBoxCellType->addItem(QString());
         comboBoxCellType->addItem(QString());
         comboBoxCellType->addItem(QString());
         comboBoxCellType->setObjectName(QString::fromUtf8("comboBoxCellType"));
-        comboBoxCellType->setGeometry(QRect(310, 40, 121, 28));
+        comboBoxCellType->setGeometry(QRect(160, 40, 121, 28));
         pushButton = new QPushButton(groupBox);
         pushButton->setObjectName(QString::fromUtf8("pushButton"));
-        pushButton->setGeometry(QRect(450, 40, 83, 29));
+        pushButton->setGeometry(QRect(320, 20, 83, 29));
         pushButtonAddSafetyZone = new QPushButton(groupBox);
         pushButtonAddSafetyZone->setObjectName(QString::fromUtf8("pushButtonAddSafetyZone"));
-        pushButtonAddSafetyZone->setGeometry(QRect(10, 50, 121, 29));
+        pushButtonAddSafetyZone->setGeometry(QRect(10, 60, 121, 29));
         pushButtonClear_saveObst = new QPushButton(groupBox);
         pushButtonClear_saveObst->setObjectName(QString::fromUtf8("pushButtonClear_saveObst"));
-        pushButtonClear_saveObst->setGeometry(QRect(170, 50, 83, 29));
+        pushButtonClear_saveObst->setGeometry(QRect(430, 40, 91, 29));
         pushButton_2 = new QPushButton(groupBox);
         pushButton_2->setObjectName(QString::fromUtf8("pushButton_2"));
-        pushButton_2->setGeometry(QRect(450, 70, 83, 29));
-        pushButtonTest = new QPushButton(groupBox);
-        pushButtonTest->setObjectName(QString::fromUtf8("pushButtonTest"));
-        pushButtonTest->setGeometry(QRect(580, 0, 83, 29));
+        pushButton_2->setGeometry(QRect(320, 60, 83, 29));
         pushButtonMapping = new QPushButton(groupBox);
         pushButtonMapping->setObjectName(QString::fromUtf8("pushButtonMapping"));
-        pushButtonMapping->setGeometry(QRect(20, 20, 83, 29));
+        pushButtonMapping->setGeometry(QRect(10, 20, 121, 29));
         groupBox_2 = new QGroupBox(centralwidget);
         groupBox_2->setObjectName(QString::fromUtf8("groupBox_2"));
         groupBox_2->setGeometry(QRect(1050, 140, 671, 421));
@@ -131,7 +128,7 @@ public:
         groupBox_3->setGeometry(QRect(1050, 560, 671, 311));
         pushButtonGoHome = new QPushButton(groupBox_3);
         pushButtonGoHome->setObjectName(QString::fromUtf8("pushButtonGoHome"));
-        pushButtonGoHome->setGeometry(QRect(410, 160, 121, 31));
+        pushButtonGoHome->setGeometry(QRect(300, 80, 101, 31));
         QIcon icon;
         icon.addFile(QString::fromUtf8("home.png"), QSize(), QIcon::Normal, QIcon::Off);
         pushButtonGoHome->setIcon(icon);
@@ -139,7 +136,7 @@ public:
         pushButtonGoHome->setAutoDefault(false);
         pushButtonSTOP = new QPushButton(groupBox_3);
         pushButtonSTOP->setObjectName(QString::fromUtf8("pushButtonSTOP"));
-        pushButtonSTOP->setGeometry(QRect(490, 80, 161, 41));
+        pushButtonSTOP->setGeometry(QRect(380, 210, 261, 51));
         QPalette palette;
         QBrush brush(QColor(255, 0, 0, 255));
         brush.setStyle(Qt::SolidPattern);
@@ -156,7 +153,7 @@ public:
         pushButtonSTOP->setAutoFillBackground(false);
         pushButtonAtHome = new QPushButton(groupBox_3);
         pushButtonAtHome->setObjectName(QString::fromUtf8("pushButtonAtHome"));
-        pushButtonAtHome->setGeometry(QRect(560, 30, 91, 31));
+        pushButtonAtHome->setGeometry(QRect(300, 120, 101, 31));
         groupBox_4 = new QGroupBox(groupBox_3);
         groupBox_4->setObjectName(QString::fromUtf8("groupBox_4"));
         groupBox_4->setGeometry(QRect(10, 80, 201, 191));
@@ -196,11 +193,15 @@ public:
         comboBox->raise();
         label->raise();
         pushButtonGoThePath->raise();
+        pushButtonTest = new QPushButton(centralwidget);
+        pushButtonTest->setObjectName(QString::fromUtf8("pushButtonTest"));
+        pushButtonTest->setEnabled(false);
         MainWindow->setCentralWidget(centralwidget);
         groupBox_3->raise();
         graphicsView->raise();
         groupBox->raise();
         groupBox_2->raise();
+        pushButtonTest->raise();
         menubar = new QMenuBar(MainWindow);
         menubar->setObjectName(QString::fromUtf8("menubar"));
         menubar->setGeometry(QRect(0, 0, 1737, 21));
@@ -229,9 +230,8 @@ public:
 
         pushButton->setText(QApplication::translate("MainWindow", "A*", nullptr));
         pushButtonAddSafetyZone->setText(QApplication::translate("MainWindow", "Add Safety Zone", nullptr));
-        pushButtonClear_saveObst->setText(QApplication::translate("MainWindow", "clear", nullptr));
+        pushButtonClear_saveObst->setText(QApplication::translate("MainWindow", "Clear", nullptr));
         pushButton_2->setText(QApplication::translate("MainWindow", "Flood Fill", nullptr));
-        pushButtonTest->setText(QApplication::translate("MainWindow", "Test", nullptr));
         pushButtonMapping->setText(QApplication::translate("MainWindow", "Mapping", nullptr));
         groupBox_2->setTitle(QApplication::translate("MainWindow", "Communication", nullptr));
         pushButtonSend->setText(QApplication::translate("MainWindow", "Send", nullptr));
@@ -240,7 +240,7 @@ public:
 #endif // QT_NO_SHORTCUT
         pushButtonConnect->setText(QApplication::translate("MainWindow", "Connect", nullptr));
         pushButtonClear->setText(QApplication::translate("MainWindow", "Clear", nullptr));
-        radioButtonLED->setText(QApplication::translate("MainWindow", "LED", nullptr));
+        radioButtonLED->setText(QApplication::translate("MainWindow", "Connection Test", nullptr));
         groupBox_3->setTitle(QApplication::translate("MainWindow", "Control", nullptr));
         pushButtonGoHome->setText(QApplication::translate("MainWindow", "->Home", nullptr));
 #ifndef QT_NO_WHATSTHIS
@@ -277,6 +277,7 @@ public:
 
         label->setText(QApplication::translate("MainWindow", "Control mode:", nullptr));
         pushButtonGoThePath->setText(QApplication::translate("MainWindow", "Go the Path", nullptr));
+        pushButtonTest->setText(QApplication::translate("MainWindow", "T", nullptr));
     } // retranslateUi
 
 };

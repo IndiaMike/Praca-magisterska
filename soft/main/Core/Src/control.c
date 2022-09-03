@@ -159,7 +159,6 @@ void ROBOT_Go2Point(TRobot *R)
 	float dir = 0.0;
 	float dist= 0.0;
 
-
 	if(R->TargetDistanceMM > R->tolerance)
 	{
 
@@ -181,11 +180,8 @@ void ROBOT_Go2Point(TRobot *R)
 		R->Motors[2].pid->Set_Value = 0.0;
 		R->Motors[3].pid->Set_Value = 0.0;
 
-
 		if(R->isPathModeEN == true)pathStep++;
 	}
-
-
 
 		R->Motors[0].pid->Set_Value = (dist + dir) * R->max_speed_Rad_per_Sec;
 		R->Motors[1].pid->Set_Value = (dist - dir) * R->max_speed_Rad_per_Sec;

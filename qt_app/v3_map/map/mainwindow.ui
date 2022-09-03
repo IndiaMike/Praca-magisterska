@@ -39,9 +39,9 @@
     <widget class="QPushButton" name="pushButtonClearMap">
      <property name="geometry">
       <rect>
-       <x>540</x>
+       <x>560</x>
        <y>40</y>
-       <width>121</width>
+       <width>101</width>
        <height>29</height>
       </rect>
      </property>
@@ -52,7 +52,7 @@
     <widget class="QComboBox" name="comboBoxCellType">
      <property name="geometry">
       <rect>
-       <x>310</x>
+       <x>160</x>
        <y>40</y>
        <width>121</width>
        <height>28</height>
@@ -82,8 +82,8 @@
     <widget class="QPushButton" name="pushButton">
      <property name="geometry">
       <rect>
-       <x>450</x>
-       <y>40</y>
+       <x>320</x>
+       <y>20</y>
        <width>83</width>
        <height>29</height>
       </rect>
@@ -96,7 +96,7 @@
      <property name="geometry">
       <rect>
        <x>10</x>
-       <y>50</y>
+       <y>60</y>
        <width>121</width>
        <height>29</height>
       </rect>
@@ -108,21 +108,21 @@
     <widget class="QPushButton" name="pushButtonClear_saveObst">
      <property name="geometry">
       <rect>
-       <x>170</x>
-       <y>50</y>
-       <width>83</width>
+       <x>430</x>
+       <y>40</y>
+       <width>91</width>
        <height>29</height>
       </rect>
      </property>
      <property name="text">
-      <string>clear</string>
+      <string>Clear</string>
      </property>
     </widget>
     <widget class="QPushButton" name="pushButton_2">
      <property name="geometry">
       <rect>
-       <x>450</x>
-       <y>70</y>
+       <x>320</x>
+       <y>60</y>
        <width>83</width>
        <height>29</height>
       </rect>
@@ -131,25 +131,12 @@
       <string>Flood Fill</string>
      </property>
     </widget>
-    <widget class="QPushButton" name="pushButtonTest">
-     <property name="geometry">
-      <rect>
-       <x>580</x>
-       <y>0</y>
-       <width>83</width>
-       <height>29</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Test</string>
-     </property>
-    </widget>
     <widget class="QPushButton" name="pushButtonMapping">
      <property name="geometry">
       <rect>
-       <x>20</x>
+       <x>10</x>
        <y>20</y>
-       <width>83</width>
+       <width>121</width>
        <height>29</height>
       </rect>
      </property>
@@ -242,7 +229,7 @@
       </rect>
      </property>
      <property name="text">
-      <string>LED</string>
+      <string>Connection Test</string>
      </property>
     </widget>
    </widget>
@@ -261,9 +248,9 @@
     <widget class="QPushButton" name="pushButtonGoHome">
      <property name="geometry">
       <rect>
-       <x>410</x>
-       <y>160</y>
-       <width>121</width>
+       <x>300</x>
+       <y>80</y>
+       <width>101</width>
        <height>31</height>
       </rect>
      </property>
@@ -290,10 +277,10 @@
     <widget class="QPushButton" name="pushButtonSTOP">
      <property name="geometry">
       <rect>
-       <x>490</x>
-       <y>80</y>
-       <width>161</width>
-       <height>41</height>
+       <x>380</x>
+       <y>210</y>
+       <width>261</width>
+       <height>51</height>
       </rect>
      </property>
      <property name="palette">
@@ -355,9 +342,9 @@
     <widget class="QPushButton" name="pushButtonAtHome">
      <property name="geometry">
       <rect>
-       <x>560</x>
-       <y>30</y>
-       <width>91</width>
+       <x>300</x>
+       <y>120</y>
+       <width>101</width>
        <height>31</height>
       </rect>
      </property>
@@ -517,10 +504,19 @@
     <zorder>label</zorder>
     <zorder>pushButtonGoThePath</zorder>
    </widget>
+   <widget class="QPushButton" name="pushButtonTest">
+    <property name="enabled">
+     <bool>false</bool>
+    </property>
+    <property name="text">
+     <string>T</string>
+    </property>
+   </widget>
    <zorder>groupBox_3</zorder>
    <zorder>graphicsView</zorder>
    <zorder>groupBox</zorder>
    <zorder>groupBox_2</zorder>
+   <zorder>pushButtonTest</zorder>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
