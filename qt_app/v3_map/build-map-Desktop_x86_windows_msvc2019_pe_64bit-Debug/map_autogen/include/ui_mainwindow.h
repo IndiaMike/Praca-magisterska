@@ -15,6 +15,7 @@
 #include <QtWidgets/QComboBox>
 #include <QtWidgets/QGraphicsView>
 #include <QtWidgets/QGroupBox>
+#include <QtWidgets/QLCDNumber>
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QLineEdit>
 #include <QtWidgets/QMainWindow>
@@ -62,6 +63,12 @@ public:
     QLabel *label;
     QPushButton *pushButtonGoThePath;
     QPushButton *pushButtonTest;
+    QLCDNumber *lcdNumber;
+    QLabel *label_3;
+    QLabel *label_4;
+    QLCDNumber *lcdNumber_2;
+    QLCDNumber *lcdNumberPink;
+    QLabel *label_5;
     QMenuBar *menubar;
     QStatusBar *statusbar;
 
@@ -200,14 +207,38 @@ public:
         pushButtonGoThePath->raise();
         pushButtonTest = new QPushButton(centralwidget);
         pushButtonTest->setObjectName(QString::fromUtf8("pushButtonTest"));
-        pushButtonTest->setEnabled(false);
-        pushButtonTest->setGeometry(QRect(1050, 10, 51, 31));
+        pushButtonTest->setEnabled(true);
+        pushButtonTest->setGeometry(QRect(1140, 20, 101, 31));
+        lcdNumber = new QLCDNumber(centralwidget);
+        lcdNumber->setObjectName(QString::fromUtf8("lcdNumber"));
+        lcdNumber->setGeometry(QRect(1250, 30, 64, 23));
+        label_3 = new QLabel(centralwidget);
+        label_3->setObjectName(QString::fromUtf8("label_3"));
+        label_3->setGeometry(QRect(1250, 10, 63, 20));
+        label_4 = new QLabel(centralwidget);
+        label_4->setObjectName(QString::fromUtf8("label_4"));
+        label_4->setGeometry(QRect(1330, 10, 63, 20));
+        lcdNumber_2 = new QLCDNumber(centralwidget);
+        lcdNumber_2->setObjectName(QString::fromUtf8("lcdNumber_2"));
+        lcdNumber_2->setGeometry(QRect(1330, 30, 64, 23));
+        lcdNumberPink = new QLCDNumber(centralwidget);
+        lcdNumberPink->setObjectName(QString::fromUtf8("lcdNumberPink"));
+        lcdNumberPink->setGeometry(QRect(1410, 30, 64, 23));
+        label_5 = new QLabel(centralwidget);
+        label_5->setObjectName(QString::fromUtf8("label_5"));
+        label_5->setGeometry(QRect(1410, 10, 63, 20));
         MainWindow->setCentralWidget(centralwidget);
         groupBox_3->raise();
         graphicsView->raise();
         groupBox->raise();
         groupBox_2->raise();
         pushButtonTest->raise();
+        lcdNumber->raise();
+        label_3->raise();
+        label_4->raise();
+        lcdNumber_2->raise();
+        lcdNumberPink->raise();
+        label_5->raise();
         menubar = new QMenuBar(MainWindow);
         menubar->setObjectName(QString::fromUtf8("menubar"));
         menubar->setGeometry(QRect(0, 0, 1737, 21));
@@ -284,7 +315,10 @@ public:
 
         label->setText(QApplication::translate("MainWindow", "Control mode:", nullptr));
         pushButtonGoThePath->setText(QApplication::translate("MainWindow", "Go the Path", nullptr));
-        pushButtonTest->setText(QApplication::translate("MainWindow", "T", nullptr));
+        pushButtonTest->setText(QApplication::translate("MainWindow", "Get statistic", nullptr));
+        label_3->setText(QApplication::translate("MainWindow", "Green", nullptr));
+        label_4->setText(QApplication::translate("MainWindow", "Yellow", nullptr));
+        label_5->setText(QApplication::translate("MainWindow", "Magenta", nullptr));
     } // retranslateUi
 
 };

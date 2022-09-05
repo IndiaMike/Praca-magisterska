@@ -44,7 +44,8 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     timer = new QTimer(this);
     connect(timer, SIGNAL(timeout()),this,SLOT(WatchDogComunicationReset()));
     timer->setInterval(500);
-    ui->pushButtonTest->setVisible(false);
+
+    ui->pushButtonTest->setVisible(true);
 
 
 
@@ -356,26 +357,30 @@ pushButtonAStar_clicked();
 
 void MainWindow::on_pushButtonTest_clicked()
 {
-
-    /*
-    QString recieveData = "P=0.32,100.54,90;";
-    //  9 P=X.XX,Y.YY,A.AA
-    QStringList splitedData = recieveData.split('=');
-    splitedData = splitedData.last().split(',');
-    splitedData.last().remove(QRegularExpression(";"));
-
-
-    if(splitedData.count() >= 3)
+int counter=0;
+int yellow=0;
+int magenta=0;
+for(int x=0;x<50;x++)
+{
+    for(int y=0;y<50;y++)
+    {
+        if(cells[x][y]->rect->brush().color() == Qt::green)
         {
-
-            float X   = splitedData.at(0).toFloat();
-            float Y   = splitedData.at(1).toFloat();
-            float angle = splitedData.at(2).toFloat();
-
-
-          //  DRAW_TRIANGLE(cells[20][20],angle);
-    qDebug() << "P="<<X<<","<<Y<<","<<angle<<"deg.";
-        }*/
+              counter++;
+        }
+        if(cells[x][y]->rect->brush().color() == Qt::yellow)
+        {
+              yellow++;
+        }
+        if(cells[x][y]->rect->brush().color() == Qt::magenta)
+        {
+              magenta++;
+        }
+    }
+}
+ui->lcdNumber->display(counter);
+ui->lcdNumber_2->display(yellow);
+ui->lcdNumberPink->display(magenta);
 }
 
 void MainWindow::DRAW_TRIANGLE(cell *cell, int direction)
@@ -553,13 +558,13 @@ QList<cell*> MainWindow::A_STAR_GET_NEIGHBOURS(cell* cella)
     {
         neighbours.append(cells[j][(i - 1 < 0) ? 0 : i - 1]);
     }
-    if(!cells[j][(i + 1 > 50) ? 50 : i + 1]->visited && cells[j][i]->type != CellType_Obstacle)
+    if(!cells[j][(i + 1 > 49) ? 49 : i + 1]->visited && cells[j][i]->type != CellType_Obstacle)
     {
-        neighbours.append(cells[j][(i + 1 > 50) ? 50 : i + 1]);
+        neighbours.append(cells[j][(i + 1 > 49) ? 49 : i + 1]);
     }
-    if(!cells[(j + 1 > 50) ? 50 : j + 1][i]->visited && cells[j][i]->type != CellType_Obstacle)
+    if(!cells[(j + 1 > 49) ? 49 : j + 1][i]->visited && cells[j][i]->type != CellType_Obstacle)
     {
-        neighbours.append(cells[(j + 1 > 50) ? 50 : j + 1][i]);
+        neighbours.append(cells[(j + 1 > 49) ? 49 : j + 1][i]);
     }
     if(!cells[(j - 1 < 0) ? 0 : j - 1][i]->visited && cells[j][i]->type != CellType_Obstacle)
     {
@@ -574,20 +579,20 @@ QList<cell*> MainWindow::A_STAR_GET_NEIGHBOURS(cell* cella)
         {
             neighbours.append(cells[(j - 1 < 0) ? 0 : j - 1][(i - 1 < 0) ? 0 : i - 1]);
         }
-        if(!cells[(j - 1 < 0) ? 0 : j - 1][(i + 1 > 50) ? 50 : i + 1]->visited &&   // right top corner
+        if(!cells[(j - 1 < 0) ? 0 : j - 1][(i + 1 > 49) ? 49 : i + 1]->visited &&   // right top corner
                 cells[j][i]->type != CellType_Obstacle)
         {
-            neighbours.append(cells[(j - 1 < 0) ? 0 : j - 1][(i + 1 > 50) ? 50 : i + 1]);
+            neighbours.append(cells[(j - 1 < 0) ? 0 : j - 1][(i + 1 > 49) ? 49 : i + 1]);
         }
-        if(!cells[(j + 1 > 50) ? 50 : j + 1][(i + 1 > 50) ? 50 : i + 1]->visited && // right bottom corner
+        if(!cells[(j + 1 > 49) ? 49 : j + 1][(i + 1 > 49) ? 49 : i + 1]->visited && // right bottom corner
                 cells[j][i]->type != CellType_Obstacle)
         {
-            neighbours.append(cells[(j + 1 > 50) ? 50 : j + 1][(i + 1 > 50) ? 50 : i + 1]);
+            neighbours.append(cells[(j + 1 > 49) ? 49 : j + 1][(i + 1 > 49) ? 49 : i + 1]);
         }
-        if(!cells[(j + 1 > 50) ? 50 : j + 1][(i - 1 < 0) ? 0 : i - 1]->visited &&   // left bottom corner
+        if(!cells[(j + 1 > 49) ? 49 : j + 1][(i - 1 < 0) ? 0 : i - 1]->visited &&   // left bottom corner
                 cells[j][i]->type != CellType_Obstacle)
         {
-            neighbours.append(cells[(j + 1 > 50) ? 50 : j + 1][(i - 1 < 0) ? 0 : i - 1]);
+            neighbours.append(cells[(j + 1 > 49) ? 49 : j + 1][(i - 1 < 0) ? 0 : i - 1]);
         }
 
 
@@ -609,7 +614,16 @@ int MainWindow::GET_DISTANCE_BETWEEN_CELLS(cell* cellA, cell* cellB)
     int distanceY = abs(cellA->y - cellB->y);
 
 
-            return (distanceX + distanceY);
+            //return (distanceX + distanceY);
+
+            //return (distanceX + distanceY) * 10; // Manhattan
+
+            return 10 * (distanceX + distanceY) + (14 - 2 * 10) * fmin(distanceX, distanceY); // _DIAGONAL_DISTANCE_OCTILE:
+
+            //return 10 * (distanceX + distanceY) + (10 - 2 * 10) * fmin(distanceX, distanceY); //DIAGONAL_DISTANCE_CHEBYSHEV:
+
+            //return sqrt((distanceX * distanceX) + (distanceY * distanceY)) * 10;    //EUCLIDEAN_DISTANE
+
 
 
 }
