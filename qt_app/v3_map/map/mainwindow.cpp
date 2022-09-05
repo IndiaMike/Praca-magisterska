@@ -44,6 +44,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     timer = new QTimer(this);
     connect(timer, SIGNAL(timeout()),this,SLOT(WatchDogComunicationReset()));
     timer->setInterval(500);
+    ui->pushButtonTest->setVisible(false);
 
 
 
